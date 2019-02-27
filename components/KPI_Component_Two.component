@@ -1,0 +1,2962 @@
+<apex:component controller="KPI_Component_three_AC" allowDml="true" id="pageId3">    
+    <apex:attribute name="myValue" description="This is the value for the component." type="String"  assignTo="{!SessionsId}"/> 
+    <apex:attribute name="DeleteValues2" description="This is the value for the component." type="boolean"  assignTo="{!DeleteAllValues2}"/> 
+    
+    <apex:stylesheet value="{!URLFOR($Resource.jQueryDataTables, 'css/jquery.dataTables.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SLDSv0122, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+     <apex:stylesheet value="{!URLFOR($Resource.GlobalFundsJqueryUI, 'GlobalFundsJqueryUI/CustomEventEditCSS.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.GlobalFundsJqueryUI, 'GlobalFundsJqueryUI/EventJqueryMin.js')}"/>
+   <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.jQueryDataTables, 'js/jquery.dataTables.js')}"></script>    
+       
+      <apex:stylesheet value="{!URLFOR($Resource.EdgeClient)}"/> 
+    <apex:styleSheet value="{!URLFOR($Resource.Wave,'Wave/css/EdgeClient.css')}" />   
+                 <apex:outputpanel rendered="{!IF(DeleteAllValues2 == true,true,false)}">
+                       <script>
+                            DeleteAll1();
+                        </script>
+                     </apex:outputpanel> 
+      <!--search- for Dimension,measures,datefields-->             
+    <script>
+            function SearchFunction1() {
+              var input, filter, table, tr, td, i;
+              input = document.getElementById("LIn");
+              filter = input.value.toUpperCase();
+              table = document.getElementById("myTable");
+              tr = table.getElementsByTagName("tr");
+              for (i = 0; i < tr.length; i++) {    
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                  } else {
+                    tr[i].style.display = "none";
+                  }
+                }       
+              }
+            }
+    </script>
+    
+   
+    
+      <style>
+        #LIn{     
+              background-image: url('{!$Resource.SearchIcon}');
+              background-repeat: no-repeat;
+              font-size: 16px;
+              padding: 15px 15px 20px 50px;
+              border: 1px solid #ddd;
+              
+        }
+        .slds .slds-m-top--large {
+            margin-top: 0px;
+        }
+        
+        .NewclassAdd{ 
+                            margin-top: 60px !important;
+                            margin-left: 40px !important;
+                            padding: 0px 15px 6px 15px !important;
+                            font-size: 32px !important;
+                            line-height: 25px !important;
+                            background: lightgrey !important;
+                            color: black !important;
+                        }
+                        .NewclassRem{ 
+                            margin-top: 10px !important;
+                           margin-left: 40px !important;
+                            padding: 0px 15px 6px 15px !important;
+                            font-size: 32px !important;
+                            line-height: 25px !important;
+                            background: lightgrey !important;
+                            color: black !important;
+                        }
+   </style>
+    
+    
+   
+    <script>  
+        function showSpinner(){
+            document.getElementById('opaque').style.display='block';       
+            var popUp = document.getElementById('spinner');       
+            popUp.style.display = 'block';
+        } 
+    </script>       
+    <script>
+        var j$ = jQuery.noConflict();
+    </script>  
+    <script>
+                function btnColor7(btn, color,Row,Data) {
+                                 document.getElementById('RowNumbers').value = Row;
+                                document.getElementById('Dataset').value = Data;
+                                document.getElementById('Count').value = 'Count';
+                                var property = document.getElementById(btn);
+                                document.getElementById('DimenName').value = '';
+                                document.getElementById('SUMName').value = '';
+                                    if (property.className !== 'toggled') {
+                                       
+                                       property.style.backgroundColor=color;
+                                        property.style.color="white";
+                                        property.className = 'toggled'
+                                        document.getElementById('Rowtrue').value = 'true';
+                                    }
+                                    else {
+                                        
+                                        property.style.backgroundColor = "White";
+                                        property.style.color = "#0070d2";
+                                        property.className = '';
+                                        
+                                          document.getElementById('Rowtrue').value = 'false';
+                                    }
+                                     DateNames2();
+                 }
+                
+            </script>
+            <script>
+                function btnColor7s(btn, color,Row,Data) {
+                                 document.getElementById('RowNumbers').value = Row;
+                                document.getElementById('Dataset').value = Data;
+                                document.getElementById('Count').value = 'Count';
+                                var property = document.getElementById(btn);
+                                document.getElementById('DimenName').value = '';
+                                document.getElementById('SUMName').value = '';
+                                    if (property.className !== 'toggled') {
+                                       
+                                       property.style.backgroundColor="white";
+                                        property.style.color="#0070d2";
+                                        property.className = 'toggled'
+                                        document.getElementById('Rowtrue').value = 'false';
+                                    }
+                                    else {
+                                        
+                                        property.style.backgroundColor = "#0070d2";
+                                        property.style.color ="white";
+                                        property.className = '';
+                                        
+                                          document.getElementById('Rowtrue').value = 'true';
+                                    }
+                                     DateNames2();
+                 }
+                
+            </script>
+                <script>       
+                function btnColor8(btn, color,Rows,Datas,Sums) {
+                                 
+                    document.getElementById('SUM').value = Sums;
+                                document.getElementById('SUMName').value = Datas;
+                                document.getElementById('RowNumbers').value =Rows;
+                                document.getElementById('Count').value = 'Count';
+                                var property = document.getElementById(btn);
+                                document.getElementById('Dataset').value = '';
+                                document.getElementById('DimenName').value = '';
+                                    if (property.className !== 'toggled') {
+                                       
+                                        property.style.backgroundColor=color;
+                                        property.style.color="white";
+                                        property.className = 'toggled'
+                                         document.getElementById('Rowsumtrue').value = 'false';
+                                        
+                                    }
+                                    else {
+                                       
+                                        property.style.backgroundColor = "White";
+                                        property.style.color = "#0070d2";
+                                        property.className = '';
+                                        
+                                          document.getElementById('Rowsumtrue').value = 'true';
+                                         
+                                    }
+                                     DateNames2();
+                 }
+                
+            </script>
+            <script>       
+                function btnColor8sum(btn, color,Rows,Datas,Sums) {
+                                 
+                    document.getElementById('SUM').value = Sums;
+                                document.getElementById('SUMName').value = Datas;
+                                document.getElementById('RowNumbers').value =Rows;
+                                document.getElementById('Count').value = 'Count';
+                                var property = document.getElementById(btn);
+                                document.getElementById('Dataset').value = '';
+                                document.getElementById('DimenName').value = '';
+                                    if (property.className !== 'toggled') {
+                                       
+                                        property.style.backgroundColor="White";
+                                        property.style.color="#0070d2";
+                                        property.className = 'toggled'
+                                         document.getElementById('Rowsumtrue').value = 'true';
+                                        
+                                    }
+                                    else {
+                                       
+                                        property.style.backgroundColor = "#0070d2";
+                                        property.style.color ="White" ;
+                                        property.className = '';
+                                        
+                                          document.getElementById('Rowsumtrue').value = 'false';
+                                         
+                                    }
+                                     DateNames2();
+                 }
+                
+            </script>
+                <script>
+                function btnColor9(btn, color,Rows,Datas,Sums) {
+                                 
+                                document.getElementById('DimenCount').value = 'count';
+                                document.getElementById('DimenName').value =Datas;
+                                document.getElementById('RowNumbers').value = Rows;
+                                var property = document.getElementById(btn);
+                                document.getElementById('Dataset').value = '';
+                                 document.getElementById('SUMName').value = '';
+                                    if (property.className !== 'toggled') {
+                                    
+                                        property.style.backgroundColor=color;
+                                        property.style.color="white";
+                                        property.className = 'toggled'
+                                         document.getElementById('RowDimtrue').value = 'true';
+                                         
+                                    }
+                                    else {
+                                        
+                                        property.style.backgroundColor = "White";
+                                        property.style.color = "#0070d2";
+                                        property.className = '';
+                                        
+                                          document.getElementById('RowDimtrue').value = 'false';
+                                          
+                                    }
+                                     DateNames2();
+                 }
+                
+            </script>
+            <script>
+                function btnColor9g(btn, color,Rows,Datas,Sums) {
+                                 
+                                document.getElementById('DimenCount').value = 'count';
+                                document.getElementById('DimenName').value =Datas;
+                                document.getElementById('RowNumbers').value = Rows;
+                                var property = document.getElementById(btn);
+                                document.getElementById('Dataset').value = '';
+                                 document.getElementById('SUMName').value = '';
+                                    if (property.className !== 'toggled') {
+                                    
+                                        property.style.backgroundColor="white";
+                                        property.style.color="#0070d2";
+                                        property.className = 'toggled'
+                                         document.getElementById('RowDimtrue').value = 'false';
+                                         
+                                    }
+                                    else {
+                                        
+                                        property.style.backgroundColor ="#0070d2" ;
+                                        property.style.color ="White" ;
+                                        property.className = '';
+                                        
+                                          document.getElementById('RowDimtrue').value = 'true';
+                                          
+                                    }
+                                     DateNames2();
+                 }
+                
+            </script>
+        <script type="text/javascript">
+         function numberIclicked3(v){
+            document.getElementById('dimSelecteed').value = v;
+         }
+        function numberDateclicked3(v){
+            document.getElementById('dateSelecteed').value = v;
+        }          
+        
+                        function funTopic3(){ 
+                        var KPIName = document.getElementById('txTopic2').value;
+                        var KPIValue = document.getElementById('KPIRow2').value;
+                        if(KPIName != '')
+                        {
+                            document.getElementById('hiddenKPI2').value= KPIName;
+                            document.getElementById('KPIValue2').value= KPIValue;
+                            document.getElementById("error5").innerHTML = "";
+                            newTopics2();
+                        }
+                        else
+                        {
+                            document.getElementById("error5").innerHTML = "Error: You must enter a value";
+                        }
+                        }
+                        
+                        function funCalTab2(){
+                            var v2 = document.getElementById('hiddenKPI2').value;
+                            document.getElementById(v2).click();
+                        }
+                        
+                        function funTab3(num,name,dataset){
+                        if(name != ''){
+                        document.getElementById('tabid2').value= num;
+                        document.getElementById('SelectedDatasetid2').value= dataset;
+                        document.getElementById('SelectedRownumid2').value= num;
+                        ActTabs2();
+                        }
+                       
+                        }
+                        
+                         function ShowKPIsectiontwo(about,colors)
+                         {
+                            var div = document.getElementById(about);
+                            var divval = document.getElementById(colors);
+                     
+                       div.style.display = "block";
+                       divval.style.display = "block";
+                     
+                      } 
+                      function HideKPIsectiontwo(about,colors)
+                         {
+                            var div = document.getElementById(about);
+                             var divval = document.getElementById(colors);
+                     
+                       div.style.display = "none";
+                       divval.style.display = "none";
+                     
+                      } 
+                     </script>   
+                        <input type="hidden" name="hiddenKPI2" id="hiddenKPI2" />
+                        <input type="hidden" name="KPIValue2" id="KPIValue2" />
+                        <input type="hidden" name="dimSelecteed" id="dimSelecteed" />
+                        <input type="hidden" name="dateSelecteed" id="dateSelecteed" />
+                        <apex:actionFunction name="CallActions1" id="CallActions1" action="{!previous}"  rerender="FormsTab" status="status"/>
+                        
+                        <apex:actionFunction name="newTopics2" id="newTopics2" action="{!saveKPI2}" oncomplete="funCalTab2()" rerender="MyForm,FormsTab" status="status"/>        
+                        <apex:actionFunction name="ActTabs2" id="ActTabid2" action="{!ActTabs2}"  rerender="FormsTab" status="status" oncomplete="NewDatasettwo()"/>
+                        <input type="hidden" name="tabid2" id="tabid2" />
+                        <input type="hidden" name="SelectedDataset" id="SelectedDatasetid2" />
+                        <input type="hidden" name="SelectedRownum" id="SelectedRownumid2" />
+       
+                 <apex:outputpanel id="FormsTab">
+                
+                    
+                <style>
+                .Class5{
+                    color:#FFF !important;
+                }
+                .Class6{
+                    border-color: none !important;
+                    background-color:white !important;
+                    color: #54698d !important;                
+                }
+                
+                
+
+         
+                 .managebutton {
+                               border: 1.35px solid lightgrey; 
+                               
+                           }
+                           .managebutton:hover{
+                               border: 1.35px solid #2EC2BA;
+                           } 
+                </style>
+                <apex:outputpanel id="FormsTabNew">
+                <div class="slds-tabs--default">
+                <ul class="slds-tabs--default__nav slds-grid slds-wrap" role="tablist" style="background-color: #F0F0F0;padding: 12px;">
+                <apex:variable var="Row" value="{!11}" />
+                <apex:repeat value="{!KPIDetils}" var="KPIRec"> 
+                    <li class="slds-tabs--default__item slds-text-heading--label slds-active slds-col--padded slds-size--1-of-2 slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--3-of-12 {!if(KPIRec.KPIRownumber== Row,'tabyes','tabno')}" Style="max-width:20%" title="Tab 6" role="presentation">                  
+                        <div class="slds-form-element" >
+                        	<div class="slds-modal__content" style="padding:0px;border-radius:5px">
+                        		<div class="slds-grid slds-wrap" onmouseover="ShowKPIsectiontwo('ShowIdsaddtwo{!KPIRec.KPIRownumber}','ShowIdsdeltwo{!KPIRec.KPIRownumber}')" onmouseout="HideKPIsectiontwo('ShowIdsaddtwo{!KPIRec.KPIRownumber}','ShowIdsdeltwo{!KPIRec.KPIRownumber}')">            
+                        			<div class="slds-size--12-of-12 slds-medium-size--8-of-12 slds-small-size--12-of-12 slds-large-size--9-of-12 {!IF(SelectedrowValue2 = KPIRec.KPIRownumber,'Class5','Class6')}" style="text-align: right;border:0px;border-radius: 5px 0px 0px 5px;">
+                                            <a class="slds-tabs--default__link {!IF(SelectedrowValue2 = KPIRec.KPIRownumber,'Class5','Class6')}"  onclick="funTab3('{!KPIRec.KPIRownumber}','{!KPIRec.KPIname}','{!KPIRec.dataSet}')" id="{!KPIRec.KPIname}" href="javascript:void(0);" role="tab" tabindex1="{!IF(KPIRec.KPIRownumber == 1,'0','-1')}" aria-selected="false" aria-controls="tab-default-6" style="border:0px;border-radius: 5px 0px 0px 5px;line-height: 33px;height: 35px;" >
+                                                {!KPIRec.KPIname} 
+                                            </a> 
+                        			</div> 
+                        			<div class="slds-size--12-of-12 slds-medium-size--4-of-12 slds-small-size--12-of-12 slds-large-size--3-of-12 {!IF(SelectedrowValue2 = KPIRec.KPIRownumber,'Class5','Class6')}"  style="text-align: right;background-color:#2EC2BA;border-radius: 0px 5px 5px 0px;">
+                        				<div style="padding-top: 5px;padding-bottom: 30px;">
+                        					<apex:outputpanel rendered="{!IF(KPIRec.KPIname == '',true,false)}" >  
+                                               <img style="cursor:pointer;position:relative; z-index:2;float:left;margin-left: -70px;"  onclick="openKPI3('{!KPIRec.KPIRownumber}','{!KPIRec.KPIName}','{!KPIRec.dataSet}')" src="{!$Resource.Add}" width="20px" height="10px" />
+                                             </apex:outputpanel>
+                                             <apex:outputpanel rendered="{!IF(KPIRec.KPIname != '',true,false)}" >
+                                                <img style="cursor:pointer;display:none;float:right"  onclick="confirmKPIDelete2('{!KPIRec.KPIRownumber}','{!KPIRec.KPIName}','{!KPIRec.dataSet}')" title="Delete" src="{!$Resource.Delete}" width="22px" height="12px" id="ShowIdsdeltwo{!KPIRec.KPIRownumber}"/>
+                                                 <img style="cursor:pointer;display:none;float:right;padding-top:3px"  onclick="openKPI3('{!KPIRec.KPIRownumber}','{!KPIRec.KPIName}','{!KPIRec.dataSet}')" title="Edit" src="{!$Resource.Edit}" width="17px" height="11px" id="ShowIdsaddtwo{!KPIRec.KPIRownumber}"/>
+                                               
+                                             </apex:outputpanel>
+                        				</div>
+                        			</div>
+                        		</div>
+                        	</div>
+                        </div>
+                    </li>
+                    
+                <apex:variable var="Row" value="{!Row+1}" /> 
+               
+                </apex:repeat>
+                </ul>
+                </div>
+                </apex:outputpanel>
+               <div class="slds-form-element" style="padding-top:0px;">
+                <div class="slds-grid slds-m-top--large"  style="margin-top:0px;">
+                    <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="tstpopup3" >
+                        <div class="slds-modal__container ">
+                            
+                                
+                           <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+                                <div class="slds">
+                                <div class="myapp">
+                                     
+                                    </div>
+                                </div>
+                                <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;"><span><b style="font-size:15px">Add KPI</b></span></div>                           
+                                   
+                                        <div class="slds-grid slds-wrap slds-grid--pull-padded ">
+                                        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--1-of-4 slds-grid--align-center slds-text-align--right - col-form-label">
+                                        <apex:outputtext value="KPI Name" Styleclass="slds-input" style="border:0px"/>      
+                                        </div>
+                                            <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--2-of-4 slds-grid--align-center slds-p-bottom--medium">
+                                               <!--   <apex:inputText value="{!KPINameUI}" Styleclass="slds-input" />   -->
+                                               <input type="text" class="slds-input" id="txTopic2" placeholder="Enter KPI Name"  /> 
+                                               <input type="hidden" class="slds-input" id="KPIRow2" /> 
+                                               <div id="error5" style="padding-left:3px;color: #d74c3b;"></div>   
+                                            </div>                                          
+                                        </div>
+                                        
+                                        <div class="slds-grid slds-wrap slds-grid--pull-padded ">
+                                        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--1-of-4 slds-grid--align-center slds-text-align--right - col-form-label">
+                                        <apex:outputtext value="Select Dataset" Styleclass="slds-input" style="border:0px"/>      
+                                        </div>
+                                            <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--2-of-4 slds-grid--align-center slds-p-bottom--medium">
+                                                                <apex:selectlist value="{!SelectKPIValue}" size="1" styleclass="slds-col--padded slds-size--1-of-2 slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--3-of-12 slds-input" style="width:70%" id="SelectKPIValue1">
+                                                                    <apex:selectoptions value="{!DatasetValuesList}"></apex:selectoptions>
+                                                                </apex:selectlist>   
+                                               <div id="error" style="padding-left:3px;color: #d74c3b;"></div>   
+                                            </div>                                          
+                                        </div>                                        
+
+                         
+                                <div class="slds-modal__footer">
+                                    <div class="slds-x-small-buttons--horizontal">
+                                          <!--    <apex:commandButton styleClass="slds-button slds-button--neutral slds-button--brand"  value="Save"  action="{!SaveKPI}"  rerender="MyForm,FormsTab,names"/>  -->
+                                          <button type="button" Class="slds-button slds-button--neutral"  onclick="closeKPI3();" rerender="MyForm,FormsTab"  html-formnovalidate="formnovalidate">Close</button> 
+                                          <button type="button" class="slds-button slds-button--neutral slds-button--brand" onClick="funTopic3();" >Save</button>
+                                     </div>    
+                                </div>   
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>  
+             <script>
+              function NewDatasettwo(){
+                 dataSetId = '{!KPIDatasets}';
+                 folderId='{!CurrentVersionId}';
+                 selurlid = '{!CurrentVersionurl}';
+             }
+                function openKPI3(name,value,dataset){ 
+                     if(dataset != ''){
+                        document.getElementById('{!$Component.SelectKPIValue1}').value = dataset;  
+                     }
+                    document.getElementById("txTopic2").value = value; 
+                    document.getElementById("KPIRow2").value = name;
+                    document.getElementById("tstpopup3").className =
+                    document.getElementById("tstpopup3").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )               
+                    showBackDrop3();
+                    return false;
+                }                           
+                function closeKPI3(){                     
+                    document.getElementById("tstpopup3").className =
+                    document.getElementById("tstpopup3").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )               
+                    hideBackDrop3();
+                    return true;
+                } 
+                
+                function hideBackDrop3(){    
+                    document.getElementById("backdropDiv").className = document.getElementById("backdropDiv").className.replace(/(?:^|\s)slds-modal-backdrop--open(?!\S)/g , ' slds-modal-backdrop--closed' )
+                    return false;
+                }
+                    function showBackDrop3(){ 
+                        document.getElementById("backdropDiv").className =document.getElementById("backdropDiv").className.replace(/(?:^|\s)slds-modal-backdrop--closed(?!\S)/g , ' slds-modal-backdrop--open' )
+                        return false;
+                    }
+                function openSelectPopup3(value){
+                    document.getElementById('{!$Component.SelectedButtonValue}').value = value;
+                    document.getElementById("SelectPopup2").className =
+                    document.getElementById("SelectPopup2").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' ) 
+                    if(value == 'Dimensions2'){
+                    ActDimension2();
+                    }
+                    if(value == 'Datefield2'){
+                    ActDateField2();
+                    }  
+                    if(value == 'Measures2'){
+                    ActMeasures2();
+                    }  
+                    if(value == 'Filters2'){
+                    ActFilters2();
+                    filtersrecordsupdatetwo();
+                    }                                                         
+                    showBackDrop3();
+                    return true;                
+                }
+               
+                
+                  function closeSelectPopup12(){
+                    document.getElementById("SelectPopup2").className =
+                    document.getElementById("SelectPopup2").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' ) 
+                    var Rownumber =  '{!SelectedrowValue2}'; 
+                    var MeasureRec = $("#MenuItems"+Rownumber+" ul").html();
+                    document.getElementById('Menuitemsval').value= MeasureRec;
+                    document.getElementById("RowNumber").value = Rownumber;
+                    refreshSelected2();              
+                    hideBackDrop3();
+                    return true;                
+                }
+                
+                
+                  function closePopup12(){
+                    var Rownumber =  '{!SelectedrowValue2}'; 
+                    var MeasureRec = $("#MenuItems"+Rownumber+" ul").html();
+                    document.getElementById('Menuitemsval').value= MeasureRec;
+                    document.getElementById("RowNumber").value = Rownumber;
+                    refreshSelected2();              
+                                  
+                }
+                
+                
+                 function closeSelectPopup8(){
+                    document.getElementById("EditPopup2").className =
+                    document.getElementById("EditPopup2").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' ) 
+                    
+                    refreshSelected2();
+                    hideBackDrop3();
+                    return true;                
+                }
+                
+                 
+                 
+        </script>
+        <script>
+             function showhidesectwo(about,colors,displays)
+                 {
+                    var div = document.getElementById(about);
+                    var divval = document.getElementById(colors);
+                     var divvals = document.getElementById(displays);
+                
+                        div.style.display = "block";
+                        divval.style.background = "#2EC2BA";
+                        divvals.style.display = "none";
+                
+              } 
+              function showhidesectwo1(about,colors,displays)
+                 {
+                    var div = document.getElementById(about);
+                     var divval = document.getElementById(colors);
+                      var divvals = document.getElementById(displays);
+                
+                        div.style.display = "none";
+                        divval.style.background = "white";
+                        divvals.style.display = "block";
+                
+              }
+              
+               function showhidesectwo2(about,colors,displays)
+                 {
+                    var div = document.getElementById(about);
+                    var divval = document.getElementById(colors);
+                    var divvals = document.getElementById(displays);
+                
+                        div.style.display = "block";
+                        divval.style.background = "#2EC2BA";
+                 divvals.style.display = "none";
+              } 
+              function showhidesectwo3(about,colors,displays)
+                 {
+                    var div = document.getElementById(about);
+                     var divval = document.getElementById(colors);
+                     var divvals = document.getElementById(displays);
+                
+                        div.style.display = "none";
+                        divval.style.background = "white";
+                 divvals.style.display = "block";
+              } 
+              
+              function showhidesectwo4(about,colors)
+                 {
+                    var div = document.getElementById(about);
+                    var divval = document.getElementById(colors);
+                
+                        div.style.display = "block";
+                        divval.style.background = "#2EC2BA";
+                
+              } 
+              function showhidesectwo5(about,colors)
+                 {
+                    var div = document.getElementById(about);
+                     var divval = document.getElementById(colors);
+                
+                        div.style.display = "none";
+                        divval.style.background = "white";
+                
+              } 
+              
+              
+              function showhidesectwo6(about,colors)
+                 {
+                    var div = document.getElementById(about);
+                    var divval = document.getElementById(colors);
+                
+                        div.style.display = "block";
+                        divval.style.background = "#2EC2BA";
+                
+              } 
+              function showhidesectwo7(about,colors)
+                 {
+                    var div = document.getElementById(about);
+                     var divval = document.getElementById(colors);
+                
+                        div.style.display = "none";
+                        divval.style.background = "white";
+                
+              } 
+              
+       </script>
+        <apex:outputpanel id="refreshSelected2" onclick="onmeasureClose13();">       
+  <apex:outputpanel id="tab_default6" rendered="{!defaultTab3}">
+  <div id="tab-default-6" style="padding: 0px;" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-6__item">    
+    <div style="background-color:#F0F0F0 ;padding: 10px;max-height: 300px;height: 290px;">
+     
+    
+    <div class="row">
+    <table style="width:100%;" cellpadding="4px">
+    <tr>
+    <td style="width:25%;text-align:center;"><button onclick="openSelectPopup3('Dimensions2')" type="button" class="managebutton slds-button--neutral" style="line-height: 24px;color:rgb(77, 77, 77);background:#FFF;font-weight:bold" >Dimensions</button></td>
+    <td style="width:25%;text-align:center;"><button onclick="openSelectPopup3('Datefield2')" type="button" class="managebutton slds-button--neutral" style="line-height: 24px;color:rgb(77, 77, 77);background:#FFF;font-weight:bold" >Datefields</button></td>
+      <td style="width:25%;text-align:center;"><button onclick="toggleMeasures('{!SelectedrowValue2}','0Fb36000000H8iHCAS','0Fc360000010Yy6CAE');return false;" type="button" class="managebutton slds-button--neutral" style="line-height: 24px;color:rgb(77, 77, 77);background:#FFF;font-weight:bold" >Measures</button></td>
+  
+   <!-- <td style="width:25%;text-align:center;"><button onclick="openSelectPopup3('Measures2')" type="button" class="managebutton slds-button--neutral" style="line-height: 24px;color:rgb(77, 77, 77);background:#FFF;font-weight:bold" >Measures</button></td>-->
+    <td style="width:25%;text-align:center;">
+          <apex:repeat value="{!KPIDetils}" var="KPIFilterRec"> 
+           <apex:outputpanel rendered="{!IF(KPIFilterRec.KPIRownumber == SelectedrowValue2,true,false)}">
+                <apex:outputpanel rendered="{!IF(KPIFilterRec.SelectedFilterList == null || KPIFilterRec.SelectedFilterList.size == 0 ,true,false)}">
+                    <button  onclick="openSelectPopup3('Filters2')" type="button" class="managebutton slds-button--neutral" style="background: white;color: rgb(77, 77, 77);font-weight:bold">Filters</button>
+                </apex:outputpanel>
+                <apex:outputpanel rendered="{!IF(KPIFilterRec.SelectedFilterList != null && KPIFilterRec.SelectedFilterList.size != 0 ,true,false)}">
+                    <button   type="button" class="managebutton slds-button--neutral" style="background: white;color: rgb(77, 77, 77);font-weight:bold">Filters</button>
+                </apex:outputpanel>
+                </apex:outputpanel>
+            </apex:repeat>    
+        </td>
+   
+    </tr>
+    <tr>
+    <td style="width:25%;padding: 5px 5px;" valign="top">
+    <apex:repeat value="{!KPIDetils}" var="KPIDimenRec"> 
+    <apex:outputpanel rendered="{!IF(KPIDimenRec.KPIRownumber == SelectedrowValue2,true,false)}">
+    <apex:outputpanel rendered="{!IF(KPIDimenRec.KPICheck == false,true,false)}">
+    <apex:outputpanel rendered="{!IF(KPIDimenRec.SelectedDimensions != null && KPIDimenRec.SelectedDimensions.size !=0,true,false)}">
+    <table style="width:100%;margin-top:10px;background-color: white;border-radius: 6px;table-layout:fixed"> 
+    <apex:variable var="Row" value="{!1}" />
+    <tr><td style="padding-bottom: 4px;"></td></tr>
+    <apex:repeat value="{!KPIDimenRec.SelectedDimensions}" var="DimSel"> 
+       
+        
+         <tr valign="top" id="AccountIdsectwo{!Row}{!KPIDimenRec.KPIRownumber}" onmouseover="showhidesectwo('Accountsectwo{!Row}{!KPIDimenRec.KPIRownumber}','AccountIdsectwo{!Row}{!KPIDimenRec.KPIRownumber}','Displaysectwo{!Row}{!KPIDimenRec.KPIRownumber}')" onmouseout="showhidesectwo1('Accountsectwo{!Row}{!KPIDimenRec.KPIRownumber}','AccountIdsectwo{!Row}{!KPIDimenRec.KPIRownumber}','Displaysectwo{!Row}{!KPIDimenRec.KPIRownumber}')">
+             <td Style="text-align:center;border-top:0px;overflow:hidden;width:100%;max-width:949px;text-overflow: ellipsis;" id="Displaysectwo{!Row}{!KPIDimenRec.KPIRownumber}"> 
+			   <apex:outputText value="{!DimSel.Availablename}" />
+                
+                 </td>
+             
+        <td Style="text-align:center;border-top:0px;overflow:visible;display:none;z-index:100;width:100%;" id="Accountsectwo{!Row}{!KPIDimenRec.KPIRownumber}">
+             <div style="width: max-content;" class="NewSldscard">
+            <div style="float:left;background:#2EC2BA !important;width:93%;position:relative; z-index:2;height: 25px;padding-left:21px"> <apex:outputText value="{!DimSel.Availablename}" style="position:relative; z-index:2;"/> </div>
+            <div style="float:right;background:#2EC2BA !important;width:7%;position:relative; z-index:2;    height: 25px;">     <img style="cursor:pointer;position:relative; z-index:2;float:right" onclick="openLabelPopup3('{!DimSel.Availablename}','Dimensions3','{!SelectedrowValue2}')" title="Edit" src="{!$Resource.Edit}" width="20px" height="11px" />  
+             </div>
+                 </div>
+                 </td>
+        </tr>
+        <apex:variable var="Row" value="{!Row+1}" />
+    </apex:repeat>
+    <tr><td style="padding-bottom: 4px;"></td></tr>
+    </table> 
+    </apex:outputpanel>
+    </apex:outputpanel>
+    </apex:outputpanel>
+    </apex:repeat> 
+
+    </td>
+    <td style="width:25%;padding: 5px 5px;" valign="top">
+    <apex:repeat value="{!KPIDetils}" var="KPIDateRec"> 
+    <apex:outputpanel rendered="{!IF(KPIDateRec.KPIRownumber == SelectedrowValue2,true,false)}">
+    <apex:outputpanel rendered="{!IF(KPIDateRec.KPICheck == false,true,false)}">  
+    <apex:outputpanel rendered="{!IF(KPIDateRec.SelectedDateFieldlist != null && KPIDateRec.SelectedDateFieldlist.size != 0,true,false)}">
+    <table style="width:100%;margin-top:10px;background-color: white;border-radius: 6px;table-layout:fixed"> 
+    <apex:variable var="Row" value="{!1}" />
+    <tr><td style="padding-bottom: 4px;"></td></tr>
+    <apex:repeat value="{!KPIDateRec.SelectedDateFieldlist}" var="SelectedFields">
+       
+        
+         <tr valign="top" id="AccountIdsectwo1{!Row}{!KPIDateRec.KPIRownumber}" onmouseover="showhidesectwo('Accountsectwo1{!Row}{!KPIDateRec.KPIRownumber}','AccountIdsectwo1{!Row}{!KPIDateRec.KPIRownumber}','Displaysect2{!Row}{!KPIDateRec.KPIRownumber}')" onmouseout="showhidesectwo1('Accountsectwo1{!Row}{!KPIDateRec.KPIRownumber}','AccountIdsectwo1{!Row}{!KPIDateRec.KPIRownumber}','Displaysect2{!Row}{!KPIDateRec.KPIRownumber}')">
+             <td Style="text-align:center;border-top:0px;overflow:hidden;width:100%;max-width:949px;text-overflow: ellipsis;" id="Displaysect2{!Row}{!KPIDateRec.KPIRownumber}"> 
+			   <apex:outputText value="{!SelectedFields.DateFieldName}" />
+                
+                 </td>
+             
+        <td Style="text-align:center;border-top:0px;overflow:visible;display:none;z-index:100" id="Accountsectwo1{!Row}{!KPIDateRec.KPIRownumber}">
+             <div style="width: max-content;" class="NewSldscard">
+            <div style="float:left;background:#2EC2BA !important;width:93%;position:relative; z-index:2;height: 25px;padding-left:21px"> <apex:outputText value="{!SelectedFields.DateFieldName}" style="position:relative; z-index:2;"/> </div>
+            <div style="float:right;background:#2EC2BA !important;width:7%;position:relative; z-index:2;    height: 25px;">     <img style="cursor:pointer;position:relative; z-index:2;float:right" onclick="openLabelPopup3('{!SelectedFields.DateFieldName}','DateFields3','{!SelectedrowValue2}')" title="Edit" src="{!$Resource.Edit}" width="20px" height="11px" />  
+             </div>
+                 </div>
+                 </td>
+        </tr>
+        <apex:variable var="Row" value="{!Row+1}" />
+    </apex:repeat> 
+    <tr><td style="padding-bottom: 4px;"></td></tr>
+    </table> 
+    </apex:outputpanel>
+    </apex:outputpanel>
+    </apex:outputpanel>
+    </apex:repeat> 
+    
+    </td>
+    <td style="width:25%;padding: 5px 5px;" valign="top">
+          <style>
+          
+          .selector.measure .functionlist .btn.selected:after {
+    content: " ";
+    position: absolute;
+    right: -8px;
+    top: 0;
+    border-right: none;
+    border-left: 8px solid #c5d2e0;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+}
+
+
+.selector.measure .functionlist .btn:not(.disabled).selected {
+    background: #c5d2e0 !important;
+    border: none;
+}
+
+.selector.measure .functionlist .btn.selected {
+    margin-left: 5px;
+    width: 70px !important;
+    border-radius: 2px 0 0 2px;
+    font-weight: 600;
+}
+
+.selector.measure .functionlist .btn {
+    text-align: left;
+    -webkit-transition: all .1s ease;
+    transition: all .1s ease;
+    font-size: 12px;
+    -webkit-box-pack: start;
+    -o-box-pack: start;
+    -ms-flex-pack: start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+}
+
+.buttonbar.vertical .btn, .buttonbar.vertical .buttongroup {
+    margin-bottom: 2px;
+    margin-right: 0;
+}
+
+.buttonbar.vertical .btn {
+    float: none;
+    -webkit-box-pack: initial;
+    -o-box-pack: initial;
+    -ms-flex-pack: initial;
+    -webkit-justify-content: initial;
+    justify-content: initial;
+}
+
+.btn:not(.disabled).active, .btn:not(.disabled).selected, .active>.btn:not(.disabled), .selected>.btn:not(.disabled) {
+    background-color: #e6ecf2;
+}
+
+.buttonbar .btn {
+    float: left;
+}
+
+.btn.medium, .medium>.btn {
+    padding: 0 10px;
+    line-height: 32px;
+}
+
+.slds a {
+    color: #0070d2;
+    text-decoration: none;
+    -webkit-transition: color 0.1s linear;
+    transition: color 0.1s linear;
+}
+
+.slds a {
+    background-color: transparent;
+}
+
+.btn {
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+    -webkit-box-align: center;
+    -o-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -o-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    margin-right: 5px;
+    padding: .5rem;
+    background: none;
+    border:none;
+    border-radius: .25rem;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: visible;
+    text-align: center;
+    color: #5c7a99;
+    cursor: pointer;
+    -webkit-transition: .2s all;
+    transition: .2s all;
+}
+
+.w100 {
+    width: 100%;
+}
+
+a {
+    color: #0070d2;
+    text-decoration: none;
+    -webkit-transition: .1s color linear;
+    transition: .1s color linear;
+    cursor: pointer;
+}
+
+a {
+    background-color: transparent;
+}
+
+.slds h1, .slds h2, .slds h3, .slds h4, .slds h5, .slds h6, .slds th, .slds td {
+    font-family: "Salesforce Sans", Arial, sans-serif;
+}
+
+.slds caption, .slds th, .slds td {
+    text-align: left;
+}
+
+.slds table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+.slds:not(html), .slds body {
+    font-size: 14px;
+    background: transparent;
+}
+
+.slds {
+    font: 100%/1.5 "Salesforce Sans", Arial, sans-serif;
+    background: white;
+    color: #16325c;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.slds {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    margin: 0;
+}
+
+html, body {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    min-height: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+    height: 100%;
+    color: rgba(0, 0, 0, 0.87);
+    background: white;
+    position: relative;
+}
+
+body {
+    font-family: 'Salesforce Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+    color: #17324d;
+    font-size: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-overflow-scrolling: touch;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+}
+
+button, select, html, textarea, input {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html, body {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    min-height: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+    height: 100%;
+    color: rgba(0, 0, 0, 0.87);
+    background: white;
+    position: relative;
+}
+
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+
+
+
+.selector.measure .functionlist .btn.selected:after {
+    content: " ";
+    position: absolute;
+    right: -8px;
+    top: 0;
+    border-right: none;
+    border-left: 8px solid #c5d2e0;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+}
+
+
+
+.slds ::selection {
+    background: #faffbd;
+    text-shadow: none;
+}
+    .menu ul li:hover{
+        background-color:rgb(46, 194, 186);
+    }
+    .menu ul li{
+        padding: 0%;
+        margin: 0;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: box;
+        display: block;
+        overflow: hidden;
+        -webkit-box-pack: justify;
+        -o-box-pack: justify;
+        -ms-flex-pack: justify;
+        -webkit-justify-content: space-between;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        -o-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        background-color: white;
+        height: 26px;
+        padding: 0px;
+        border-top: 0px solid #e6ecf2;
+        border-bottom: 0px solid #e6ecf2;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        margin-top: 0%;
+        margin-bottom: 0%;
+        white-space: nowrap;
+        color: #16325c;
+        font-size: .90rem;
+        line-height: 2;
+        text-align: center;
+        flex: 1;
+        font-weight: 500;    
+    
+    }
+    .menu {
+         border:0px solid #c5d2e0;
+    }
+    .btn1{
+        background: none !important;
+        border:none !important;
+        color: #5c7a99 !important;
+        
+    }
+     .btn1:hover{
+        background: #dbe1e6 !important;;
+        border:none !important;
+        color: #5c7a99 !important;
+        text-decoration:none !important;
+        
+    }
+     @media only screen and (max-width: 830px) {
+        .NewSldscard{
+            min-width:160px
+        }      
+    }
+    @media only screen and (min-width: 831px) {
+        .NewSldscard{
+            min-width:180px
+        }      
+    }  
+    @media only screen and (min-width: 900px) {
+        .NewSldscard{
+            min-width:220px
+        }
+         .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 270px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 220px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        overflow: visible;
+        padding-left: 40px;
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 220px; 
+    }
+    
+        .paddingIds{
+            width: 222px;
+        }
+    }
+    @media only screen and (min-width: 1000px) {
+        .NewSldscard{
+            min-width:240px
+        }  
+         .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 213px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 231px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        overflow: visible;
+        padding-left: 40px;
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 231px; 
+    }
+        .paddingIds{
+            width: 234px;
+        }
+    }
+     @media only screen and (min-width: 1100px) {
+        .NewSldscard{
+            min-width:235px;
+        } 
+         .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 241px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 241px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        overflow: visible;
+        padding-left: 40px;
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 241px; 
+    }
+    .paddingIds{
+            min-width: 244px;
+        }
+    }
+    
+     @media only screen and (min-width: 1150px) {
+        .NewSldscard{
+            min-width:246px;
+        } 
+        
+          .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 248px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 253px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        overflow: visible;
+        padding-left: 40px;
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 253px; 
+    }
+    .paddingIds{
+            width: 256px;
+        }
+        
+    }
+     @media only screen and (min-width: 1200px) {
+        .NewSldscard{
+            min-width:260px
+        } 
+         .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 268px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 268px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        overflow: visible;
+        padding-left: 40px;
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 268px; 
+    }
+    .paddingIds{
+            width: 271px;
+        }
+    }
+    @media only screen and (min-width: 1250px) {
+        .NewSldscard{
+            min-width:275px
+        } 
+        
+        .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px; 
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 281px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 281px;
+    }
+    
+     .liclasses:hover{
+        background: white;
+        padding-left: 40px;
+        overflow: visible; 
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 281px; 
+    }
+    .paddingIds{
+            width: 284px;
+        }
+    }
+    @media only screen and (min-width: 1300px) {
+        .NewSldscard{
+            min-width:284px
+        } 
+         .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px; 
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 278px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 293px;
+    }
+    
+     .liclasses:hover{
+        background: white;
+        padding-left: 40px;
+        overflow: visible; 
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 293px; 
+    }
+    .paddingIds{
+            width: 296px;
+        }
+    }
+    
+    @media only screen and (min-width: 1350px) {
+        .NewSldscard{
+            min-width:299px
+        }
+            .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px; 
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 309px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 309px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        padding-left: 40px;
+        overflow: visible; 
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 309px; 
+    }
+    .paddingIds{
+            width: 312px;
+        }
+        }    
+   
+     @media only screen and (min-width: 1400px) {
+        .NewSldscard{
+            min-width:315px
+        }  
+        .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px; 
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 323px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 320px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        padding-left: 40px
+        overflow: visible; 
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 320px; 
+    }
+    .paddingIds{
+           width: 323px;
+        }
+    }
+    @media only screen and (min-width: 1450px) {
+        .NewSldscard{
+            min-width:340px
+        } 
+        
+        .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px;
+        margin-top: 0px;
+        position: absolute; 
+        height: 26px; 
+        background: white; 
+        overflow: hidden; 
+        max-width: 323px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 323px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        overflow: visible; 
+        padding-left: 40px
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 323px; 
+    }
+    .paddingIds{
+            width: 326px;
+        }
+    }
+    
+     @media only screen and (min-width: 1500px) {
+        .NewSldscard{
+            min-width:343px
+        } 
+        
+        .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 333px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 333px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        padding-left: 40px;
+        overflow: visible; 
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 333px; 
+    }
+    .paddingIds{
+            width: 337px;
+        }
+    }
+    
+    @media only screen and (min-width: 1550px) {
+        .NewSldscard{
+            min-width:341px
+        } 
+        
+        .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 340px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 352px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        padding-left: 40px;
+        overflow: visible; 
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 352px; 
+    }
+    .paddingIds{
+            width: 355px;
+        }
+    }
+    
+    @media only screen and (min-width: 1600px) {
+        .NewSldscard{
+            min-width:370px
+        } 
+        
+        .liclasses{
+        cursor: pointer; 
+        float: left; 
+        padding-left: 0px; 
+        position: absolute; 
+        height: 26px;
+        margin-top: 0px;
+        background: white; 
+        overflow: hidden; 
+        max-width: 365px;
+        text-overflow:ellipsis;
+        text-align: center;
+        min-width: 365px;
+    }
+    
+     .liclasses:hover{
+        background: white; 
+        padding-left: 40px;
+        overflow: visible; 
+        max-width: max-content;
+        background:#2EC2BA !important;
+        text-align: center;
+        min-width: 365px; 
+    }
+    .paddingIds{
+            width: 368px;
+        }
+    }
+</style>
+<div width="" style="margin-top: 10px;">
+   
+    <div class="menu" id="MenuItems{!SelectedrowValue2}">
+            <ul id="paddingIds{!SelectedrowValue2}" style="border-radius: 5px;background: white;" class="paddingIds">
+            
+            
+        </ul>
+    </div>
+</div>
+
+ <script>
+    var Rows = '{!SelectedrowValue2}';
+       $('#MenuItemsEdit'+Rows+' li').appendTo($('#MenuItems'+Rows+' ul')); 
+        var func = 'false';
+        if(func == 'false'){
+        $(function() {
+                 PopupEdit(Rows);
+                 func == 'true';
+              }); 
+        }
+        
+        
+        function filterPopUpModelfour(){
+                     $('#MenuItemsEdit'+Rows+' li').appendTo($('#MenuItems'+Rows+' ul')); 
+                     	var itemsrec = 0;
+                    		if($("#MenuItems"+Rows+" li").length != undefined ){
+                    			for(var i=1;i<= $("#MenuItems"+Rows+" li").length;i++){
+                    				 itemsrec = i;
+                    		}
+                    	}
+                    	if(itemsrec == 0 ){
+                    		var divs = document.getElementById("paddingIds"+Rows);
+                    		divs.style.padding = "0px";
+                    		divs.style.border = "0px solid white";
+                    	}
+                    	else{
+                    		var divs = document.getElementById("paddingIds"+Rows);
+                    		divs.style.padding = "1px";
+                    		divs.style.border = "1px solid white";
+                    	}
+                   filterPopUpModel();
+                   NewDatasettwo();
+               } 
+ </script>
+<div width="200px" style="margin: 10px;diplay:none">
+   
+    <div class="menu" style="width:200px;height:150px;overflow-y:auto;display:none" id="MenuItemsEdit{!SelectedrowValue2}">
+        <ul>
+             <apex:repeat value="{!KPIDetils}" var="KPIDateRec"> 
+                <apex:outputpanel rendered="{!IF(KPIDateRec.KPIRownumber == SelectedrowValue2,true,false)}">
+                <apex:repeat value="{!KPIDateRec.NewMeasurevarlist}" var="mes">
+                    <li onmouseover="ShowMeasures('{!mes.EditApi}')" onmouseout="hideMeasures('{!mes.EditApi}')"><input type="hidden" class="parentSelected" value="{!mes.Measurevar}"/><input type="hidden" class="itemSelected" value="{!mes.Measureval}"/><input type="hidden" class="editSelected" value="{!mes.EditMeasval}"/><input type="hidden" class="editApi" value="{!mes.EditApi}" /><div class="liclasses" onclick="editItems(this,{!SelectedrowValue2},event)">{!mes.EditMeasval}<span style="cursor: pointer;float:right;display:none" id="{!mes.EditApi}"><img style="cursor:pointer;position:relative; z-index:2;" title="Edit" src="{!$Resource.Edit}" width="17px" height="10px" onclick="openLabelPopup3(this,'Measures3','{!SelectedrowValue2}')"/><img style="cursor:pointer;position:relative; z-index:2;" title="Delete" src="{!$Resource.Delete}" onclick="removeItemsone(this,{!SelectedrowValue2},'{!mes.Measureval}')" width="26px" height="12px" /></span></div></li>
+                </apex:repeat>
+                </apex:outputpanel>
+                </apex:repeat>
+        </ul>
+    </div>
+</div>
+
+
+  <div  id="MeasuresPanel{!SelectedrowValue2}" class="popup menu selector controlmenu query-builder-picker-menu measureChangeMenu measure"  style="opacity: 1; top:35px; left:936px;display:none" onclick="measureclose13(event)">
+    
+    <div class="container" >
+        <div class="search measearch" >
+            <svg class="icon searchBoxIcon" >
+                <use
+                    xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#search">
+                </use>
+            </svg>
+            <input onkeyup="onfilterRecords('{!SelectedrowValue2}')" type="text" placeholder="Search..."  id="myInput{!SelectedrowValue2}"  />
+                <span class="searchhint resnum" ></span>
+                <a class="clear hide" data-tooltip="Clear Search" >
+                    <svg class="icon" >
+                        <use
+                            xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#close">
+                        </use>
+                    </svg>
+                </a>
+            </div>
+            <div class="functionlist computations tall" data-reactid=".g.0.1.2">
+                <div class="buttonbar vertical clearfix" data-reactid=".g.0.1.2.0">
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="count" class="btn medium w100 btn1 " >Count</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="sum" class="btn medium w100 btn1" >Sum</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="avg" class="btn medium w100 btn1" >Average</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="max" class="btn medium w100 btn1" >Maximum</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="min" class="btn medium w100 btn1" >Minimum</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="unique" class="btn medium w100 selected btn1" >Unique</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="median" class="btn medium w100 btn1">Median</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="first" class="btn medium w100 btn1" >First</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="last" class="btn medium w100 btn1" >Last</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="stddev" class="btn medium w100 btn1" data-tooltip="Standard Deviation" >Stddev</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="stddevp" class="btn medium w100 btn1" data-tooltip="Population Standard Deviation" >stddevp</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="var" class="btn medium w100 btn1" data-tooltip="Sample Variance" >Var</a>
+                    <a onclick="ParentItemsSelected(this,'{!SelectedrowValue2}')" data-aggtype="varp" class="btn medium w100 btn1" data-tooltip="Population Variance" >Varp</a>
+                </div>
+            </div>
+            <div class="names selectors selectors{!SelectedrowValue2}" >
+                <div class="listheader squeezed" ></div>
+                
+                <div class="listheader" >Measures</div>
+                
+                <div id="MeasuresPanelLayout{!SelectedrowValue2}"></div>
+               
+                <div class="listheader" >Dimensions</div>
+                
+                <div id="DimensionsPanelLayout{!SelectedrowValue2}"></div>
+
+            </div>
+        </div>
+    </div>
+   <!-- <apex:repeat value="{!KPIDetils}" var="KPIMeasureRec"> 
+    <apex:outputpanel rendered="{!IF(KPIMeasureRec.KPIRownumber == SelectedrowValue2,true,false)}">
+    <apex:outputpanel rendered="{!IF(KPIMeasureRec.KPICheck == false,true,false)}"> 
+    <apex:outputpanel rendered="{!IF(KPIMeasureRec.selectedMeasures != null,true,false)}">
+    <table style="width:100%;margin-top:10px;background-color: white;border-radius: 6px;">
+        <apex:variable var="Row" value="{!1}" />
+    <apex:repeat value="{!KPIMeasureRec.selectedMeasures}" var="SelectedMeasure">
+        <tr valign="top" id="AccountIdsectwo2{!Row}{!KPIMeasureRec.KPIRownumber}" onmouseover="showhidesectwo('Accountsectwo2{!Row}{!KPIMeasureRec.KPIRownumber}','AccountIdsectwo2{!Row}{!KPIMeasureRec.KPIRownumber}')" onmouseout="showhidesectwo1('Accountsectwo2{!Row}{!KPIMeasureRec.KPIRownumber}','AccountIdsectwo2{!Row}{!KPIMeasureRec.KPIRownumber}')">
+            <td Style="text-align:center;border-top:0px">
+                <apex:outputText value="{!SelectedMeasure}"/>
+            </td>
+            <td class="messageCell" Style="text-align:left;border-top:0px;display:none" id="Accountsectwo2{!Row}{!KPIMeasureRec.KPIRownumber}">
+                <img style="cursor:pointer;position:relative; z-index:2;" onclick="openLabelPopup3('{!SelectedMeasure}','Measures3','{!KPIMeasureRec.KPIRownumber}')"  src="{!$Resource.Edit}" width="20px" height="10px" />             
+          
+            </td>
+        </tr> 
+        <apex:variable var="Row" value="{!Row+1}" />
+    </apex:repeat>  
+    </table> 
+    </apex:outputpanel>
+    </apex:outputpanel>
+    </apex:outputpanel>
+    </apex:repeat> -->
+    </td>
+    <td style="width:25%;padding: 5px 5px;" valign="top">
+    <apex:repeat value="{!KPIDetils}" var="KPIFilterRec">   
+    <apex:outputpanel rendered="{!IF(KPIFilterRec.KPIRownumber == SelectedrowValue2,true,false)}">
+    
+    <apex:outputpanel rendered="{!IF(KPIFilterRec.SelectedFilterList != null && KPIFilterRec.SelectedFilterList.size != 0,true,false)}">
+    <table style="width:100%;margin-top:10px;background-color: white;border-radius: 6px;">
+        <tr><td style="padding-bottom: 4px;"></td></tr>
+        <apex:variable var="Row" value="{!1}" />
+        <apex:repeat value="{!KPIFilterRec.SelectedFilterList}" var="AddFil">
+       <tr valign="top" id="AccountIdsectwo3{!Row}{!KPIFilterRec.KPIRownumber}" onmouseover="showhidesectwo('Accountsectwo3{!Row}{!KPIFilterRec.KPIRownumber}','AccountIdsectwo3{!Row}{!KPIFilterRec.KPIRownumber}')" onmouseout="showhidesectwo1('Accountsectwo3{!Row}{!KPIFilterRec.KPIRownumber}','AccountIdsectwo3{!Row}{!KPIFilterRec.KPIRownumber}')">
+           <td Style="text-align:center;border-top:0px" width="80%"> 
+           <apex:outputPanel rendered="{!if(AddFil.FilterName != null || AddFil.FilterName != '' ,true,false)}" >
+                    <apex:outputText value="{!AddFil.FilterName}" style="font-sizet:20px;padding-left:57px"/><br/>
+                 </apex:outputPanel> </td>
+            <td Style="text-align:right;border-top:0px;" width="20%">
+                <apex:outputPanel rendered="{!if(Row != 1,true,false)}">
+              <h4 style="display: none" id="Accountsectwo3{!Row}{!KPIFilterRec.KPIRownumber}" >
+               <img style="cursor:pointer;position:relative; z-index:2;" onclick="openEditPopup2('{!KPIFilterRec.KPIRowNUmber}','{!AddFil.FilterName}','{!AddFil.rowcount}','{!AddFil.Newoutput}')" title="Edit" src="{!$Resource.Edit}" width="20px" height="10px" />
+                <img style="cursor:pointer;position:relative; z-index:2;"  onclick="confirmPayment2('{!KPIFilterRec.KPIRowNumber}','{!AddFil.FilterName}','{!AddFil.rowcount}')" title="Delete" src="{!$Resource.Delete}" width="26px" height="12px" />                              
+                 </h4>
+                    <input type="hidden" id="RowNumberDel2" name="RowNumberDel2" />
+                    <input type="hidden" id="RemoveFilterDel2" name="RemoveFilterDel2"/>
+                 <input type="hidden" id="hidrowcount2" name="hidrowcount2"/>
+                 
+             </apex:outputPanel>
+             
+    </td>
+    </tr>
+    <apex:variable var="Row" value="{!Row+1}" />
+    </apex:repeat>
+    <tr><td style="padding-bottom: 4px;"></td></tr>
+    </table>
+        <apex:outputpanel rendered="{!IF(KPIFilterRec.SelectedFilterList != null && KPIFilterRec.SelectedFilterList.size != 0,true,false)}">
+            <apex:outputpanel rendered="{!IF(KPIFilterRec.SelectedFilterList.size <= 4,true,false)}">
+                <center><img style="cursor:pointer;position:relative; z-index:2;" onclick="openSelectPopup3('Filters2')"  src="{!$Resource.Add}"  class="managebutton" width="20px" height="10px" /></center>   
+            </apex:outputpanel>
+        </apex:outputpanel>
+        </apex:outputpanel>
+        </apex:outputpanel>
+    </apex:repeat>
+    </td>
+    </tr>
+    </table>
+    </div>
+    </div>
+  </div>
+  </apex:outputpanel>
+  
+  </apex:outputpanel>
+  
+  <Script>
+
+
+    function confirmKPIDelete2(RowNumber,RemoveFIlter,Dataset) {
+         if(confirm('Do you want to proceed?') ) {
+         document.getElementById('DeleteKPI').value = RowNumber;
+         document.getElementById('DeleteFil').value = RemoveFIlter;
+         RemoveKPIS2();
+    }
+    returnfalse;
+    }
+ 
+ 
+  
+     function confirmPayment2(RowNumber,RemoveFIlter,rowcount) {
+         if(confirm('Do you want to proceed?') ) {
+         document.getElementById('RowNumberDel2').value = RowNumber;
+         document.getElementById('RemoveFilterDel2').value = RemoveFIlter;        
+         document.getElementById('hidrowcount2').value = rowcount;
+         
+         RemoveFilters2();
+    }
+    returnfalse;
+    }
+   function openEditPopup2(RowNumber,AddFilName,rowcount,Newout){ 
+       NewDimensions = 'false';
+       document.getElementById('{!$Component.SelectedButtonValue}').value = "Filters2";
+    document.getElementById('RowNumberCount').value = rowcount;  
+    document.getElementById('RowNumberFilter').value = RowNumber;
+    document.getElementById('AddFilName').value = AddFilName;
+    document.getElementById("FilterLogics").value = Newout; 
+    document.getElementById("SelectPopup2").className =
+    document.getElementById("SelectPopup2").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )               
+    ActEditFilters2();  
+     
+     
+    return true;  
+
+        
+}
+ 
+                
+      function openLabelPopup3(name,value,Rowvalue){ 
+          NewDimensions = 'false';
+                    document.getElementById("tstpopupLabel1").className =
+                    document.getElementById("tstpopupLabel1").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' ) 
+                     document.getElementById("RowValues2").value = Rowvalue; 
+                    if(value == 'DateFields3'){ 
+                        document.getElementById("EditTopic").value = name; 
+                        EditLabelClass();
+                    } 
+                    if(value == 'Dimensions3'){
+                            document.getElementById("EditDim").value = name; 
+                        EditDimClass();
+                    }
+                    if(value == 'Measures3'){
+                           var MeasureRec = $("#MenuItems"+Rowvalue+" ul").html();
+                        var delKey=$(name).closest('li').find('.editSelected').val();   
+                      
+                        document.getElementById('Menuitemsval').value= MeasureRec;
+                        document.getElementById("MeasTopic").value = delKey;  
+                        EditMeasClass();
+                    }
+                    showBackDrop1();          
+                    return true;
+                }
+                
+        function closeGenerateLabelPopup1(){      
+            document.getElementById("tstpopupLabel1").className = document.getElementById("tstpopupLabel1").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+            $(".popup").hide();
+            hideBackDrop();
+            return false;
+        }  
+         function MeasDateSelectPopuptwo(item) {
+             var RowNumber = '{!SelectedrowValue2}';
+             document.getElementById("RowNumber").value = RowNumber;
+		  if(item == 'Dimensions2'){
+			  var dimtype = $("#DimensionsbyItmestwoval ul").html();
+			  document.getElementById('DimhiddenKPI').value = dimtype;
+			  DimensionsNewtwo();
+		  }
+		  if(item == 'Datefield2'){
+			   var datetype = $("#DatesByItmesvaltwo ul").html();
+			  document.getElementById('DatehiddenKPI').value = datetype;
+			  DatesNewtwo();
+			  
+		  }
+	  }
+         function NewSelectPopupthree(output){    
+                var RowNumber = '{!SelectedrowValue2}';
+                    var Filter = document.getElementById('FilterNames2').value;
+                    
+                   var Slection =  $("#2 ul").html();
+                   if(Filter != '' && Slection != ''){
+                        document.getElementById("error125").innerHTML = ""; 
+                        document.getElementById("errorCond2").innerHTML = "";
+                     document.getElementById("FilterNamesandVal").value = Slection; 
+                       document.getElementById("RowNumber").value = RowNumber;
+                       document.getElementById("FilterLogics").value = document.getElementById(output).value;
+                       
+                       document.getElementById("FilterNamesvalues").value =  Filter; 
+                    AddFilterNewtwo();
+                   }
+                   else{
+                        if(Filter == ''){
+                            document.getElementById("error125").innerHTML = "Error: You Must Enter Value";
+                        }else{
+                            document.getElementById("error125").innerHTML = ""; 
+                        }
+                        if(Slection == ''){
+                            document.getElementById("errorCond2").innerHTML = "Error: You Must Enter At Least one Filter"; 
+                        }else{
+                            document.getElementById("errorCond2").innerHTML = "";
+                        }
+                }
+            }
+            
+             function NewSelectPopupEditthree(){  
+                  var RowNumber = '{!SelectedrowValue2}';
+                    var Filter = document.getElementById('FilterNames2').value;
+                   var Slection =   $("#2 ul").html();
+                     if(Filter != '' && Slection != '' ){
+                    document.getElementById("FilterNamesandVal").value = Slection; 
+                    document.getElementById("FilterNamesvalues").value = Filter; 
+                     document.getElementById("RowNumber").value = RowNumber;
+                     document.getElementById("FilterLogics").value = document.getElementById("2FilterLogic").value;
+                      document.getElementById("error125").innerHTML = ""; 
+                         document.getElementById("errorCond2").innerHTML = "";    
+                    updateFilterNewtwo();
+                    hideBackDrop();                  
+                    
+                    return true; 
+                     }
+                     else{
+                         if(Filter == ''){
+                            document.getElementById("error125").innerHTML = "Error: You Must Enter Value";
+                        }else{
+                            document.getElementById("error125").innerHTML = ""; 
+                        }
+                        if(Slection == ''){
+                            document.getElementById("errorCond2").innerHTML = "Error: You Must Enter At Least one Filter"; 
+                        }else{
+                         document.getElementById("errorCond2").innerHTML = "";
+                }
+                     }
+                }
+                
+</script>
+<!-- Label Edit PopUp Start-->               
+                 <div class="slds-form-element" style="padding-top:0px;">
+                <div class="slds-grid slds-m-top--large" Style="margin-top:0px">
+                
+                    <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="tstpopupLabel1" >
+                        <div class="slds-modal__container ">
+                            
+                         <apex:outputPanel id="OppEditPopup1">       
+                           <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">  
+                                <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;"><span><b style="font-size:15px">Edit Label</b></span></div>                           
+                                   
+                                        <div class="slds-grid slds-wrap slds-grid--pull-padded ">
+                                        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--1-of-4 slds-grid--align-center slds-text-align--right - col-form-label">
+                                        <apex:outputtext value="Edit Label" Styleclass="slds-input" style="border:0px"/>      
+                                        </div>
+                                            <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--2-of-4 slds-grid--align-center slds-p-bottom--medium">
+                                                <apex:outputpanel rendered="{!IF(DimStrings == true,true,false)}">
+                                                  <apex:inputText value="{!KPINameUI}" Styleclass="slds-input" onKeydown="Javascript: if (event.keyCode==13) validatefunction2('dimension');" id="text3"/>                                                     
+                                                </apex:outputpanel>
+                                                <apex:outputpanel rendered="{!IF(DateStrings == true,true,false)}">
+                                                  <apex:inputText value="{!KPINameUI}" Styleclass="slds-input" onKeydown="Javascript: if (event.keyCode==13) validatefunction2('date');" id="text31"/>                                                     
+                                                </apex:outputpanel>
+                                                <apex:outputpanel rendered="{!IF(measStrings == true,true,false)}">
+                                                  <apex:inputText value="{!KPINameUI}" Styleclass="slds-input" onKeydown="Javascript: if (event.keyCode==13) validatefunction2('measure');" id="text32"/>                                                     
+                                                </apex:outputpanel>
+                                                <div id="ComponentThree" style="padding-left:3px;color: #d74c3b;"></div >
+                                            </div>                                          
+                                        </div>
+  
+                         
+                                <div class="slds-modal__footer">
+                                    <div class="slds-x-small-buttons--horizontal">  
+                                    <button type="button" Class="slds-button slds-button--neutral" rerender="MyForm,Forms"  onclick="closeGenerateLabelPopup1()" html-formnovalidate="formnovalidate" >Close</button>
+                                    <apex:outputpanel rendered="{!IF(DateStrings == true,true,false)}">
+                                          <!--<apex:commandbutton value="Save" action="{!SaveEditLabels}" styleclass="slds-button slds-button--neutral slds-button--brand"  rerender="FormsTab" status="status"/>   -->
+                                          <button type="button" onclick="validatefunction2('date')" class="slds-button slds-button--neutral slds-button--brand"  >Save</button>
+                                    </apex:outputpanel>
+                                    <apex:outputpanel rendered="{!IF(DimStrings == true,true,false)}">
+                                          <!--<apex:commandbutton value="Save" action="{!SaveDimLabels}" styleclass="slds-button slds-button--neutral slds-button--brand"  rerender="FormsTab" status="status"/>-->
+                                          <button type="button" onclick="validatefunction2('dimension')" class="slds-button slds-button--neutral slds-button--brand"  >Save</button>
+                                    </apex:outputpanel>
+                                     <apex:outputpanel rendered="{!IF(measStrings == true,true,false)}">
+                                          <button type="button" onclick="validatefunction2('measure')" class="slds-button slds-button--neutral slds-button--brand"  >Save</button>     
+                                          <!--<apex:commandbutton value="Save" action="{!SaveMeasLabels}" styleclass="slds-button slds-button--neutral slds-button--brand"  rerender="FormsTab" status="status"/>   -->
+                                    </apex:outputpanel>
+                                          
+                                    </div>    
+                                </div>   
+                            </div>
+                             </apex:outputPanel>
+                        </div>
+                    </div> 
+                   
+                </div>
+            </div> 
+                
+        
+
+
+<div class="slds-form-element" style="padding-top:0px;">      
+  <div class="slds-grid slds-m-top--large" >
+      <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="SelectPopup2" onclick="onmouseClose()">
+          <apex:outputPanel id="OppselectPopup3">
+           
+          <div class="slds-modal__container">
+                    
+              <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:1000px;left:100px;top:30px;height:580px;max-height:580px" id="popup" onclick="Mouseopen(event)">
+              <apex:inputhidden value="{!SelectedButtonValue}" id="SelectedButtonValue"/>
+               <apex:outputpanel rendered="{!IF(SelectedButtonValue != 'Filters2',true,false)}">
+                  <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;"><span>
+                       <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Datefield2',true,false)}"><b style="font-size:15px">Datefields</b></apex:outputpanel>
+                       <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Measures2',true,false)}"><b style="font-size:15px">Measures</b></apex:outputpanel>
+                       <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Dimensions2',true,false)}"> <b style="font-size:15px">Dimensions</b></apex:outputpanel></span></div>
+</apex:outputpanel>
+                        <div class="slds-grid slds-wrap slds-grid--pull-padded ">
+                        
+                        <!-- Dimension -->
+                        <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Dimensions2',true,false)}" style="width:100%"> 
+                        <apex:outputpanel rendered="{!SetDimension}">   
+                         <apex:pageMessages ></apex:pageMessages>  
+                        <apex:repeat value="{!KPIDetils}" var="KPIDimenRec"> 
+                        <apex:outputpanel rendered="{!IF(KPIDimenRec.KPIRownumber == SelectedrowValue2,true,false)}">
+                        <apex:outputpanel rendered="{!IF(KPIDimenRec.KPICheck == false,true,false)}">  
+                   <apex:outputpanel id="DimensionsId">
+                         <apex:outputpanel id="DimensionsIdstwo">
+                           
+                            <apex:outputpanel rendered="{!DimensionId}">  
+                            <apex:pagemessages /> 
+                            </apex:outputpanel>
+                                <script>
+                                    if('{!DimensionIdClosetwo}' == 'true'){
+                                        closeSelectPopup12();
+                                    }
+                                </script>
+                                           
+
+                                
+                            </apex:outputpanel>
+                             <p style="padding-left: 30px;float:left">  </p>                            
+                                <p style="padding-left: 580px;"> # of Dimensions Selected : <b id="NumberIdstwo" style="font-size:14px;font-weight:300">0</b>/10</p>
+                               
+                        <div class="slds">                                                              
+                            <div class="myapp" style="margin-left:30px;">
+                                 
+                                <div class="slds-grid slds-m-top--large" style="margin-top:2px;margin-bottom:10px">
+                                    <div class="slds-col slds-col-rule--right slds-p-right--large" style="margin-top:2px;margin-bottom:10px;box-sizing: initial;">                                                 
+                                        <div class="slds-card" style="width:40%;float:left;background:white">                            
+                                            <section class="slds-card__body"  Style="height:300px;padding:0px 0px">                                                      
+                                                <div class="slds-scrollable" Style="max-height:300px;">  
+                                                    
+                                                    <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal" style="border-bottom: 0px" >
+                                                        <!-- Dimension Angular Starts-->
+                                                <apex:outputpanel id="DimRecords">
+                                                
+                                            <div class="search dimsearch" >
+                                                <svg class="icon searchBoxIcon" >
+                                                    <use
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#search">
+                                                    </use>
+                                                </svg>
+                                            	<input type="text" placeholder="Search for Dimensions..." onkeyup="filterRecordsnewtwo('{!SelectedrowValue2}')" id="DimInputtwo{!SelectedrowValue2} "/>
+                                            		<span class="searchhint resnum" ></span>
+                                            		<a class="clear hide" >
+                                            			<svg class="icon" >
+                                            				<use
+                                            					xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#close">
+                                            				</use>
+                                            			</svg>
+                                            		</a>
+                                            	</div>
+                                            	<div class="names selectors newselectorstwo{!SelectedrowValue2}" style="height:263px">
+                                            		<div class="listheader squeezed" ></div>   
+                                            		<div class="listheader" >Dimensions</div>
+                                            	   <div class="DimensionsLayoutthreeval" id="DimensionsLayoutthreeval"></div>		
+                                            	</div>
+                                            	
+                                           </apex:outputpanel>
+                                            
+                                            <!-- Dimension Angular End -->
+                                                       
+                                                    </table>
+                                                    
+                                                </div>  
+                                            </section>
+                                        </div>
+                                        <div class="slds-card" style="width:10%;background:white;border:none;float:right;margin-top: auto;"> 
+                                       <table align="center" style="margin-top:50px;" >
+                                       <tr >
+                                       <td style="text-align:center;">
+                                       <Button  type="button" style="margin-top:10px;" Class="NewclassAdd"  onclick="moveActiveRowtwo(-1)"  rerender="MyForm,DimensionsIdstwo" status="status" >
+                                           <i class="fa fa-caret-up" />
+                                       </Button>
+                                       </td>
+                                       </tr>
+                                       <tr >
+                                       <td style="text-align:center;" >
+                                       <Button type="button" style="margin-top:10px;" Class="NewclassRem"  onclick="moveActiveRowtwo(1)"  rerender="MyForm,DimensionsIdstwo" status="status" >
+                                          <i class="fa fa-caret-down" />
+                                       </Button>
+                                       </td>
+                                       </tr>  
+                                                                  
+                                       </table>
+                                       </div>  
+                                            <div class="slds-card" style="width:40%;float:right;background:white;border-bottom: 1px solid #d8dde6;margin-top: auto;"> 
+                                                <section class="slds-card__body" Style="height:300px;padding:0px 0px">                
+                                                    <div class="slds-scrollable--y" Style="max-height:300px">
+                                                        <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal" style="border-bottom:0px" >                                               
+                                                            	
+                                                           <!-- <thead>
+                                                                <tr >
+                                                                    <th class="slds-text-heading--label slds-size--1-of-13 ClassTh" scope="col" style="font-family: Salesforce Sans, Arial, sans-serif;background:whitesmoke">Selected Dimensions</th>
+                                                                    <th class="slds-text-heading--label slds-size--2-of-13" scope="col" style="background:whitesmoke"> </th>
+                                                                </tr>
+                                                            </thead>  -->
+                                                            	<div class="listheader" >Selected Dimensions</div>
+                                                            <div class="slds-grid slds-wrap slds-grid--pull-padded" >
+                                                            	<div id="DimensionsbyItmestwoval" class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12" style="border: 1px solid #E6ECF2;">                                                     
+                                                            	   <ul class="slds-scrollable" style="height: 259px;overflow: scroll;margin-top: 1%;" id="movingTabletwo">
+                                                            			
+                                                            	   </ul>
+                                                            	</div>
+                                                            	 <div id="DimensionsbyItmestwovalEdit" class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12" style="border: 1px solid #E6ECF2;display:none">                                                     
+                                                            	   <ul class="slds-scrollable" style="height: 259px;overflow-y: scroll;margin-top: 1%;" id="movingTables">
+                                                            			<apex:repeat value="{!KPIDimenRec.SelectedDimensions}" var="DimSel">
+                                                            			    <li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onclick="setActiveRowtwo(this)">
+                                                                                <div class="DimeItemDev" onclick="editDimModeltwo(this)" style="display: inline;">
+                                                                                    <img style="cursor:pointer;position:relative; z-index:2;" title="Delete"  src="{!$Resource.Delete}" width="26px" height="12px" /></div><p style="margin-left:30px;margin-top:-25px"> {!DimSel.Availablename}</p>
+                                                                                    <input type="hidden" class="selectedfield" value="{!DimSel.AvailableAPI}"/>
+                                                                            </li>
+                                                            			</apex:repeat> 
+                                                            	   </ul>
+                                                            	</div>
+                                                            	</div>
+                                                                                                         
+                                                        </table>  
+                                                    </div>                                         
+                                                </section>
+                                            </div>
+                                                                                    
+                                    </div>                                   
+                                </div>                               
+                            </div>                            
+                        </div>
+                        
+                        </apex:outputpanel>
+                        </apex:outputpanel>
+                        </apex:outputpanel>
+</apex:repeat>
+</apex:outputpanel>
+<!-- Dimension End-->
+</apex:outputpanel>
+
+<!-- DateMethod-->
+<apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Datefield2',true,false)}" style="width:100%">
+                    <apex:outputpanel id="OppsetDate" rendered="{!SetDate}"> 
+                         <apex:pageMessages ></apex:pageMessages>  
+                        <apex:repeat value="{!KPIDetils}" var="KPIDateRec"> 
+                        <apex:outputpanel rendered="{!IF(KPIDateRec.KPIRownumber == SelectedrowValue2,true,false)}">
+                        <apex:outputpanel rendered="{!IF(KPIDateRec.KPICheck == false,true,false)}"> 
+                        <apex:outputpanel id="DatesId">
+                             
+                               <apex:outputpanel id="DatesIdstwo">
+                         <apex:outputpanel rendered="{!DateIds}">
+                        <apex:pagemessages /> 
+                        </apex:outputpanel>
+                        <script>
+                                    if('{!DatesIdClosetwo}' == 'true'){
+                                        closeSelectPopup12();
+                                    }
+                                </script>
+                         </apex:outputpanel> 
+                         <p style="padding-left: 30px;float:left"> </p> 
+                             <p style="padding-left: 580px;"> # of Datefields Selected :<b id="NumberdateIdstwo" style="font-size:14px;font-weight:300">0</b>/3</p>  
+                         
+                            <div class="slds">                                                              
+                                <div class="myapp" style="margin-left:30px;">
+                                    <div class="slds-grid slds-m-top--large" style="margin-top:2px">
+                                        <div class="slds-col slds-col-rule--right slds-p-right--large" style="margin-top:2px;margin-bottom:10px;box-sizing: initial;">                                            
+                                            <div class="slds-card" style="width:40%;float:left;background:white;border-bottom: 1px solid #d8dde6;">                            
+                                                <section class="slds-card__body"  Style="height:300px;padding:0px 0px">                                          
+                                                    <div class="slds-scrollable" Style="max-height:300px">
+                                                        <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal" style="border-bottom:0px">
+                                                            <!-- Dimension Angular Starts-->
+                                                             <div class="search dimsearch" >
+                                                              <svg class="icon searchBoxIcon" >
+                                                    <use
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#search">
+                                                    </use>
+                                                </svg>
+                                                        	<input type="text" placeholder="Search for Datefields..." onkeyup="filterRecordsDatestwo('{!SelectedrowValue2}')" id="EInputtwo{!SelectedrowValue2}"/>
+                                                        		<span class="searchhint resnum" ></span>
+                                                        		<a class="clear hide" >
+                                                        			<svg class="icon" >
+                                                        				<use
+                                                        					xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#close">
+                                                        				</use>
+                                                        			</svg>
+                                                        		</a>
+                                                        	</div>
+                                                        	<div class="names selectors Dateselectorstwo{!SelectedrowValue2}" style="height:263px" >
+                                                        		<div class="listheader squeezed" ></div>   
+                                                        		<div class="listheader" >Datefields</div>
+                                                        	   <div class="datesLayouttwo" ></div>		
+                                                        	</div>
+                                                         
+                                                                                                                                                                           
+                                                        </table> 
+                                                    </div>  
+                                                </section>
+                                            </div> 
+                                                    <div class="slds-card" style="width:10%;background:white;border:none;float:right;margin-top: auto;"> 
+                                                   <table align="center" style="margin-top:50px;">
+                                                   <tr>
+                                                   <td style="text-align:center;">
+                                                   <Button type="button" class="NewclassAdd"  onclick="moveActiveRowdatetwo(-1)" rerender="MyForm,DateField,DatesIdstwo" status="status" >
+                                                          <i class="fa fa-caret-up"></i>
+                                                   </Button>
+                                                   </td>
+                                                   </tr>
+                                                   <tr>
+                                                   <td style="text-align:center;">
+                                                   <Button type="button" class="NewclassRem" onclick="moveActiveRowdatetwo(1)"  rerender="MyForm,DateField,DatesIdstwo" status="status" >
+                                                          <i class="fa fa-caret-down"></i>
+                                                   </Button>
+                                                   </td>
+                                                   </tr> 
+                                                                                  
+                                                   </table>
+                                                   </div>    
+                                                <div class="slds-card" style="width:40%;float:right;background:white;margin-top:2px;border-bottom: 1px solid #d8dde6;'"> 
+                                                    <section class="slds-card__body" Style="height:300px;padding:0px 0px">                                                                   
+                                                        <div class="slds-scrollable--y" Style="max-height:300px">
+                                                            <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal" style="border-bottom:0px" >                                               
+                                                              	<div class="listheader" >Selected Datefields</div>
+                                                            <div class="slds-grid slds-wrap slds-grid--pull-padded" >
+                                                            	<div id="DatesByItmesvaltwo" class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12" style="border: 1px solid #E6ECF2;">                                                     
+                                                            	   <ul  class="slds-scrollable" style="height: 259px;overflow: scroll;margin-top: 1%;" id="movingTableDatetwo">
+                                                            			
+                                                            	   </ul>
+                                                            	</div>
+                                                            	<div id="DatesByItmesvaltwoEdit" class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12" style="border: 1px solid #E6ECF2;display:none">                                                     
+                                                            	   <ul class="slds-scrollable" style="height: 259px;overflow-y: scroll;margin-top: 1%;" id="movingTableDates">
+                                                            			<apex:repeat value="{!KPIDateRec.SelectedDateFieldlist}" var="DimSel">
+                                                            			    <li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onclick="setActiveRowdatetwo(this)" >
+                                                                                <div class="dateFivDiv" onclick="editDateModeltwo(this)" style="display: inline;">
+                                                                                    <img style="cursor:pointer;position:relative; z-index:2;"  title="Delete" src="{!$Resource.Delete}" width="26px" height="12px" /></div> <p style="margin-left:30px;margin-top:-25px">{!DimSel.DateFieldName}</p>
+                                                                                    <input type="hidden" class="selectedfield" value="{!DimSel.DateFieldAPI}"/>
+                                                                            </li>
+                                                            			</apex:repeat> 
+                                                            	   </ul>
+                                                            	</div>
+                                                            	</div>
+                                                            </table>  
+                                                        </div>          
+                                                    </section>          
+                                                </div>
+                                                
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </apex:outputpanel>						
+                            </apex:outputpanel>
+                            </apex:outputpanel>
+                        </apex:repeat>
+                    </apex:outputpanel>
+
+</apex:outputpanel>
+<!-- Datemethod End -->
+
+<!-- Measures-->
+<apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Measures2',true,false)}">
+                    <apex:outputpanel id="OppsetMeasures" rendered="{!SetMeasure}">
+                    <apex:pageMessages ></apex:pageMessages>
+                        <apex:repeat value="{!KPIDetils}" var="KPIMeasureRec"> 
+                        <apex:outputpanel rendered="{!IF(KPIMeasureRec.KPIRownumber == SelectedrowValue2,true,false)}">    
+                        <apex:outputpanel rendered="{!IF(KPIMeasureRec.KPICheck == false,true,false)}">
+                        <apex:outputpanel id="MeasureIds">
+                            <apex:pagemessages /> 
+                          
+                            <p style="padding-left: 30px;float:left"> </p> 
+                             <p style="padding-left: 580px;"> # Measures Selected : <apex:outputpanel rendered="{!IF(KPIMeasureRec.MeasureSize == 0 || KPIMeasureRec.MeasureSize == Null,true,false)}"> 0/4 </apex:outputpanel>
+                                    <apex:outputpanel rendered="{!IF(KPIMeasureRec.MeasureSize != 0 && KPIMeasureRec.MeasureSize != Null ,true,false)}">{!KPIMeasureRec.MeasureSize}/4 </apex:outputpanel></p> 
+                             </apex:outputpanel>
+                            <div class="slds" style="width:1000px">                                                              
+                                <div class="myapp" Style="margin-left:15px">
+                                    <div class="slds-grid slds-m-top--large" style="margin-top:2px;margin-bottom:10px;box-sizing: initial;">
+                                        <div class="slds-col slds-col-rule--right slds-p-right--large" style="margin-top:2px;margin-bottom:10px">  
+                                            <apex:outputpanel id="DateFields">                                          
+                                            <div class="slds-card" style="width:53%;float:left;background:white;border-bottom: 1px solid #d8dde6; max-width: 53%;">                            
+                                                <section class="slds-card__body"  Style="height:300px;">                                             
+                                                    <div class="slds-scrollable--y" Style="max-height:300px;">
+                                                          <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal" style="border-bottom:0px;width:100%">
+                                                            <thead>                                                               
+                                                                <tr >
+                                                                    <!--<th class="slds-text-heading--label slds-size--1-of-13 ClassTh" scope="col" style="font-family: Salesforce Sans, Arial, sans-serif;background:whitesmoke">Select Measures </th>-->
+                                                                      <th class="slds-text-heading--label slds-size--1-of-13" scope="col" style="background:whitesmoke"> <input type="text" id="LIn" onkeyup="SearchFunction1()" placeholder="Select Measures"  style="margin-left:-21px;width: 219px;height:10px"/> </th>
+                                                                     <th class="slds-text-heading--label slds-size--2-of-13" scope="col" style="background:whitesmoke"> 
+                                                                      <!--<input type="button" Class="slds-button slds-button--neutral slds-button--brand" Style="color: #0070d2;border: 1px solid #d8dde6;background-color: white;padding-left:10px" value="Count" onclick="setColor('button', '#0070d2','{!KPIMeasureRec.KPIRownumber}','{!KPIMeasureRec.dataset}')" id="button" status="status" />-->
+                                                                           
+                                                                        <apex:outputpanel rendered="{!IF(KPIMeasureRec.CountRender == false,true,false)}">   
+                                                                           <input type="button" id="btnHousingcun100{!KPIMeasureRec.KPIRownumber}" value="Count" onclick="btnColor7('btnHousingcun100{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!KPIMeasureRec.dataset}');" style="background-color: white;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: rgb(0, 112, 210);font-size: inherit;line-height: 34px; "/>   
+                                                                       </apex:outputpanel>
+                                                                       
+                                                                       <apex:outputpanel rendered="{!IF(KPIMeasureRec.CountRender == true,true,false)}">
+                                                                            <input type="button" id="btnHousingcuns10g{!KPIMeasureRec.KPIRownumber}" value="Count" onclick="btnColor7s('btnHousingcuns10g{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!KPIMeasureRec.dataset}');" style="background-color:#0070d2 ;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: white;font-size: inherit;line-height: 34px; "/>   
+                                                                       </apex:outputpanel>
+                                                                    </th> 
+                                                                                                                             
+                                                                </tr>
+                                                               
+                                                            </thead>                                                                                                                
+                                                            <tbody id="myTable">
+                                                              <apex:variable var="Row" value="{!1}" /> 
+                                                                <apex:repeat value="{!KPIMeasureRec.availableMeasures}" var="AvailableMeasure"> 
+                                                                    <tr valign="top">                                                                 
+                                                                        <td class="messageCell" Style="text-align:left;border-top:0px;width:40%;overflow: hidden;max-width:230px">
+                                                                           <apex:outputText value="{!AvailableMeasure.DateFieldName}" style="overflow: hidden;max-width:230px"/>
+                                                                        </td>
+                                                                        <td Style="text-align:left;border-top:0px;width:60%;padding: 1px;font-size: 13px;">
+                                                                        
+                                                                        <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheck == false,true,false)}">
+                                                                            <input type="button"  id="btnHousingsumm99{!Row}{!KPIMeasureRec.KPIRownumber}" value="SUM" onclick="btnColor8('btnHousingsumm99{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','sum');" style="background-color: white;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: rgb(0, 112, 210);font-size: inherit;line-height: 34px;"/>   
+                                                                          </apex:outputpanel>
+                                                                          
+                                                                          <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheck == true,true,false)}">
+                                                                                <input type="button"  id="btnHousingsumms9n{!Row}{!KPIMeasureRec.KPIRownumber}" value="SUM" onclick="btnColor8sum('btnHousingsumms9n{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','sum');" style="background-color:#0070d2 ;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: white;font-size: inherit;line-height: 34px;"/>   
+                                                                          </apex:outputpanel>
+                                                                           
+                                                                           <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheckMIN == false,true,false)}">
+                                                                                    <input type="button" id="btnHousingminn22{!Row}{!KPIMeasureRec.KPIRownumber}" value="MIN" onclick="btnColor8('btnHousingminn22{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','min');" style="background-color: white;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: rgb(0, 112, 210);font-size: inherit;line-height: 34px;"/>
+                                                                           </apex:outputpanel>
+                                                                           
+                                                                           <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheckMIN == true,true,false)}">
+                                                                                <input type="button" id="btnHousingminns2q{!Row}{!KPIMeasureRec.KPIRownumber}" value="MIN" onclick="btnColor8sum('btnHousingminns2q{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','min');" style="background-color: #0070d2;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: white;font-size: inherit;line-height: 34px;"/>
+                                                                           </apex:outputpanel>
+                                                                           
+                                                                           <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheckMAX == false,true,false)}">
+                                                                                 <input type="button" id="btnHousingmaxx33{!Row}{!KPIMeasureRec.KPIRownumber}" value="MAX" onclick="btnColor8('btnHousingmaxx33{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','max');" style="background-color: white;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: rgb(0, 112, 210);font-size: inherit;line-height: 34px;" />
+                                                                           </apex:outputpanel>
+                                                                           
+                                                                           <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheckMAX == true,true,false)}">
+                                                                                <input type="button" id="btnHousingmaxxs3m{!Row}{!KPIMeasureRec.KPIRownumber}" value="MAX" onclick="btnColor8sum('btnHousingmaxxs3m{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','max');" style="background-color: #0070d2;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: white;font-size: inherit;line-height: 34px;" />
+                                                                           </apex:outputpanel>
+                                                                           
+                                                                           <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheckAVG == false,true,false)}">
+                                                                                <input type="button" id="btnHousingavgg44{!Row}{!KPIMeasureRec.KPIRownumber}" value="AVG" onclick="btnColor8('btnHousingavgg44{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','avg');" style="background-color: white;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: rgb(0, 112, 210);font-size: inherit;line-height: 34px;" />
+                                                                           </apex:outputpanel>
+                                                                           
+                                                                            <apex:outputpanel rendered="{!IF(AvailableMeasure.DateFieldCheckAVG == true,true,false)}">
+                                                                                <input type="button" id="btnHousingavggs4x{!Row}{!KPIMeasureRec.KPIRownumber}" value="AVG" onclick="btnColor8sum('btnHousingavggs4x{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!AvailableMeasure.DateFieldName}','avg');" style="background-color: #0070d2;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: white;font-size: inherit;line-height: 34px;" />
+                                                                            </apex:outputpanel>    
+                                                                            
+                                                                     <apex:variable var="Row" value="{!Row+1}" /> 
+                                                                           
+                                                                                              
+                                                                        </td>                                                                        
+                                                                      
+                                                                       
+                                                                    </tr>
+                                                                </apex:repeat>
+                                                                <apex:variable var="Row" value="{!1}" />
+                                                              <apex:repeat value="{!KPIMeasureRec.availableDimesions}" var="availableDimension">
+                                                               
+                                                                    <tr valign="top">                                                                 
+                                                                        <td class="messageCell" Style="text-align:left;border-top:0px;width:30%;overflow: hidden;max-width:190px">
+                                                                           <apex:outputText value="{!availableDimension.AvailableName}" style="overflow: hidden;max-width:190px"/>
+                                                                        </td>
+                                                                          <td Style="text-align:leftt;border-top:0px;width:70%;padding: 1px;font-size: 13px;">
+                                                                           <!--<input type="button" Class="slds-button slds-button--neutral slds-button--brand" Style="color: #0070d2;border: 1px solid #d8dde6;background-color: white;padding-left:10px" value="Count" onclick="setColorDim('button5', '#0070d2','{!KPIMeasureRec.KPIRownumber}','{!availableDimension.AvailableName}')" id="button5" status="status" />-->
+                                                                         <apex:outputpanel rendered="{!IF(availableDimension.AvailableMeasure == false,true,false)}">
+                                                                                <input type="button" id="btnHousing55{!Row}{!KPIMeasureRec.KPIRownumber}" value="Count" onclick="btnColor9('btnHousing55{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!availableDimension.AvailableName}','count');" style="background-color: white;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: rgb(0, 112, 210);font-size: inherit;line-height: 34px;" />   
+                                                                            </apex:outputpanel> 
+                                                                            
+                                                                            <apex:outputpanel rendered="{!IF(availableDimension.AvailableMeasure == true,true,false)}">
+                                                                                <input type="button" id="btnHousing5h{!Row}{!KPIMeasureRec.KPIRownumber}" value="Count" onclick="btnColor9g('btnHousing5h{!Row}{!KPIMeasureRec.KPIRownumber}','#0070d2','{!KPIMeasureRec.KPIRownumber}','{!availableDimension.AvailableName}','count');" style="background-color: #0070d2;padding-left: 16px;padding-right: 16px;text-align: center;vertical-align: middle;border: 1px solid rgb(216, 221, 230);position: relative;display: inline-block;background-clip: padding-box;border-radius: 4px;color: white;font-size: inherit;line-height: 34px;" />   
+                                                                            </apex:outputpanel>
+                                                                            
+                                                                          <apex:variable var="Row" value="{!Row+1}" /> 
+                                                                          
+                                                                                      
+                                                                       </td>                                                                                                                                                                                             
+                                                                    </tr>
+                                                                </apex:repeat>                                                              
+                                                            </tbody>                                                                                                                       
+                                                         </table>
+                                                    </div>  
+                                                </section>  
+                                            </div>                                                                    
+                                            <div class="slds-card" style="width:45%;float:right;background:white;border-bottom: 1px solid #d8dde6;margin-top: 0px; max-width: 43%;"> 
+                                               <apex:outputpanel id="SectionIds">
+                                                <section class="slds-card__body" Style="height:300px;">                                                                   
+                                                    <div class="slds-scrollable--y" Style="max-height:300px">
+                                                        <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal" style="border-bottom:0px">                                               
+                                                            <thead>
+                                                                <tr >
+                                                                    <th class="slds-text-heading--label slds-size--1-of-13 ClassTh" scope="col" style="font-family: Salesforce Sans, Arial, sans-serif;background:whitesmoke">  SELECTED MEASURES</th>
+                                                                    <th class="slds-text-heading--label slds-size--2-of-13" scope="col" style="background:whitesmoke"> </th>
+                                                                </tr>
+                                                            </thead>                                                           
+                                                            <tbody>
+                                                                <apex:repeat value="{!KPIMeasureRec.selectedMeasures}" var="SelectedMeasure">
+                                                                    <tr valign="top">
+                                                                        <td Style="text-align:center;border-top:0px">
+                                                                            <apex:outputText value="{!SelectedMeasure}"/>
+                                                                        </td>
+                                                                        <td class="messageCell" Style="text-align:left;border-top:0px">
+                               
+                                                                        </td>
+                                                                    </tr>
+                                                                </apex:repeat>   
+                                                            </tbody>                                             
+                                                        </table>  
+                                                    </div>                             
+                                                </section> 
+                                                </apex:outputpanel>                                             
+                                            </div>
+                                        </apex:outputpanel>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        </apex:outputpanel>
+                        </apex:outputpanel>
+                        </apex:repeat>
+                    </apex:outputpanel>
+</apex:outputpanel>
+<!-- Measures End-->
+
+<!-- Filters-->
+<apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Filters2',true,false)}" style="width:100%">
+                    <apex:outputpanel id="OppsetFilters"  >
+                              
+                            <apex:outputpanel id="tableRepeat" >
+                        
+                        <div id="errorCond2" style="padding-left:3px;color: #d74c3b;"></div>
+
+                           
+                            
+                       <!--   <c:Filter_Items /> -->
+                          <div class="slds-grid slds-wrap slds-grid--pull-padded" style="margin: 0%;">
+    
+                                <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+                                   
+                                <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                                   <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+                                          <!-- Row 2 -->   
+                                           <div class="slds-grid slds-wrap slds-grid--pull-padded" >
+                                               <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+                                                    <table style="width:100%">
+                                                         <tr>
+                                                             <td><!--<c:Filter_Panel panelId="2" panelstyle="opacity: 1;top: 28% !important;left:91% !important;"/>-->
+                                                             </td>
+                                                             <td>
+                                                                    <div class="slds-grid slds-wrap slds-grid--pull-padded" style="margin: 1%;">
+    
+    <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+       
+    <div class="slds-grid slds-wrap slds-grid--pull-padded">
+       <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+               <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                   <div class="slds-p-horizontal--small slds-size--10-of-12 slds-medium-size--10-of-12 slds-large-size--10-of-12">
+                       <div class="slds-form slds-form--inline" style="text-align: left;">
+                          <label class="slds-form-element__label" for="name">Filter Name : </label>
+                          <div class="slds-form-element__control" style="width: 50%;">
+                            <input id="FilterNames2" class="slds-input" type="text"/>
+                            <div id="error125" style="padding-left:3px;color: #d74c3b;"></div>
+                          </div>
+                        </div>
+                   </div>   
+                </div>
+              <!-- Row 2 -->   
+              
+               <div id="errorCond2" style="padding-left:3px;color: #d74c3b;"></div>
+               <div class="slds-grid slds-wrap slds-grid--pull-padded" style="background-color: #E6ECF2;padding: 8px;margin-top: 1%;">
+                   <div class="slds-p-horizontal--small slds-size--6-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                       <h4 style="margin-top: 10px;">Filters</h4>
+                   </div>
+                   <div class="slds-p-horizontal--small slds-size--6-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                       <h1  id="filterIconBtnPls" style="font-size: 26px;float:right;cursor: pointer;" onclick="showFilter('2')">+</h1>
+                       <h1  id="filterIconBtnMins" style="font-size: 26px;float:right;cursor: pointer;display: none;" onclick="showFilter('2')">-</h1>
+                     
+                       
+                   </div>
+               </div>  
+             <!--Row 3 -->
+               <div class="slds-grid slds-wrap slds-grid--pull-padded" >
+                   <div id="2" class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12" style="border: 1px solid #E6ECF2;">
+                      
+                       <ul id="selectitemstab2" class="slds-scrollable" style="height: 250px;overflow-y: scroll;margin-top: 1%;">
+                          
+                       </ul>
+                   </div>
+                    <div id="FilterbyItmesIdEdittwo" style="margin-left: 42%;height: 200px;width: 520px;border: 1px solid #c5d2e0;border-radius: .25rem;display:none;font-size: 14px;">
+                                                <ul style="overflow-y: scroll;height: 153px;">
+                          
+                        <apex:repeat value="{!InnClassEditList}" var="val">
+                            
+                        <apex:outputpanel rendered="{!IF(val.typeofSelect == 'measure',true,false)}">
+                            <apex:outputpanel rendered="{!IF(val.filterCon == 'Between',true,false)}">
+                                 <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                            <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                         </apex:outputpanel>
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Greater Than',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Greater Than Or Equal To',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Less Than',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Less Than Or Equal To',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Equals',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                    <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Does Not Equal',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Is Null',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                             <apex:outputpanel rendered="{!IF(val.filterCon == 'Is Not Null',true,false)}">
+                                  <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                                        <div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                            
+                                <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="minVal" value="{!val.minVal}" />
+                                    <input type="hidden" class="maxVal" value="{!val.maxval}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                        </apex:outputpanel>
+                                
+                        </apex:outputpanel>
+                        
+                         <apex:outputpanel rendered="{!IF(val.typeofSelect == 'date',true,false)}">
+                        <apex:outputpanel rendered="{!IF(val.filterCon == 'Between',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="dateFivDiv" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                    <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="fromDate" value="{!val.fromDate}" />
+                                    <input type="hidden" class="toDate" value="{!val.toDate}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                            
+                                </apex:outputpanel>
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Less Than Or Equal To',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="dateFivDiv" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                        <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="fromDate" value="{!val.fromDate}" />
+                                    <input type="hidden" class="toDate" value="{!val.toDate}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Greater Than Or Equal To',true,false)}">
+                                     <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                        
+                                    <div class="dateFivDiv" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                    <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="fromDate" value="{!val.fromdate}" />
+                                    <input type="hidden" class="toDate" value="{!val.todate}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />   
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                                </apex:outputpanel>
+                                
+                        </apex:outputpanel>
+                         <apex:outputpanel rendered="{!IF(val.typeofSelect == 'dimension',true,false)}">
+                                <apex:outputpanel rendered="{!IF(val.filterCon == 'Contains',true,false)}">
+                        <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                            <div class="DimeItemDev" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                    <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="selectedIds" value="{!val.minVal}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                        </li>
+                        </apex:outputpanel>
+                            <apex:outputpanel rendered="{!IF(val.filterCon != 'Contains',true,false)}">
+                                <li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;">
+                            <div class="DimeItemDev" onclick="editFilterModel(this)" style="display: inline;">{!val.Betweens}</div>
+                                    <div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>
+                                    <input type="hidden" class="typeofSelect" value="{!val.typeofSelect}" />
+                                    <input type="hidden" class="selectedIds" value="{!val.minVal}" />
+                                    <input type="hidden" class="filterCon" value="{!val.filterCon}" />
+                                    <input type="hidden" class="selectedfield" value="{!val.selectedfield}"  />
+                                    <input type="hidden" class="fieldapi" value="{!val.FieldAPI}"  />
+                                    
+                        </li>
+                                </apex:outputpanel>
+                                
+                        </apex:outputpanel>
+                        </apex:repeat>
+                    </ul>
+                </div>
+               </div>     
+            <div class="slds-grid slds-wrap slds-grid--pull-padded" style="margin-top: 1%;">
+                  
+                   <div class="slds-p-horizontal--small slds-size--6-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                     <div class="slds-form slds-form--inline" style="text-align: left;">
+                          <label class="slds-form-element__label" for="FilterLogic">Filter Logic: </label>
+                          <div class="slds-form-element__control" style="width: 70%;">
+                            <input id="2FilterLogic" class="slds-input" type="text"/>
+                            <br/>
+                            Advanced Filter Conditions: (1 AND 2) OR 3
+                          </div>
+                        </div>
+                   </div>
+                   
+                      <apex:outputpanel rendered="{!AddFiltersShow}">
+                                       <apex:outputpanel id="NewIdsq">
+                                   <apex:repeat value="{!KPIDetils}" var="KPIFilterRec"> 
+                                     <apex:outputpanel rendered="{!IF(KPIFilterRec.KPIRownumber == SelectedrowValue2,true,false)}">
+                                                           <apex:repeat value="{!KPIFilterRec.AddFilter}" var="AddFilter"> 
+                           
+                                                              <script>
+                                                                if('{!isTrue}' == 'true'){
+                                                    
+                                                                closeSelectPopup12();
+                                                                   }
+                                                                </script>
+                                             <apex:outputpanel rendered="{!isErrortwo}">
+                                         <div id="error" style="padding-left:3px;color: #d74c3b;"> Please Enter Valid Filter Condition. </div> 
+                                         </apex:outputpanel>  
+                                   </apex:repeat>
+                                   </apex:outputpanel> 
+                                  </apex:repeat>
+                                   </apex:outputpanel> <br/><br/>
+                                           <!--<div class="slds-p-horizontal--small slds-size--6-of-12 slds-medium-size--12-of-12 slds-large-size--6-of-12" style="width:100%;margin-left:135px">
+                                               <table>
+                                                   <tr style="">
+                                                     <td style="padding: 10px; text-align: right;">
+                                                         <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Filters2',true,false)}">
+                                                                    <button type="button"  class="" style="margin-right: 10px;padding:3px 8px" onClick="closeSelectPopup12();" status="status" >Close</button>
+                                                                    <button type="button" class="" style="padding:3px 8px" onClick="NewSelectPopupthree('2FilterLogic');" status="status" >Add Filter</button>
+                                                                    
+                                                            </apex:outputpanel>
+                                                        
+                                                     </td> 
+                                                 </tr>
+                                               </table>
+                                           </div>-->
+                                           
+                                           
+                                           <div class="slds-modal__footer" style="width:914px;">
+                                                <div class="slds-x-small-buttons--horizontal">
+                                                     <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Filters2',true,false)}">
+                                                                    <button type="button"  class="slds-button slds-button--neutral"  onClick="closeSelectPopup12();" status="status" >Cancel</button>
+                                                                    <button type="button" class="slds-button slds-button--neutral slds-button--brand" onClick="NewSelectPopupthree('2FilterLogic');" status="status" >Add Filter</button>
+                                                                    
+                                                            </apex:outputpanel>
+                                                    </div>
+                                                    </div>
+                                           
+                                           
+                                           
+                                       </apex:outputpanel>
+               
+                                        <apex:outputpanel rendered="{!EditFiltersShow}">
+                                             <apex:outputpanel id="NewIdsqEdit">
+                   <apex:repeat value="{!KPIDetils}" var="KPIFilterRec"> 
+                     <apex:outputpanel rendered="{!IF(KPIFilterRec.KPIRownumber == SelectedrowValue2,true,false)}">
+                                            <apex:repeat value="{!KPIFilterRec.EditFilter}" var="AddFilter"> 
+                             <script>
+                                                if('{!isFalse}' == 'true'){
+                                    
+                                                closeSelectPopup12();
+                                                   }
+                                                </script>
+                             <apex:outputpanel rendered="{!isEditErrortwo}">
+                        <div id="error" style="padding-left:3px;color: #d74c3b;"> Please Enter Valid Filter Condition. </div> 
+                         </apex:outputpanel>                             
+                       
+               </apex:repeat>
+               </apex:outputpanel> 
+               </apex:repeat>
+               </apex:outputpanel> <br/><br/>
+                                         <!-- <div class="slds-p-horizontal--small slds-size--6-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12" style="margin-left:130px;width:100%" >
+                                               <table>
+                                                   <tr style="">
+                                                     <td style="padding: 10px; text-align: right;">
+                                                         <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Filters2',true,false)}">
+                                                                    <button type="button"  class="" style="margin-right: 10px;padding:3px 8px" onClick="closeSelectPopup12();" status="status" >Cancel</button>
+                                                                    <button type="button" class="slds-button slds-button--neutral slds-button--brand" style="line-height: 27px;" onClick="NewSelectPopupEditthree();" status="status" >Submit</button>
+                                                                    
+                                                            </apex:outputpanel>
+                                                           
+                                                        
+                                                     </td> 
+                                                 </tr>
+                                               </table>
+                                           </div>-->
+                                           
+                                           <div class="slds-modal__footer" style="width:914px;">
+                                                <div class="slds-x-small-buttons--horizontal">
+                                                     <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Filters2',true,false)}">
+                                                                    <button type="button"  class="slds-button slds-button--neutral"  onClick="closeSelectPopup12();" status="status" >Cancel</button>
+                                                                    <button type="button" class="slds-button slds-button--neutral slds-button--brand" onClick="NewSelectPopupEditthree();" status="status" >Submit</button>
+                                                                    
+                                                            </apex:outputpanel>
+                                                    </div>
+                                                    </div>
+                                           
+                                           
+                                       </apex:outputpanel>
+               </div>  
+               
+               
+               
+        
+               
+               
+               
+           </div>              
+       </div>  
+     </div>
+     
+   </div>    
+                                                             </td>
+                                                         </tr>
+                                                     </table>
+                                               </div>
+                                           </div>  
+                                           
+                                        <!--Row 3 --> 
+                                             
+                                        <!-- Row 4-->
+                                      
+
+                                      </div>              
+                                   </div>  
+                                 </div>
+                                 
+                               </div>     
+                          
+                        
+                          
+                        </apex:outputpanel> 
+                  
+                
+                
+                </apex:outputpanel>
+                
+                           
+        </apex:outputpanel>
+
+<!-- Filters-->
+ 
+</div>
+                <apex:outputpanel rendered="{!IF(SelectedButtonValue != 'Filters2',true,false)}">
+                 <div class="slds-modal__footer">
+                      <div class="slds-x-small-buttons--horizontal">
+                                   
+                                        <button type="button" class="slds-button slds-button--neutral " onClick="closeSelectPopup12();" status="status" >Cancel</button>
+                                        <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Dimensions2',true,false)}">
+                                         <button type="button" class="slds-button slds-button--neutral slds-button--brand" onClick="MeasDateSelectPopuptwo('Dimensions2');" status="status" >Submit</button>
+                                        </apex:outputpanel>
+                                        <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Datefield2',true,false)}">
+                                         <button type="button" class="slds-button slds-button--neutral slds-button--brand" onClick="MeasDateSelectPopuptwo('Datefield2');" status="status" >Submit</button>
+                                         </apex:outputpanel>
+                                        <apex:outputpanel rendered="{!IF(SelectedButtonValue == 'Measures2',true,false)}">
+                         
+                                         <button type="button" class="slds-button slds-button--neutral slds-button--brand" onClick="MeasDateSelectPopuptwo('Measures2');" status="status" >Submit</button>
+                                         </apex:outputpanel> 
+                          
+                       </div>    
+                    </div>
+                     </apex:outputpanel>
+                </div>
+            </div>
+            </apex:outputPanel>
+        </div>  
+    </div>
+    </div>
+                </apex:outputpanel>
+           <input type="hidden" Name="RowNumbers" id="RowNumbers"/>
+<input type="hidden" Name="Dataset" id="Dataset"/>
+<input type="hidden" Name="Rowtrue" id="Rowtrue"/>
+<input type="hidden" Name="Count" id="Count"/>
+
+<input type="hidden" Name="SUMName" id="SUMName"/>
+<input type="hidden" Name="DimenCount" id="DimenCount"/>
+<input type="hidden" Name="DimenName" id="DimenName"/>
+
+<input type="hidden" Name="Rowsumtrue" id="Rowsumtrue"/>
+<input type="hidden" Name="RowDimtrue" id="RowDimtrue"/>
+<input type="hidden" Name="SUM" id="SUM"/>
+ <input type="hidden" Name="FilterNamesandVal" id="FilterNamesandVal"/>
+           <input type="hidden" Name="FilterNamesvalues" id="FilterNamesvalues"/>
+            <apex:actionFunction name="AddFilterNewtwo" id="AddFilterNew" action="{!AddFilterNewtwo}"  rerender="NewIdsq" status="status"/>
+                     <apex:actionFunction name="updateFilterNewtwo" action="{!updateFilterNewtwo}" rerender="NewIdsqEdit" status="status" />
+        
+     <input type="hidden"  Name="RowNumber" id="RowNumber" /> 
+        <input type="hidden"  Name="counterWrap" id="counterWrap" />  
+        <input type="hidden"  Name="KPIDimen" id="KPIDimen" />
+        <input type="hidden"  Name="KPIFilterName" id="KPIFilterName" /> 
+           <input type="hidden"  Name="FilterLogics" id="FilterLogics" />
+        <input type="hidden"  Name="AddFilName" id="AddFilName" />    
+        <input type="hidden" Name="RowNumberFilter" id="RowNumberFilter" /> 
+        <input type="hidden" Name="RowNumberCount" id="RowNumberCount" /> 
+        <apex:actionFunction name="ActEditFilters2" action="{!FilterMethodEdit}" rerender="OppselectPopup3" status="status" oncomplete="Newpop2()"/>
+        <apex:actionFunction name="selectopp2" rerender="OppselectPopup3"/>
+        <apex:actionFunction name="ActDimension2" action="{!ReportList}" rerender="OppselectPopup3" status="status" oncomplete="NewDimPoptwo()"/>
+        <apex:actionFunction name="ActDateField2" action="{!DateFieldMethod}" rerender="OppselectPopup3,OppsetDate" status="status" oncomplete="NewDatePoptwo()"/>
+        <apex:actionFunction name="ActMeasures2" action="{!MeasureMethod}" rerender="OppselectPopup3,OppsetMeasures" status="status"/>
+        <apex:actionFunction name="ActFilters2" action="{!FilterMethod}" rerender="OppselectPopup3,OppsetFilters,NewIdsvla" status="status" oncomplete="filterPopUpModel();"/>
+        <apex:actionFunction name="refreshSelected2"  rerender="FormsTab" action="{!Previous}" status="status" oncomplete="filterPopUpModelfour()"/> 
+        <apex:actionFunction name="RemoveFilters2"  rerender="MyForm,FormsTab,Names" action="{!RemoveFilters}" status="status"/>
+         <input type="hidden" id="DeleteKPI" name="DeleteKPI"/>
+          <input type="hidden" id="DeleteFil" name="DeleteFil" />
+  <apex:actionFunction name="RemoveKPIS2"  rerender="FormsTab,FormsTabNew" action="{!RemoveKPIS}" status="status"/>   
+
+          <apex:actionFunction name="DateNames2" action="{!DateNames}" rerender="SectionIds,MeasureIds" status="status"/> 
+           <input type="hidden"  Name="EditTopic" id="EditTopic" /> 
+        <input type="hidden"  Name="EditDim" id="EditDim" /> 
+         <input type="hidden"  Name="MeasTopic" id="MeasTopic" />   
+          <input type="hidden"  Name="RowValues2" id="RowValues2" />
+          <apex:actionFunction name="editdimlabel" action="{!SaveDimLabels}"  rerender="FormsTab,FormsTabNew" status="status"/>
+          <apex:actionFunction name="editdatelabel" action="{!SaveEditLabels}"  rerender="FormsTab,FormsTabNew" status="status"/>
+          <apex:actionFunction name="editmeaslabel" action="{!SaveMeasLabels}"  rerender="FormsTab,FormsTabNew" status="status"/>
+         <apex:actionFunction name="EditLabelClass" action="{!EditLabelClass}" rerender="OppEditPopup1" status="status" oncomplete="NewMeaslabel21()"/>
+         <apex:actionFunction name="EditDimClass" action="{!EditDimClass}" rerender="OppEditPopup1" status="status" oncomplete="NewMeaslabel22()"/>
+         <apex:actionFunction name="EditMeasClass" action="{!MeasLabelClass}" rerender="OppEditPopup1" status="status" oncomplete="NewMeaslabel23()"/> 
+                <apex:actionFunction name="DeleteAll1"  rerender="FormsTab,NewValue2" action="{!DeleteAll}" status="status"/> 
+                <apex:actionFunction name="DimensionsNewtwo" action="{!DimensionsNewtwo}"  rerender="Dimen1,DimensionsIdstwo" status="status"/>
+                   <apex:actionFunction name="DatesNewtwo" action="{!DatesNewtwo}"  rerender="DatesIdstwo" status="status"/> 
+
+        <input type="hidden" name="DimhiddenKPI" id="DimhiddenKPI" />
+        <input type="hidden" name="DatehiddenKPI" id="DatehiddenKPI" />
+                
+                 <script>
+            
+                  function newFilterClasstwo(){
+                var Values =  document.getElementById('AddFilName').value;
+                document.getElementById('FilterNames2').value = Values;
+                 var Valuesone =   document.getElementById("FilterLogics").value ; 
+                document.getElementById("2FilterLogic").value = Valuesone;
+            }
+            
+             function Newpop2(){
+                  
+                   $('#FilterbyItmesIdEdittwo li').appendTo($('#2 ul'));
+                  newFilterClasstwo();
+                  filterPopUpModel();
+                  filtersrecordsupdate();
+                }
+             
+              function filtersrecordsupdate(){
+                $(".slds-scrollable li").each(function( index ) {
+                var classname=$(this).find('div').attr('class');
+                var html=$(this).find('.'+classname).html();
+             
+                html="<div class='index' style='display: inline;'>("+(index+1)+")</div> "+html;
+            
+                $(this).find('.'+classname).html(html);
+                }); 
+            }
+            
+             function filtersrecordsupdatetwo(){
+                //  alert('three');
+                $(".slds-scrollable li").each(function( index ) {
+                var classname=$(this).find('div').attr('class');
+                var html=$(this).find('.'+classname).html();
+             
+                html="<div class='index' style='display: inline;'>("+(0)+")</div> "+html;
+            
+                $(this).find('.'+classname).html(html);
+                }); 
+            }
+             
+             
+         </script>  
+         
+         <script language="Javascript">
+	var activeRows2 = 0;
+	function setActiveRowdatetwo(el) {
+		var rows = $('#movingTableDatetwo li');
+		for (var i = 0; i < rows.length; i++) {
+			if (rows[i] == el) {
+				rows[i].style.backgroundColor = "lightgrey";
+				activeRows2 = i;
+			} else {
+				rows[i].style.backgroundColor = "white";
+			}
+		}
+	}
+
+	function moveActiveRowdatetwo(move) {
+		 var rows = $('#movingTableDatetwo li');
+		var oldRow = rows[activeRows2].innerHTML;
+		var newRow = rows[activeRows2 + move].innerHTML;
+		rows[activeRows2].innerHTML = newRow;
+		rows[activeRows2 + move].innerHTML = oldRow;
+		setActiveRowdatetwo(rows[activeRows2 + move]);
+	}
+	
+	 
+	function NewDimPoptwo(){
+	   $('#DimensionsbyItmestwovalEdit li').appendTo($('#DimensionsbyItmestwoval ul'));
+	   showDimensiontwo();  
+	}
+	function NewDatePoptwo(){
+	   $('#DatesByItmesvaltwoEdit li').appendTo($("#DatesByItmesvaltwo ul"));
+	   showDatestwo();
+	   
+	}
+	
+
+ 
+
+ function onmouseClose() {
+     
+         closeSelectPopup12();
+         NewDimensions = 'false';
+     
+ }
+ function Mouseopen(e){
+        if (!e) var e = window.event; 
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation()
+  }
+  
+  function onmeasureClose13() {
+      if(NewDimensions =='true'){
+          NewDimensions = 'false';
+		$(".popup").hide();
+		closePopup12();
+      }
+	}
+	function measureclose13(e){
+		if (!e) var e = window.event; 
+		e.cancelBubble = true;
+		if (e.stopPropagation) e.stopPropagation()
+	}
+	function NewMeaslabel22(){
+            var input = j$('input[id*=text3]');
+            //alert("KPI 3");
+            var len = input.val().length;
+            input[0].focus();
+            input[0].setSelectionRange(len, len);
+
+        }
+        
+    function NewMeaslabel21(){
+            var input = j$('input[id*=text31]');
+            //alert("KPI 3");
+            var len = input.val().length;
+            input[0].focus();
+            input[0].setSelectionRange(len, len);
+
+        }  
+        
+        function NewMeaslabel23(){
+            var input = j$('input[id*=text32]');
+           // alert("KPI 3");
+            var len = input.val().length;
+            input[0].focus();
+            input[0].setSelectionRange(len, len);
+
+        }  
+        
+    function validatefunction2(Names){
+        //alert("KPI 3");
+                            var KPINameUI21 = j$('input[id*=text3]').val();
+                            var KPINameUI22 = j$('input[id*=text31]').val();
+                            var KPINameUI23 = j$('input[id*=text32]').val();
+
+                             
+                            if(Names == 'date'){
+                                 if(KPINameUI22 != '' && KPINameUI22 != undefined){  
+                                     document.getElementById("ComponentThree").innerHTML = "";   
+                                     editdatelabel(); 
+                                 }else{
+                                    document.getElementById("ComponentThree").innerHTML = "Error: You must enter a value";
+                                }
+                             }
+                            
+                            if(Names == 'dimension'){
+                                if(KPINameUI21 != '' && KPINameUI21 != undefined){
+                                    document.getElementById("ComponentThree").innerHTML = "";
+                                    editdimlabel(); 
+                                }else{
+                                    document.getElementById("ComponentThree").innerHTML = "Error: You must enter a value";
+                                }
+                             }
+                              
+                            if(Names == 'measure'){
+                                if(KPINameUI23 != '' && KPINameUI23 != undefined){
+                                    document.getElementById("ComponentThree").innerHTML = "";
+                                    editmeaslabel(); 
+                                }else{
+                                    document.getElementById("ComponentThree").innerHTML = "Error: You must enter a value";
+                                }
+                             }
+                            
+                        }    
+        
+</script>
+</apex:component>

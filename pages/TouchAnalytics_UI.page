@@ -1,0 +1,374 @@
+<apex:page sidebar="false" standardStylesheets="true" controller="TouchAnalytics_UIClass" action="{!connectToSFDCs}" tabstyle="Touch_Analytics_UI__tab" id="pageId">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.SLDSv0122, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />    
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" /> 
+    <apex:stylesheet value="{!URLFOR($Resource.EdgeClient)}"/> 
+    <apex:styleSheet value="{!URLFOR($Resource.Wave,'Wave/css/EdgeClient.css')}" /> 
+    <style>
+    
+            #myInputcls {
+                  background-image: url('{!$Resource.WaveRemoteSiteSettings}');
+                  background-repeat: no-repeat; 
+                  height:650px; 
+                  background-position: center;
+                  background-size: 850px;
+            }
+            
+            .wrapperclass:hover img{
+       
+           }
+            .wrapperclass:hover .ContactSupport{
+                display: block !important;
+            }
+            
+            .wrapperclass:hover .ContactSales{
+                display: block !important;
+            }
+            
+            @media (min-width: 700px) and (max-width: 843px) {
+                .myapp{
+                    margin-left: -80px !important;
+                    margin-right: -80px !important;
+                }
+                
+                .imgClass{
+                    height: 40px;
+                    margin-top: 25px;
+                    margin-right: 20px;
+                }
+                
+            } 
+            
+            @media (min-width: 844px) and (max-width: 963px) {
+                .myapp{
+                    margin-left: -65px !important;
+                    margin-right: -65px !important;
+                }
+                
+                .imgClass{
+                    height: 40px;
+                    margin-top: 25px;
+                    margin-right: 15px;
+                }
+                
+            } 
+            
+            @media (min-width: 964px) and (max-width: 1079px) {
+                .myapp{
+                    margin-left: -50px !important;
+                    margin-right: -50px !important;
+                }
+                
+                .imgClass{
+                    height: 40px;
+                    margin-top: 25px;
+                    margin-right: 5px;
+                }
+                
+            } 
+                
+               @media (min-width: 1080px) and (max-width: 1364px) {
+                .myapp{
+                    margin-left: -37px !important;
+                    margin-right: -35px !important;
+                }
+                
+                .imgClass{
+                    height: 40px;
+                    margin-top: 25px;
+                }
+                
+            } 
+            
+            @media (min-width: 1400px) and (max-width: 1599px) {
+                .myapp{
+                    margin-left: 17px !important; 
+                }
+                
+                .imgClass{
+                    height: 40px;
+                    margin-top: 25px;
+                }
+                
+            } 
+            
+            @media (min-width: 1600px) and (max-width: 1799px) {
+                .myapp{
+                    margin-left: 60px !important;
+                }
+                
+                .imgClass{
+                    height: 40px;
+                    margin-top: 25px;
+                }
+                
+            } 
+            
+            @media (min-width: 1800px) and (max-width: 1920px) {
+                .myapp{
+                    margin-left: 80px !important;
+                }
+                
+                .imgClass{
+                    height: 40px;
+                    margin-top: 25px;
+                }
+                
+            } 
+            
+            
+            
+            
+            
+    </style>
+    <script>
+        function DataflowImageOver(DataflowBackground) { 
+            DataflowBackground.src='{!$Resource.New_Dataflow_Builder_Hover}'; } 
+            
+        function DataflowImageNormal(DataflowBackground) { 
+            DataflowBackground.src='{!$Resource.New_Dataflow_Builder}'; }
+        
+        function DashboardImageOver(DashboardBackground) { 
+            DashboardBackground.src='{!$Resource.New_Dashboard_Builder_Hover}'; } 
+            
+        function DashboardImageNormal(DashboardBackground) { 
+            DashboardBackground.src='{!$Resource.New_Dashboard_Builder}'; }
+        
+        function BackupImageOver(BackupBackground) { 
+            BackupBackground.src='{!$Resource.New_Dashboard_Backup_Hover}'; } 
+            
+        function BackupImageNormal(BackupBackground) { 
+            BackupBackground.src='{!$Resource.New_Dashboard_Backup}'; }
+        
+        function AdminImageOver(AdminBackground) { 
+            AdminBackground.src='{!$Resource.New_Analytics_Admin_Hover}';} 
+            
+        function AdminImageNormal(AdminBackground) { 
+            AdminBackground.src='{!$Resource.New_Analytics_Admin}';}
+        
+        function createRemoteSite(){
+            var binding = new XMLHttpRequest();  
+            var urls='{!JSENCODE(BaseUrl)}';
+            var request = '<?xml version="1.0" encoding="utf-8"?>' +
+                            '<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'+
+                                '<env:Header>' +
+                                    '<urn:SessionHeader xmlns:urn="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<urn:sessionId>{!$Api.Session_ID}</urn:sessionId>' +
+                                    '</urn:SessionHeader>' +
+                                '</env:Header>' +
+                                '<env:Body>' +
+                                    '<createMetadata xmlns="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<metadata xsi:type="RemoteSiteSetting">' +
+                                            '<fullName>ScheduleTouchAnalyticsEndpoint</fullName>' +
+                                            '<disableProtocolSecurity>false</disableProtocolSecurity>' +
+                                            '<isActive>true</isActive>' +
+                                            '<url>'+urls+'</url>' +
+                                        '</metadata>' +
+                                    '</createMetadata>' +
+                                '</env:Body>' +
+                            '</env:Envelope>';
+            binding.open('POST', 'https://{!URLENCODE(HostUrl)}/services/Soap/m/31.0',true);  
+            binding.setRequestHeader('SOAPAction','""');
+            binding.setRequestHeader('Content-Type', 'text/xml');
+            binding.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var parser = new DOMParser();
+                    var doc  = parser.parseFromString(this.response, 'application/xml');
+                }
+            }
+            binding.send(request);
+            RemoteSite();
+            
+        }
+        
+        function createHostRemoteSite(){
+            var binding = new XMLHttpRequest();  
+            var urls='{!HostUrl}';
+            var request = '<?xml version="1.0" encoding="utf-8"?>' +
+                            '<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'+
+                                '<env:Header>' +
+                                    '<urn:SessionHeader xmlns:urn="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<urn:sessionId>{!$Api.Session_ID}</urn:sessionId>' +
+                                    '</urn:SessionHeader>' +
+                                '</env:Header>' +
+                                '<env:Body>' +
+                                    '<createMetadata xmlns="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<metadata xsi:type="RemoteSiteSetting">' +
+                                            '<fullName>CompleteTouchAnalyticsEndpoint</fullName>' +
+                                            '<disableProtocolSecurity>false</disableProtocolSecurity>' +
+                                            '<isActive>true</isActive>' +
+                                            '<url>https://'+urls+'</url>' +
+                                        '</metadata>' +
+                                        '<metadata xsi:type="RemoteSiteSetting">' +
+                                            '<fullName>TouchAnalyticsPostEndpoint</fullName>' +
+                                            '<disableProtocolSecurity>false</disableProtocolSecurity>' +
+                                            '<isActive>true</isActive>' +
+                                            '<url>https://analyticscc.my.salesforce.com</url>' +
+                                        '</metadata>' +
+                                        '<metadata xsi:type="RemoteSiteSetting">' +
+                                            '<fullName>SalesforceProductionURL</fullName>' +
+                                            '<disableProtocolSecurity>false</disableProtocolSecurity>' +
+                                            '<isActive>true</isActive>' +
+                                            '<url>https://login.salesforce.com</url>' +
+                                        '</metadata>' +
+                                        '<metadata xsi:type="RemoteSiteSetting">' +
+                                            '<fullName>SalesforceSandboxURL</fullName>' +
+                                            '<disableProtocolSecurity>false</disableProtocolSecurity>' +
+                                            '<isActive>true</isActive>' +
+                                            '<url>https://test.salesforce.com</url>' +
+                                        '</metadata>' +
+                                    '</createMetadata>' +
+                                '</env:Body>' +
+                            '</env:Envelope>';
+            binding.open('POST', 'https://{!HostUrl}/services/Soap/m/31.0',true);
+            binding.setRequestHeader('SOAPAction','""');
+            binding.setRequestHeader('Content-Type', 'text/xml');
+            binding.onreadystatechange = function() {
+                //alert(this.status);
+                if (this.readyState == 4 && this.status == 200) {
+                    var parser = new DOMParser();
+                    var doc  = parser.parseFromString(this.response, 'application/xml');
+                }
+            }
+            binding.send(request);
+            alert('Remote Site Settings added Successfully');
+        }
+        
+        
+        
+        
+    </script>
+    <apex:form id="FormId">
+        <apex:actionFunction name="openTouchAnalyticsPage" action="{!openTouchAnalyticsPage}" rerender="FormId" status="status"/>
+        <apex:actionFunction name="openDataFlowPage" action="{!openDataFlowPage}" rerender="FormId" status="status"/>
+        <apex:actionFunction name="openTouchBackupPage" action="{!openTouchBackupPage}" rerender="FormId" status="status"/>
+        <apex:actionFunction name="RemoteSite" action="{!remoteSiteSettings}" rerender="FormId" status="status"/>
+        <body ng-cloak="ng-cloak" ng-app="demoajax" ng-controller="Demo" style="padding-top:0px;font-size: 12px;" id="anguController">
+            <apex:outputpanel rendered="{!IF(remoteSiteSettings == false,true,false)}">
+         <div class="main" Id="myInputcls">
+            <div class="row">
+                <div class="col-sm-12 col-lg-12 NewHeightClass" > 
+                                                                     
+                </div>
+                <div class="col-sm-4 col-lg-4">                                
+                </div>
+                <div class="col-sm-3 col-lg-3">                           
+                     <center>
+                        <div class="slds" id="DimensionId" >
+                            <div class="myapp" style="">  
+                                <div class="slds-grid slds-m-top--large" style="margin-top:0px">
+                                    <div class="slds-col slds-col-rule--right slds-p-right--large" style="box-sizing: initial;padding-right:0px;border-right:none;width:100%;margin-top:230px;margin-left:113px;">                                                                       
+                                        <span><b><p style="font-size:16px;">The following remote site settings will be created</p></b></span> 
+                                        <br/>
+                                        <span style="color: black;font-size:12px;"><b>{!HostUrl}</b></span><br/><br/>
+                                        <span style="color: black;font-size:12px;"><b>login.salesforce.com</b></span><br/>
+                                        <span style="color: black;font-size:12px;"><b>test.salesforce.com</b></span><br/>
+                                        <span style="color: black;font-size:12px;"><b>https://analyticscc.my.salesforce.com</b></span><br/>
+                                        <img src="{!$Resource.Wave_Create_Icon}" id="CreateRemoteId" class="imgClass" style="height:40px;margin-top:14px;" onclick="createHostRemoteSite(); createRemoteSite()"/>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </center>                    
+                </div>                              
+                <div class="col-sm-12 col-lg-12">
+                    <center>
+                    </center>                         
+                </div>
+            </div>
+    </div>          
+     </apex:outputpanel>
+            <apex:outputPanel rendered="{!IF(NewRemoteSiteSettings == false && remoteSiteSettings == true,true,false)}">
+              
+            <div class="slds">
+                <div class="slds-page-header" style="border-bottom: 1px solid #d8dde6;background:none;padding: 2px 35px 1px;">
+                    <div class="slds-grid" style="margin-top: 5px;margin-bottom: 5px;">
+                        <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--4-of-12" Style="margin-top:0px">
+                            <div class="slds-form-element__control">
+                                <div class="wrapper">
+                                    <!--<img style="cursor:pointer;float:left" src="{!$Resource.Settings_Icon}" width="65px" height="65px"/>-->
+                                </div>                                    
+                            </div>   
+                        </div>
+                        <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--4-of-12" style="text-align:center">
+                            <div class="slds-form-element__control">
+                                <apex:image value="{!$Resource.Touch_Analytics_New_Logo}" width="320" height="320"/>
+                            </div>                   
+                        </div>
+                        <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--4-of-12" style="">
+                                       <div class="slds-form-element__control">  
+                                           <div class="wrapperclass">
+                                            <img style="cursor:pointer;float: right;" src="{!$Resource.Contactus_Active_Logo}" width="75px" height="15px" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeVSeLboh4gOU-Vnut_CApMKd5XwrkWjJ95HfUV-8UkBwcUKA/viewform?c=0&w=1');" Id="SupportId"/>
+                                                <div>
+                                                   <apex:outputLink style="display: none; cursor:pointer;text-align: right; color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;margin-top:2px;padding-top:2px;" value="mailto:Sales@AnalyticsCc.com" styleClass="ContactSales">Contact Sales</apex:outputLink><br/> 
+                                                </div>
+                                                <div>
+                                                    <apex:outputLink style="display: none; cursor:pointer;text-align: right; color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;" value="mailto:Support@AnalyticsCc.com" styleClass="ContactSupport">Contact Support</apex:outputLink>
+                                                </div>
+                                                
+                                            <!--<button type="button" Class=" slds-button--neutral" style="color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;margin-left: 70px;margin-top:2px;padding-top:2px;padding-bottom:4px;" onclick="mailto:Sales@AnalyticsCc.com">Contact Sales</button> -->
+                                            <!--<button type="button" Class=" slds-button--neutral" style="color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;margin-left: 70px;margin-top:2px;padding-top:2px;padding-bottom:4px;" onclick="mailto:Support@AnalyticsCc.com">Contact Support</button> -->
+                                           </div>
+                                       </div>
+                            </div>
+                    </div>   
+                </div>
+            </div> 
+            <div class="slds">
+                <div class="slds-grid slds-wrap" style="margin-:10px;background-color: #FFF;">
+                    
+                    <div class="slds-size--6-of-12 slds-medium-size--3-of-12 slds-small-size--9-of-12 slds-large-size--3-of-12 maxcont">
+                        <div class="slds-form-element slds-m-top--large slds-p-right--large" style="margin-top: 14px;margin-bottom:20px;margin-left: 42px;">    
+                            <div class="slds-form-element__control" style="max-width: 60%;text-align: center;background: #FFF;padding-bottom: 0px;" id="SingleId"> 
+                               <!-- <apex:image url="{!$Resource.New_Dataflow_Builder}" style="cursor:pointer;" id="DataflowBackground" onclick="openDataFlow()" onmouseover="DataflowImageOver(this)" onmouseout="DataflowImageNormal(this)" /> -->
+                                <apex:image url="{!$Resource.New_Dataflow_Builder}" style="cursor:pointer;" id="DataflowBackground" onclick="" onmouseover="DataflowImageOver(this)" onmouseout="DataflowImageNormal(this)" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-size--6-of-12 slds-medium-size--3-of-12 slds-small-size--9-of-12 slds-large-size--3-of-12 maxcont">
+                        <div class="slds-form-element slds-m-top--large slds-p-right--large" style=" margin-top: 14px;margin-bottom:20px;margin-left: 42px;">    
+                            <div class="slds-form-element__control" style="max-width: 60%;text-align: center;background: #FFF;padding-bottom: 0px;" id="SingleId"> 
+                                <apex:image url="{!$Resource.New_Dashboard_Builder}" style="cursor:pointer;" id="DashboardBackground" onclick="openTouchAnalytics()" onmouseover="DashboardImageOver(this)" onmouseout="DashboardImageNormal(this)" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-size--6-of-12 slds-medium-size--3-of-12 slds-small-size--9-of-12 slds-large-size--3-of-12 maxcont">
+                        <div class="slds-form-element slds-m-top--large slds-p-right--large" style="margin-top: 14px;margin-bottom:20px;margin-left: 42px;">    
+                            <div class="slds-form-element__control" style="max-width: 60%;text-align: center;background: #FFF;padding-bottom: 0px;" id="SingleId"> 
+                                <apex:image url="{!$Resource.New_Dashboard_Backup}" style="cursor:pointer;" id="BackupBackground" onclick="openTouchBackup()" onmouseover="BackupImageOver(this)" onmouseout="BackupImageNormal(this)" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-size--6-of-12 slds-medium-size--3-of-12 slds-small-size--9-of-12 slds-large-size--3-of-12 maxcont">
+                        <div class="slds-form-element slds-m-top--large slds-p-right--large" style="margin-top: 14px;margin-bottom:20px;margin-left: 42px;">    
+                            <div class="slds-form-element__control" style="max-width: 60%; text-align: center;background: #FFF;padding-bottom: 0px;" id="SingleId"> 
+                                <apex:image url="{!$Resource.New_Analytics_Admin}" style="cursor:pointer;" id="AdminBackground"  onmouseover="AdminImageOver(this)" onmouseout="AdminImageNormal(this)" />
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </apex:outputPanel>
+        </body>
+        <script>
+            function openTouchAnalytics(){
+                openTouchAnalyticsPage();
+            }
+            
+            function openDataFlow(){
+                openDataFlowPage();
+            }
+            
+            function openTouchBackup(){
+                openTouchBackupPage();
+            }
+        </script>
+    </apex:form>
+</apex:page>

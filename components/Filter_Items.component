@@ -1,0 +1,77 @@
+<apex:component >
+<apex:attribute name="panelItems" description="This is the value for the component." type="String"  />
+
+   <div class="slds-grid slds-wrap slds-grid--pull-padded" style="margin: 1%;">
+    
+    <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+       
+    <div class="slds-grid slds-wrap slds-grid--pull-padded">
+       <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+               <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                   <div class="slds-p-horizontal--small slds-size--10-of-12 slds-medium-size--10-of-12 slds-large-size--10-of-12">
+                       <div class="slds-form slds-form--inline" style="text-align: left;">
+                          <label class="slds-form-element__label" for="name">Name : </label>
+                          <div class="slds-form-element__control" style="width: 50%;">
+                            <input id="FilterNames{!panelItems}" class="slds-input" type="text"/>
+                            <div id="error12" style="padding-left:3px;color: #d74c3b;"></div>
+                            <div id="error125" style="padding-left:3px;color: #d74c3b;"></div>
+                          </div>
+                        </div>
+                   </div>   
+                </div>
+              <!-- Row 2 -->   
+               <div class="slds-grid slds-wrap slds-grid--pull-padded" style="background-color: #E6ECF2;padding: 8px;margin-top: 1%;">
+                   <div class="slds-p-horizontal--small slds-size--6-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                       <h4 style="margin-top: 10px;">Filters</h4>
+                   </div>
+                   <div class="slds-p-horizontal--small slds-size--6-of-12 slds-medium-size--6-of-12 slds-large-size--6-of-12">
+                       <h1  id="filterIconBtnPls" style="font-size: 26px;float:right;cursor: pointer;" onclick="showFilter('{!panelItems}')">+</h1>
+                       <h1  id="filterIconBtnMins" style="font-size: 26px;float:right;cursor: pointer;display: none;" onclick="showFilter('{!panelItems}')">-</h1>
+                     
+                       
+                   </div>
+               </div>  
+               <div id="errorCond" style="padding-left:3px;color: #d74c3b;"></div>
+               <div id="errorCond2" style="padding-left:3px;color: #d74c3b;"></div>
+             <!--Row 3 -->
+               <div class="slds-grid slds-wrap slds-grid--pull-padded" >
+                   <div id="{!panelItems}" class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12" style="border: 1px solid #E6ECF2;">
+                      
+                       <ul class="slds-scrollable" style="height: 150px;overflow-y: scroll;margin-top: 1%;">
+                          
+                       </ul>
+                   </div>
+               </div>     
+            <!-- Row 4-->
+            <div class="slds-grid slds-wrap slds-grid--pull-padded" style="margin-top: 1%;">
+                  
+                   <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+                     <div class="slds-form slds-form--inline" style="text-align: left;">
+                          <label class="slds-form-element__label" for="FilterLogic">Filter Logic: </label>
+                          <div class="slds-form-element__control" style="width: 50%;">
+                            <input id="{!panelItems}FilterLogic" class="slds-input" type="text"/>
+                            <br/>
+                            Advanced Filter Conditions: (1 AND 2) OR 3
+                          </div>
+                        </div>
+                   </div>
+               </div>  
+             <!-- Row 5
+               <div class="slds-grid slds-wrap slds-grid--pull-padded" style="margin-top: 1%;">
+                   <div class="slds-p-horizontal--small slds-size--12-of-12 slds-medium-size--12-of-12 slds-large-size--12-of-12">
+                       <table>
+                           <tr style="background-color: #e6ecf2;">
+                             <td style="padding: 10px; text-align: right;">
+                                 <button class="slds-button slds-button_neutral" style="background-color: white;width: 10%;">Close</button> 
+                                 <button class="slds-button slds-button_neutral" style="margin-right: 10px;background-color: white;width: 10%;" onclick="NewSelectPopup{!panelItems}('{!panelItems}FilterLogic')">Add Filter</button>
+                             </td> 
+                         </tr>
+                       </table>
+                   </div>
+               </div>   -->
+           </div>              
+       </div>  
+     </div>
+     
+   </div>     
+</apex:component>

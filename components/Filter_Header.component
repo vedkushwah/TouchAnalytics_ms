@@ -1,0 +1,3271 @@
+<apex:component >
+ <script>
+     var addFilteritemsOld={};
+      var addFilterTO={}; 
+       var updateRef;
+       var selectedarr={};
+       var selectedItemscount=0;
+       var selectItems=''; 
+       var fieldapi='';
+       var folderId='';
+       var dataSetId='';
+       var selurlid='';
+       var dataSetLayout='';
+       var DimensionsApis={}  ;
+       var datesApis={}  ;
+       var NewDimensions = false;
+       
+       var indexpanel;
+       
+                   var selectedElements={};
+             var ref;
+             var isUpdate=false;
+             var checkPanelLoad={};
+             var selectedPanel;
+
+       
+       var sid = '{!$Api.Session_ID}';
+       var instance_url = '{!$Site.BaseUrl}';
+        var body;
+        var app = angular.module('demoajax', ['ngMaterial']);
+        app.controller('Demo', function($scope,$http) {
+            
+             //Show Spinner
+             $("#IsProcessSpinner").show();
+             
+                $http({
+                    url: "/services/data/v39.0/wave/datasets",
+                    method: "GET",
+                    headers: {
+                       "Authorization": "OAuth " + sid
+                    }
+                })
+                .then(function(response) {
+                  
+                    
+                    $(".dataSetLayout").html(dataSetLayout);
+                   
+                    //Hide Spinner
+                    $("#IsProcessSpinner").hide();
+                }, 
+                function(response) { 
+                      // alert("failed");
+                });
+                
+                $scope.onGetDimRecordstwo= function() {
+                 //Show Spinner
+                 $("#IsProcessSpinner").show();
+                 var DimensionsLayout='';
+                 var DimensionsLayoutone='';
+                 var Dimensions=[];
+                 var adddimensTO={};
+                 var Dimensionsorgs= {};
+                 selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;                 
+                       $http({
+                            url: selurlid+"/xmds/system",
+                            method: "GET",
+                            headers: {
+                               "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {
+   
+                             for(var i=0;i<response.data.dimensions.length;i++){
+                                Dimensions[i]=response.data.dimensions[i]['label'];
+                                DimensionsApis[response.data.dimensions[i]['label']]=response.data.dimensions[i]['field'];
+                                Dimensionsorgs[response.data.dimensions[i]['label']]=response.data.dimensions[i]['origin'];
+                            }
+                            Dimensions.sort();
+                            $('#DimensionsbyItmestwoval li').filter(
+                        		function(){
+                        				var keyFields = $(this).closest('li').find('.selectedfield').val();
+                        				var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','');
+                        				keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','');
+                        				adddimensTO[keyFieldss] = keyFieldss; 
+                        			
+                        		});	
+                             //For Dimensions Layout
+                            for(var i=0;i<Dimensions.length;i++){
+                                 var Dimes = DimensionsApis[Dimensions[i]].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                    if(Dimensions[i]!=undefined && adddimensTO[Dimes]==undefined && Dimensionsorgs[Dimensions[i]]!= undefined){                                
+                                    DimensionsApis[Dimensions[i]]
+                                    DimensionsLayoutone+='<a onclick="moveitemstwo(this)" class="dimensions" id='+DimensionsApis[Dimensions[i]]+i+'>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="blotwo'+Dimes+'"/>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="distwo'+Dimes+'"/>';
+                                   
+                                    DimensionsLayoutone+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayoutone+='<span class="valuesbtn" >';
+                                    DimensionsLayoutone+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayoutone+='</span>';
+                                    DimensionsLayoutone+='<svg class="icon" >';
+                                    DimensionsLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';                                   
+                                 
+                            } 
+                             if(Dimensions[i]!=undefined && adddimensTO[Dimes]!=undefined && Dimensionsorgs[Dimensions[i]]!= undefined){                                
+                                    DimensionsApis[Dimensions[i]]
+                                    DimensionsLayoutone+='<a onclick="moveitemstwo(this)" class="dimensions" id='+DimensionsApis[Dimensions[i]]+i+'>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="blotwo'+Dimes+'"/>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="distwo'+Dimes+'"/>';
+                                   
+                                    DimensionsLayoutone+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayoutone+='<span class="valuesbtn" >';
+                                    DimensionsLayoutone+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayoutone+='</span>';
+                                    DimensionsLayoutone+='<svg class="icon" >';
+                                    DimensionsLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';                                   
+                                 
+                            } 
+                            }
+                           $("#DimensionsLayoutthreeval").html(DimensionsLayoutone); 
+                           
+                            var itemsrec;
+                            for(var i=1;i<= $("#DimensionsbyItmestwoval li").length;i++){
+                                 itemsrec = i;
+                                 $("#NumberIdstwo").html(itemsrec);
+                                 
+                            }
+                         //  $('.OppselectPopup').toggle(500);
+                           // hide Spinner
+                           $("#IsProcessSpinner").hide();
+                        }, 
+                        function(response) { 
+                              // alert("Select Any One");
+                               //Hide Spinner 
+                               $("#IsProcessSpinner").hide();
+                        });
+                     }
+                     
+                     
+                     /************************** New Measures Start********************************/
+                           $scope.onGetMeasureRecords= function() {
+                    //delete checkPanelLoad[selectedPanel];
+                    if(checkPanelLoad[selectedPanel]==undefined){
+                        checkPanelLoad[selectedPanel]=selectedPanel;    
+                         selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;
+                        $http({
+                            url: selurlid+'/xmds/main',
+                            method: "GET",
+                            headers: {
+                            "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {  
+                            var MeasuresApi={};
+                            var Measures=[];              
+                            var Dimensions=[];
+                            var DimensionsApi={};
+                            var DimensionsLayout='';
+                            var MeasuresLayout='';
+                            var adddimTo = {};
+                            var addmesTo = {};
+                             var Dimensionsorgs= {};
+                             var Measorg = {};
+                            for(var i=0;i<response.data.dimensions.length;i++){
+                                Dimensions[i]=response.data.dimensions[i]['label'];
+                                DimensionsApi[response.data.dimensions[i]['label']]=response.data.dimensions[i]['field'];
+                                Dimensionsorgs[response.data.dimensions[i]['label']]=response.data.dimensions[i]['origin']; 
+                            }
+                            //Sort Records 
+                            Dimensions.sort();
+                            
+                            //For Dimensions Layout
+                            for(var i=0;i<Dimensions.length;i++){
+                                var Dimse = Dimensions[i].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(/[^a-zA-Z ]/g, "");
+                                if(Dimensions[i]!=undefined  && Dimensionsorgs[Dimensions[i]]!= undefined){ 
+                                    DimensionsLayout+='<a class="dimension" onclick="filteritems(this,'+selectedPanel+')" id='+DimensionsApi[Dimensions[i]]+'>';
+                                    DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="NewAll'+selectedPanel+Dimse+'"/>';
+                                     DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="Anals'+selectedPanel+Dimse+'"/>';
+                                    
+                                    DimensionsLayout+='<label data-tooltip-on-truncation="true" data-tooltip="#" >'+Dimensions[i]+'</label><span ></span></a>';
+                                }   
+                               
+                            } 
+                            $("#DimensionsPanelLayout"+selectedPanel).html(DimensionsLayout);
+                           
+                            //***************************************End DimensionsPanelLayout**************
+                           
+                            //Measures Layout
+                            for(var i=0;i<response.data.measures.length;i++){
+                                if(response.data.measures[i]['label']!=undefined ){
+                                   
+                                    Measures[i]=response.data.measures[i]['label'];
+                                    MeasuresApi[response.data.measures[i]['label']]=response.data.measures[i]['field'];
+                                    Measorg[response.data.measures[i]['label']]=response.data.measures[i]['origin']; 
+                                }  
+                             }
+                             
+                             //Sort Measures Records 
+                                Measures.sort();
+                                
+                             //Create Layout   Measures
+                             
+                             
+                             
+                             //Default 
+                                	
+                               MeasuresLayout+='<a class="measureRows measure" onclick="filteritems(this,'+selectedPanel+')" id="Rows'+selectedPanel+'">';
+                               MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.MeasureLabel}" width="17px" height="10px" id="NewAll'+selectedPanel+'Rows"/>';
+                               MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="Anals'+selectedPanel+'Rows" />';
+                                            
+                               MeasuresLayout+='<label data-tooltip-on-truncation="true" data-tooltip="#" >Rows</label><span ></span></a>';
+                              
+                                
+                                for(var i=0;i<Measures.length;i++){
+                                    var Dimse = Measures[i].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(/[^a-zA-Z ]/g, "");
+                                        if(Measures[i]!=undefined && Measorg[Measures[i]]!= undefined){
+                                            MeasuresLayout+='<a class="measureCount  measure" onclick="filteritems(this,'+selectedPanel+')" id='+MeasuresApi[Measures[i]]+'>';
+                                            MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;"   src="{!$Resource.MeasureLabel}" width="17px" height="10px" id="NewAll'+selectedPanel+Dimse+'"/>';
+                                             MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="Anals'+selectedPanel+Dimse+'" />';
+                                            MeasuresLayout+='<label data-tooltip-on-truncation="true" data-tooltip="#" >'+Measures[i]+'</label><span ></span></a>';
+                                       
+                                }  
+                                }
+                                
+                               $("#MeasuresPanelLayout"+selectedPanel).html(MeasuresLayout);  
+                                         
+                            
+                             //Hide Process Spinner 
+                              $("#IsProcessSpinner"+selectedPanel).css('display','none');
+                              
+                               $("#MeasuresPanelLayout"+selectedPanel).prev().show();
+                                $("#MeasuresPanelLayout"+selectedPanel).show();
+                                $("#DimensionsPanelLayout"+selectedPanel).hide();
+                                $("#DimensionsPanelLayout"+selectedPanel).prev().hide();
+                                
+                                 $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                      $(this).removeClass('selected');
+                                 });
+                                
+                                $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                    if($(this).html()=='Count'){
+                                        $(this).addClass('selected');
+                                    }
+                                });
+                                $('#MenuItems'+selectedPanel+' li').filter(
+                                function(){
+                                     var key=selectedPanel+$(this).closest('li').find('.parentSelected').val()+$(this).closest('li').find('.itemSelected').val(); 
+                                   
+                                    selectedElements[key] = key;  
+                                      
+                                }
+                                );
+                                    
+                                selectedItemsFills('count');
+                                 $("#DimensionsPanelLayout"+selectedPanel).prev().hide();
+                                $("#DimensionsPanelLayout"+selectedPanel).hide();
+
+                        },
+                        function(response) { 
+                           //  alert("Measures");
+                        }); 
+                     }else{
+                          //Hide Process Spinner 
+                                $("#IsProcessSpinner"+selectedPanel).css('display','none');
+                                $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                      $(this).removeClass('selected');
+                                 });
+                                
+                                $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                    if($(this).html()=='Count'){
+                                        $(this).addClass('selected');
+                                    }
+                                });
+                          $("#DimensionsPanelLayout"+selectedPanel).prev().hide();      
+                          $("#DimensionsPanelLayout"+selectedPanel).hide();
+                     }       
+                }     
+                
+                
+                 $scope.onGetMeasureRecordsedit= function() {
+                    //delete checkPanelLoad[selectedPanel];   
+                          selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;
+                        $http({
+                            url: selurlid+'/xmds/main',
+                            method: "GET",
+                            headers: {
+                            "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {  
+                            var MeasuresApi={};
+                            var Measures=[];              
+                            var Dimensions=[];
+                            var DimensionsApi={};
+                            var DimensionsLayout='';
+                            var MeasuresLayout='';
+                            var adddimTo = {};
+                            var addmesTo = {};
+                            var Dimensionsorgs= {};
+                            var Measorg = {};
+                            for(var i=0;i<response.data.dimensions.length;i++){
+                                Dimensions[i]=response.data.dimensions[i]['label'];
+                                DimensionsApi[response.data.dimensions[i]['label']]=response.data.dimensions[i]['field'];
+                                Dimensionsorgs[response.data.dimensions[i]['label']]=response.data.dimensions[i]['origin']; 
+                            }
+                            //Sort Records 
+                            Dimensions.sort();
+                            
+                            //For Dimensions Layout
+                            for(var i=0;i<Dimensions.length;i++){
+                                var Dimse = Dimensions[i].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(/[^a-zA-Z ]/g, "");
+                                if(Dimensions[i]!=undefined && Dimensionsorgs[Dimensions[i]]!= undefined){ 
+                                    DimensionsLayout+='<a class="dimension" onclick="filteritems(this,'+selectedPanel+')" id='+DimensionsApi[Dimensions[i]]+'>';
+                                    DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="NewAll'+selectedPanel+Dimse+'"/>';
+                                     DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="Anals'+selectedPanel+Dimse+'"/>';
+                                    
+                                    DimensionsLayout+='<label data-tooltip-on-truncation="true" data-tooltip="#" >'+Dimensions[i]+'</label><span ></span></a>';
+                                }   
+                               
+                            } 
+                            $("#DimensionsPanelLayout"+selectedPanel).html(DimensionsLayout);
+                           
+                            //***************************************End DimensionsPanelLayout**************
+                           
+                            //Measures Layout
+                            for(var i=0;i<response.data.measures.length;i++){
+                                if(response.data.measures[i]['label']!=undefined ){
+                                   
+                                    Measures[i]=response.data.measures[i]['label'];
+                                    MeasuresApi[response.data.measures[i]['label']]=response.data.measures[i]['field'];
+                                    Measorg[response.data.measures[i]['label']]=response.data.measures[i]['origin']; 
+                                }  
+                             }
+                             
+                             //Sort Measures Records 
+                                Measures.sort();
+                                
+                             //Create Layout   Measures
+                             
+                             
+                             
+                             //Default 
+                                	
+                               MeasuresLayout+='<a class="measureRows measure" onclick="filteritems(this,'+selectedPanel+')" id="Rows'+selectedPanel+'">';
+                               MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.MeasureLabel}" width="17px" height="10px" id="NewAll'+selectedPanel+'Rows"/>';
+                               MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="Anals'+selectedPanel+'Rows" />';
+                                            
+                               MeasuresLayout+='<label data-tooltip-on-truncation="true" data-tooltip="#" >Rows</label><span ></span></a>';
+                              
+                                
+                                for(var i=0;i<Measures.length;i++){
+                                    var Dimse = Measures[i].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(/[^a-zA-Z ]/g, "");
+                                        if(Measures[i]!=undefined && Measorg[Measures[i]]!= undefined){
+                                            MeasuresLayout+='<a class="measureCount  measure" onclick="filteritems(this,'+selectedPanel+')" id='+MeasuresApi[Measures[i]]+'>';
+                                            MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;"   src="{!$Resource.MeasureLabel}" width="17px" height="10px" id="NewAll'+selectedPanel+Dimse+'"/>';
+                                             MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="Anals'+selectedPanel+Dimse+'" />';
+                                            MeasuresLayout+='<label data-tooltip-on-truncation="true" data-tooltip="#" >'+Measures[i]+'</label><span ></span></a>';
+                                       
+                                }  
+                                }
+                                
+                               $("#MeasuresPanelLayout"+selectedPanel).html(MeasuresLayout);  
+                                         
+                            
+                             //Hide Process Spinner 
+                              $("#IsProcessSpinner"+selectedPanel).css('display','none');
+                              
+                               $("#MeasuresPanelLayout"+selectedPanel).prev().show();
+                                $("#MeasuresPanelLayout"+selectedPanel).show();
+                                $("#DimensionsPanelLayout"+selectedPanel).hide();
+                                $("#DimensionsPanelLayout"+selectedPanel).prev().hide();
+                                
+                                 $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                      $(this).removeClass('selected');
+                                 });
+                                
+                                $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                    if($(this).html()=='Count'){
+                                        $(this).addClass('selected');
+                                    }
+                                });
+                                $('#MenuItems'+selectedPanel+' li').filter(
+                                function(){
+                                     var key=selectedPanel+$(this).closest('li').find('.parentSelected').val()+$(this).closest('li').find('.itemSelected').val();
+                                     
+                                    selectedElements[key] = key;  
+                                      
+                                }
+                                ); 
+                                    
+                                selectedItemsFills('count');
+                                 $("#DimensionsPanelLayout"+selectedPanel).prev().hide();
+                                $("#DimensionsPanelLayout"+selectedPanel).hide();
+
+                        },
+                        function(response) { 
+                            // alert("Dimensions");
+                        });  
+                         
+                }				
+                     
+			 /************************** New Measures End********************************/
+			$scope.onGetDateRecordstwo= function() {
+                 //Show Spinner
+                 $("#IsProcessSpinner").show();
+                
+                 var dates=[];
+                 var datesLayoutone=''; 
+                 var adddimensTO={};
+                 
+                 selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;
+                 
+                       $http({
+                            url: selurlid+"/xmds/system",
+                            method: "GET",
+                            headers: {
+                               "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {
+                          
+                            for(var i=0;i<response.data.dates.length;i++){
+                                dates[i]=response.data.dates[i]['alias'];
+                                datesApis[response.data.dates[i]['alias']]=response.data.dates[i].fields['epochSecond'];             
+                            }
+                            
+                            dates.sort();
+                             $('#DatesByItmesvaltwo li').filter(
+                        		function(){
+                        				var keyFields = $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','');
+                        				var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','');
+                        				keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','');
+                        				adddimensTO[keyFieldss] = keyFieldss; 
+                        			
+                        		});	
+                            //For Date Fields 
+                            for(var i=0;i<dates.length;i++){
+                                var Dimes = datesApis[dates[i]].replace('_sec_epoch','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                if(dates[i]!=undefined && adddimensTO[Dimes]==undefined){ 
+                                    datesLayoutone+='<a class="dimension date" onclick="movedateitemstwo(this)" id='+datesApis[dates[i]]+'>';
+                                      datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DateLabel}" width="15px" height="10px" id="blocktwo'+Dimes+'"/>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="15px" height="10px" id="datetwo'+Dimes+'"/>';
+                                 
+                                    datesLayoutone+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayoutone+='<span class="valuesbtn" >';
+                                    datesLayoutone+='<span class="chevronLeftIcon" >';
+                                    datesLayoutone+='</span>';
+                                    datesLayoutone+='<svg class="icon" >';
+                                    datesLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayoutone+='</svg></span></a>';
+                                }
+                                if(dates[i]!=undefined && adddimensTO[Dimes]!=undefined){ 
+                                    datesLayoutone+='<a class="dimension date" onclick="movedateitemstwo(this)" id='+datesApis[dates[i]]+'>';
+                                      datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.DateLabel}" width="15px" height="10px" id="blocktwo'+Dimes+'"/>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.TA_Label}" width="15px" height="10px" id="datetwo'+Dimes+'"/>';
+                                 
+                                    datesLayoutone+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayoutone+='<span class="valuesbtn" >';
+                                    datesLayoutone+='<span class="chevronLeftIcon" >';
+                                    datesLayoutone+='</span>';
+                                    datesLayoutone+='<svg class="icon" >';
+                                    datesLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayoutone+='</svg></span></a>';
+                                }
+                            }                            
+                            $(".datesLayouttwo").html(datesLayoutone);  
+                            
+                                var itemsrec;
+                                for(var i=1;i<= $("#DatesByItmesvaltwo li").length;i++){
+                                     itemsrec = i;
+                                     $("#NumberdateIdstwo").html(itemsrec);
+                                     
+                            }
+                           
+                           filterPopUpModel();
+                           // hide Spinner
+                           $("#IsProcessSpinner").hide();
+                        }, 
+                        function(response) { 
+                              // alert("Select Any One");
+                               //Hide Spinner 
+                               $("#IsProcessSpinner").hide();
+                        });
+                     }
+                
+          $scope.onGetDimRecordsone= function() {
+                 //Show Spinner
+                 $("#IsProcessSpinner").show();
+                 var DimensionsLayout='';
+                 var DimensionsLayoutone='';
+                 var Dimensions=[];  
+                 var adddimensTO={};
+                 var Dimensionsorgs= {};
+                 selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;                 
+                       $http({
+                            url: selurlid+"/xmds/system",
+                            method: "GET",
+                            headers: {
+                               "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {
+   
+                             for(var i=0;i<response.data.dimensions.length;i++){
+                                Dimensions[i]=response.data.dimensions[i]['label'];
+                                DimensionsApis[response.data.dimensions[i]['label']]=response.data.dimensions[i]['field']; 
+                                Dimensionsorgs[response.data.dimensions[i]['label']]=response.data.dimensions[i]['origin']; 
+                            }
+                            Dimensions.sort();
+                             $('#DimensionsbyItmesone li').filter(
+                        		function(){
+                        				var keyFields = $(this).closest('li').find('.selectedfield').val();
+                        				var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','');
+                        				keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','');
+                        				adddimensTO[keyFieldss] = keyFieldss; 
+                        			
+                        		});	
+                             //For Dimensions Layout
+                            for(var i=0;i<Dimensions.length;i++){
+                                var Dimes = DimensionsApis[Dimensions[i]].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                    if(Dimensions[i]!=undefined && adddimensTO[Dimes]==undefined && Dimensionsorgs[Dimensions[i]]!= undefined){                                 
+                                    DimensionsApis[Dimensions[i]]
+                                    DimensionsLayoutone+='<a onclick="moveitemsone(this)" class="dimensions" id='+DimensionsApis[Dimensions[i]]+i+'>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="bloone'+Dimes+'"/>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="disone'+Dimes+'"/>';
+                                   
+                                    DimensionsLayoutone+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayoutone+='<span class="valuesbtn" >';
+                                    DimensionsLayoutone+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayoutone+='</span>';
+                                    DimensionsLayoutone+='<svg class="icon" >';
+                                    DimensionsLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';                                   
+                                 
+                            } 
+                            if(Dimensions[i]!=undefined && adddimensTO[Dimes]!=undefined && Dimensionsorgs[Dimensions[i]]!= undefined){                                 
+                                    DimensionsApis[Dimensions[i]]
+                                    DimensionsLayoutone+='<a onclick="moveitemsone(this)" class="dimensions" id='+DimensionsApis[Dimensions[i]]+i+'>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="bloone'+Dimes+'"/>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="disone'+Dimes+'"/>';
+                                   
+                                    DimensionsLayoutone+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayoutone+='<span class="valuesbtn" >';
+                                    DimensionsLayoutone+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayoutone+='</span>';
+                                    DimensionsLayoutone+='<svg class="icon" >';
+                                    DimensionsLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';                                   
+                                 
+                            } 
+                            }
+                           $("#DimensionsLayouttwoval").html(DimensionsLayoutone); 
+                           
+                            var itemsrec;
+                            for(var i=1;i<= $("#DimensionsbyItmesone li").length;i++){
+                                 itemsrec = i;
+                                 $("#NumberIdsone").html(itemsrec);
+                                 
+                            }
+                         //  $('.OppselectPopup').toggle(500);
+                           // hide Spinner
+                           $("#IsProcessSpinner").hide();
+                        }, 
+                        function(response) { 
+                              // alert("Select Any One");
+                               //Hide Spinner 
+                               $("#IsProcessSpinner").hide();
+                        });
+                     }
+					 
+			$scope.onGetDateRecordsone= function() {
+                 //Show Spinner
+                 $("#IsProcessSpinner").show();
+                
+                 var dates=[];
+                 var datesLayoutone=''; 
+                 var adddimensTO={};
+                 
+                 selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;
+                 
+                       $http({
+                            url: selurlid+"/xmds/system",
+                            method: "GET",
+                            headers: {
+                               "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {
+                          
+                            for(var i=0;i<response.data.dates.length;i++){
+                                dates[i]=response.data.dates[i]['alias'];
+                                datesApis[response.data.dates[i]['alias']]=response.data.dates[i].fields['epochSecond'];             
+                            }
+                            
+                            dates.sort(); 
+                             $('#DatesByItmesvalone li').filter(
+                    		function(){
+                    				var keyFields = $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','');
+                    				var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','');
+                    				keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','');
+                    				adddimensTO[keyFieldss] = keyFieldss; 
+                    			
+                    		});	
+                            //For Date Fields 
+                            for(var i=0;i<dates.length;i++){
+                                 var Dimes = datesApis[dates[i]].replace('_sec_epoch','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                if(dates[i]!=undefined && adddimensTO[Dimes]==undefined){ 
+                                    datesLayoutone+='<a class="dimension date" onclick="movedateitemsone(this)" id='+datesApis[dates[i]]+'>';
+                                    datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DateLabel}" width="15px" height="10px" id="blockone'+Dimes+'"/>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="15px" height="10px" id="dateone'+Dimes+'"/>';
+                                 
+                                    datesLayoutone+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayoutone+='<span class="valuesbtn" >';
+                                    datesLayoutone+='<span class="chevronLeftIcon" >';
+                                    datesLayoutone+='</span>';
+                                    datesLayoutone+='<svg class="icon" >';
+                                    datesLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayoutone+='</svg></span></a>';
+                                }
+                                if(dates[i]!=undefined && adddimensTO[Dimes]!=undefined){ 
+                                    datesLayoutone+='<a class="dimension date" onclick="movedateitemsone(this)" id='+datesApis[dates[i]]+'>';
+                                    datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.DateLabel}" width="15px" height="10px" id="blockone'+Dimes+'"/>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.TA_Label}" width="15px" height="10px" id="dateone'+Dimes+'"/>';
+                                 
+                                    datesLayoutone+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayoutone+='<span class="valuesbtn" >';
+                                    datesLayoutone+='<span class="chevronLeftIcon" >';
+                                    datesLayoutone+='</span>';
+                                    datesLayoutone+='<svg class="icon" >';
+                                    datesLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayoutone+='</svg></span></a>';
+                                }
+                            }                            
+                            $(".datesLayoutonetwo").html(datesLayoutone);  
+                            
+                                var itemsrec;
+                                for(var i=1;i<= $("#DatesByItmesvalone li").length;i++){
+                                     itemsrec = i;
+                                     $("#NumberdateIds").html(itemsrec);
+                                     
+                            }
+                           
+                           filterPopUpModel();
+                           // hide Spinner
+                           $("#IsProcessSpinner").hide();
+                        }, 
+                        function(response) { 
+                              // alert("Select Any One");
+                               //Hide Spinner 
+                               $("#IsProcessSpinner").hide();
+                        });
+                     }      
+                
+		 
+		$scope.onGetDimRecords= function() {
+                 //Show Spinner
+                 $("#IsProcessSpinner").show();
+                 var DimensionsLayout='';
+                 var DimensionsLayoutone='';
+                 var Dimensions=[]; 
+                 var adddimensTO={};
+                 var Dimensionsorgs= {};
+                 selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;                 
+                       $http({
+                            url: selurlid+"/xmds/system",
+                            method: "GET",
+                            headers: {
+                               "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {
+   
+                             for(var i=0;i<response.data.dimensions.length;i++){
+                                Dimensions[i]=response.data.dimensions[i]['label'];
+                                DimensionsApis[response.data.dimensions[i]['label']]=response.data.dimensions[i]['field'];  
+                                Dimensionsorgs[response.data.dimensions[i]['label']]=response.data.dimensions[i]['origin']; 
+                            }
+                            Dimensions.sort();
+                            $('#DimensionsbyItmesval li').filter(
+                    		function(){
+                    				var keyFields = $(this).closest('li').find('.selectedfield').val();
+                    				var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','');
+                    				keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','');
+                    				adddimensTO[keyFieldss] = keyFieldss; 
+                    			
+                    		});	
+                             //For Dimensions Layout
+                            for(var i=0;i<Dimensions.length;i++){
+                               var Dimes = DimensionsApis[Dimensions[i]].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                    if(Dimensions[i]!=undefined && adddimensTO[Dimes]==undefined && Dimensionsorgs[Dimensions[i]]!= undefined){                        
+                                    DimensionsApis[Dimensions[i]]
+                                    DimensionsLayoutone+='<a onclick="moveitems(this)" class="dimensions" id='+DimensionsApis[Dimensions[i]]+i+'>';
+                                   DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="blo'+Dimes+'"/>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="dis'+Dimes+'"/>';
+                                   
+                                    DimensionsLayoutone+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayoutone+='<span class="valuesbtn" >';
+                                    DimensionsLayoutone+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayoutone+='</span>';
+                                    DimensionsLayoutone+='<svg class="icon" >';
+                                    DimensionsLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';                                   
+                                 
+                            } 
+                            if(Dimensions[i]!=undefined && adddimensTO[Dimes]!=undefined && Dimensionsorgs[Dimensions[i]]!= undefined){                        
+                                    DimensionsApis[Dimensions[i]]
+                                    DimensionsLayoutone+='<a onclick="moveitems(this)" class="dimensions" id='+DimensionsApis[Dimensions[i]]+i+'>';
+                                   DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.DimensionLabel}" width="17px" height="10px" id="blo'+Dimes+'"/>';
+                                    DimensionsLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.TA_Label}" width="17px" height="10px" id="dis'+Dimes+'"/>';
+                                   
+                                    DimensionsLayoutone+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayoutone+='<span class="valuesbtn" >';
+                                    DimensionsLayoutone+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayoutone+='</span>';
+                                    DimensionsLayoutone+='<svg class="icon" >';
+                                    DimensionsLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';                                   
+                                 
+                            } 
+                            }
+                           $("#DimensionsLayoutone").html(DimensionsLayoutone); 
+                           
+                            var itemsrec;
+                            for(var i=1;i<= $("#DimensionsbyItmesval li").length;i++){
+                                 itemsrec = i;
+                                 $("#NumberIds").html(itemsrec);
+                                 
+                            }
+                         //  $('.OppselectPopup').toggle(500);
+                           // hide Spinner
+                           $("#IsProcessSpinner").hide();
+                        }, 
+                        function(response) { 
+                              // alert("Select Any One");
+                               //Hide Spinner 
+                               $("#IsProcessSpinner").hide();
+                        });
+                     }
+					 
+			$scope.onGetDateRecords= function() {
+                 //Show Spinner
+                 $("#IsProcessSpinner").show();
+                
+                 var dates=[];
+                 var datesLayoutone=''; 
+                 var adddimensTO={};
+                 
+                 selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;
+                 
+                       $http({
+                            url: selurlid+"/xmds/system",
+                            method: "GET",
+                            headers: {
+                               "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {
+                          
+                            for(var i=0;i<response.data.dates.length;i++){
+                                dates[i]=response.data.dates[i]['alias'];
+                                datesApis[response.data.dates[i]['alias']]=response.data.dates[i].fields['epochSecond'];             
+                            }
+                            
+                            dates.sort();  
+                            $('#DatesByItmesval li').filter(
+                    		function(){
+                    				var keyFields = $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','');
+                    				var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','');
+                    				keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','');
+                    				adddimensTO[keyFieldss] = keyFieldss; 
+                    			
+                    		});	
+                            //For Date Fields 
+                            for(var i=0;i<dates.length;i++){
+                                 var Dimes = datesApis[dates[i]].replace('_sec_epoch','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                    if(dates[i]!=undefined && adddimensTO[Dimes]==undefined){ 
+                                    datesLayoutone+='<a class="dimension date" onclick="movedateitems(this)" id='+datesApis[dates[i]]+'>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DateLabel}" width="15px" height="10px" id="block'+Dimes+'"/>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="15px" height="10px" id="date'+Dimes+'"/>';
+                                 
+                                    datesLayoutone+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayoutone+='<span class="valuesbtn" >';
+                                    datesLayoutone+='<span class="chevronLeftIcon" >';
+                                    datesLayoutone+='</span>';
+                                    datesLayoutone+='<svg class="icon" >';
+                                    datesLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayoutone+='</svg></span></a>';
+                                }
+                                if(dates[i]!=undefined && adddimensTO[Dimes]!=undefined){ 
+                                    datesLayoutone+='<a class="dimension date" onclick="movedateitems(this)" id='+datesApis[dates[i]]+'>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.DateLabel}" width="15px" height="10px" id="block'+Dimes+'"/>';
+                                   datesLayoutone+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.TA_Label}" width="15px" height="10px" id="date'+Dimes+'"/>';
+                                 
+                                    datesLayoutone+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayoutone+='<span class="valuesbtn" >';
+                                    datesLayoutone+='<span class="chevronLeftIcon" >';
+                                    datesLayoutone+='</span>';
+                                    datesLayoutone+='<svg class="icon" >';
+                                    datesLayoutone+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayoutone+='</svg></span></a>';
+                                }
+                            }                            
+                            $(".datesLayoutoneone").html(datesLayoutone);  
+                            
+                                var itemsrec;
+                                for(var i=1;i<= $("#DatesByItmesval li").length;i++){
+                                     itemsrec = i;
+                                     $("#NumberdateIds").html(itemsrec);
+                                     
+                            }
+                           
+                           filterPopUpModel();
+                           // hide Spinner
+                           $("#IsProcessSpinner").hide();
+                        }, 
+                        function(response) { 
+                              // alert("Select Any One");
+                               //Hide Spinner 
+                               $("#IsProcessSpinner").hide();
+                        });
+                     }
+                
+                
+              $scope.onGetRecords= function() {
+                 //Show Spinner
+                 $("#IsProcessSpinner").show();
+                  
+                 var MeasuresLayout='';
+                 var Measures=[];
+                 var dates=[];
+                 var datesLayout='';
+                 var DimensionsLayout='';
+                 var Dimensions=[];
+                 var MeasuresApi={};
+                 var DimensionsApi={};
+                 var Dimensionsorgs= {};  
+                 var Measorg = {};
+                 
+                 var datesApi={}
+                   var adddatessTO ={};
+                 
+                 selurlid = '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;
+                 
+                       $http({
+                            url: selurlid+"/xmds/system",
+                            method: "GET",
+                            headers: {
+                               "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {
+                            
+                           for(var i=0;i<response.data.measures.length;i++){
+                               // if(response.data.measures[i]['description']!=undefined && response.data.measures[i]['label']!=undefined ){
+                                   
+                                    Measures[i]=response.data.measures[i]['label'];
+                                    MeasuresApi[response.data.measures[i]['label']]=response.data.measures[i]['field'];
+                                    Measorg[response.data.measures[i]['label']]=response.data.measures[i]['origin']; 
+                                //}
+                                
+                            }
+                            for(var i=0;i<response.data.dates.length;i++){
+                                dates[i]=response.data.dates[i]['alias'];
+                                datesApi[response.data.dates[i]['alias']]=response.data.dates[i].fields['epochSecond'];
+                               
+                                
+                            }
+                             for(var i=0;i<response.data.dimensions.length;i++){
+                                Dimensions[i]=response.data.dimensions[i]['label'];
+                                DimensionsApi[response.data.dimensions[i]['label']]=response.data.dimensions[i]['field'];
+                                Dimensionsorgs[response.data.dimensions[i]['label']]=response.data.dimensions[i]['origin']; 
+                                
+                            }
+                            
+                            //Sort Records 
+                            Measures.sort();
+                            dates.sort();
+                            Dimensions.sort();
+                            
+                            $('#'+indexpanel+' li').filter(
+                        	function(){
+                        			var keyFields =	$(this).closest('li').find('.fieldapi').val()+$(this).closest('li').find('.selectedfield').val() ;
+                        			var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','');
+                        			keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','');
+                        			adddatessTO[keyFieldss] = keyFieldss; 
+                        		
+                        	});
+                          
+                            //Create Layout  
+                            for(var i=0;i<Measures.length;i++){
+                                   var keyFieldss = MeasuresApi[Measures[i]]+Measures[i].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                    if(Measures[i]!=undefined && adddatessTO[keyFieldss] == undefined && Measorg[Measures[i]]!= undefined){
+                                        MeasuresLayout+='<a onclick="filteritemsAll(this)" class="measure" id='+MeasuresApi[Measures[i]]+'>';
+                                       MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.MeasureLabel}" width="20px" height="17px" />';
+                                         MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="20px" height="17px"/>'; 
+	
+                                        MeasuresLayout+='<label data-tooltip-on-truncation="true"  >'+Measures[i]+'</label>';
+                                        MeasuresLayout+='<span class="valuesbtn" >';
+                                        MeasuresLayout+='<span class="chevronLeftIcon" >';
+                                        MeasuresLayout+='<svg ></svg>';
+                                        MeasuresLayout+='</span>';
+                                        MeasuresLayout+='<b class="chevronLabel" ></b>';
+                                        MeasuresLayout+='<svg class="icon" >';
+                                        MeasuresLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                        MeasuresLayout+='</svg></span></a>';
+                                    }
+                                    if(Measures[i]!=undefined && adddatessTO[keyFieldss] != undefined && Measorg[Measures[i]]!= undefined){
+                                        MeasuresLayout+='<a onclick="filteritemsAll(this)" class="measure" id='+MeasuresApi[Measures[i]]+'>';
+                                       MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.MeasureLabel}" width="20px" height="17px" />';
+                                         MeasuresLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="20px" height="17px" />';
+	
+                                        MeasuresLayout+='<label data-tooltip-on-truncation="true"  >'+Measures[i]+'</label>';
+                                        MeasuresLayout+='<span class="valuesbtn" >';
+                                        MeasuresLayout+='<span class="chevronLeftIcon" >';
+                                        MeasuresLayout+='<svg ></svg>';
+                                        MeasuresLayout+='</span>';
+                                        MeasuresLayout+='<b class="chevronLabel" ></b>';
+                                        MeasuresLayout+='<svg class="icon" >';
+                                        MeasuresLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                        MeasuresLayout+='</svg></span></a>';
+                                    }
+                                    
+                               }
+                            $(".MeasuresLayout").html(MeasuresLayout);
+                            
+                            //For Date Fields 
+                            for(var i=0;i<dates.length;i++){
+                                var keyFieldss = datesApi[dates[i]]+dates[i].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                    if(dates[i]!=undefined && adddatessTO[keyFieldss] == undefined){
+                                    datesLayout+='<a class="dimension date" onclick="filteritemsAll(this)" id='+datesApi[dates[i]]+'>';
+                                       datesLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DateLabel}" width="19px" height="15px" />';
+                                        datesLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="20px" height="17px" />';
+                              	  
+                                    datesLayout+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayout+='<span class="valuesbtn" >';
+                                    datesLayout+='<span class="chevronLeftIcon" >';
+                                    datesLayout+='<svg class="icon" >';
+                                    datesLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#date"></use>';
+                                    datesLayout+='</svg>';
+                                    datesLayout+='</span>';
+                                    datesLayout+='<b class="chevronLabel" >scale</b>';
+                                    datesLayout+='<svg class="icon" >';
+                                    datesLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayout+='</svg></span></a>';
+                                }
+                                if(dates[i]!=undefined && adddatessTO[keyFieldss] != undefined){
+                                    datesLayout+='<a class="dimension date" onclick="filteritemsAll(this)" id='+datesApi[dates[i]]+'>';
+                                       datesLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DateLabel}" width="19px" height="15px"/>';
+                                        datesLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="20px" height="17px" />';
+                              	  
+                                    datesLayout+='<label data-tooltip-on-truncation="true" >'+dates[i]+'</label>';
+                                    datesLayout+='<span class="valuesbtn" >';
+                                    datesLayout+='<span class="chevronLeftIcon" >';
+                                    datesLayout+='<svg class="icon" >';
+                                    datesLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#date"></use>';
+                                    datesLayout+='</svg>';
+                                    datesLayout+='</span>';
+                                    datesLayout+='<b class="chevronLabel" >scale</b>';
+                                    datesLayout+='<svg class="icon" >';
+                                    datesLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    datesLayout+='</svg></span></a>';
+                                }
+                            }      
+                            
+                            $(".datesLayout").html(datesLayout);
+                            
+                             //For Dimensions Layout
+                            for(var i=0;i<Dimensions.length;i++){
+                                var keyFieldss = DimensionsApi[Dimensions[i]] +Dimensions[i].replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                                    if(Dimensions[i]!=undefined && adddatessTO[keyFieldss] == undefined && Dimensionsorgs[Dimensions[i]]!= undefined){ 
+                                    DimensionsApi[Dimensions[i]]
+                                    DimensionsLayout+='<a onclick="filteritemsAll(this)" class="dimension" id='+DimensionsApi[Dimensions[i]]+'>';
+                                   DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DimensionLabel}" width="20px" height="17px" />';
+                                    DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="20px" height="17px" />';
+       
+                                    DimensionsLayout+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayout+='<span class="valuesbtn" >';
+                                    DimensionsLayout+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayout+='<svg class="icon" >';
+                                    DimensionsLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#filter-list"></use>';
+                                    DimensionsLayout+='</svg>';
+                                    DimensionsLayout+='</span>';
+                                    DimensionsLayout+='<b class="chevronLabel" >filter</b>';
+                                    DimensionsLayout+='<svg class="icon" >';
+                                    DimensionsLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';
+                                    
+                                 }
+                                  if(Dimensions[i]!=undefined && adddatessTO[keyFieldss] != undefined && Dimensionsorgs[Dimensions[i]]!= undefined){ 
+                                    DimensionsApi[Dimensions[i]]
+                                    DimensionsLayout+='<a onclick="filteritemsAll(this)" class="dimension" id='+DimensionsApi[Dimensions[i]]+'>';
+                                   DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px"   src="{!$Resource.DimensionLabel}" width="20px" height="17px" />';
+                                    DimensionsLayout+='<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px;display:none"   src="{!$Resource.TA_Label}" width="20px" height="17px" />';
+       
+                                    DimensionsLayout+='<label data-tooltip-on-truncation="true"  >'+Dimensions[i]+'</label>';
+                                    DimensionsLayout+='<span class="valuesbtn" >';
+                                    DimensionsLayout+='<span class="chevronLeftIcon" >';
+                                    DimensionsLayout+='<svg class="icon" >';
+                                    DimensionsLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#filter-list"></use>';
+                                    DimensionsLayout+='</svg>';
+                                    DimensionsLayout+='</span>';
+                                    DimensionsLayout+='<b class="chevronLabel" >filter</b>';
+                                    DimensionsLayout+='<svg class="icon" >';
+                                    DimensionsLayout+='<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"> </use></svg></span> </a>';
+                                    
+                                 }
+                            }     
+                           $(".DimensionsLayout").html(DimensionsLayout);    
+                           $('.popup').toggle(500);
+                           // hide Spinner
+                           $("#IsProcessSpinner").hide();
+                           
+                          
+                           
+                        }, 
+                        function(response) { 
+                              // alert("Select Any One");
+                               //Hide Spinner 
+                               $("#IsProcessSpinner").hide();
+                        });
+                     }
+                     
+                     $scope.onGetFilterRecords= function() {
+                         //Show Spinner 
+                         $("#IsProcessSpinner").show();
+                         if(selectItems=="measure"){
+                             //alert('measure');
+                              body = { 'query':'q = load "'+dataSetId+"/"+folderId+'";'+"q = group q by all;q = foreach q generate min('"+fieldapi+"') as '_min', max('"+fieldapi+"') as '_max';"};
+                               
+                             //alert('body' + body);
+                         }else if(selectItems=="dimension"){
+                              
+                              body = { 'query':'q = load "'+dataSetId+"/"+folderId+'";'+"q = group q by all;q = group q by '"+fieldapi+"';q = foreach q generate '"+fieldapi+"' as 'Id';q = limit q 1000;"};
+                               
+                          }else if(selectItems=="date"){
+                           body = { 'query':'q = load "'+dataSetId+"/"+folderId+'";'+"q = group q by all;q = foreach q generate min('"+fieldapi+"') as '_min', max('"+fieldapi+"') as '_max';"};
+                            
+                           
+                          
+                          } 
+                            $http({
+                                url:"/services/data/v39.0/wave/query",  
+                                method: "POST",
+                                data: body,
+                                headers: {
+                                   "Authorization": "OAuth " + sid
+                                }
+                            })
+                            .then(function(response) {
+                                
+                                if(selectItems=="measure"){
+                                  //  alert('vnidjvndk'+ response.data.results.records[0]._min +'  ' +response.data.results.records[0]._max);
+                                  $("#minVal").val(response.data.results.records[0]._min);
+                                    $("#maxVal").val(response.data.results.records[0]._max);
+                                        
+                                }else if(selectItems=="dimension"){
+                                     $(".Dimensionspopup").hide();
+                                    var DimensionsitemsHtml='';
+                                    for(var i=0;i<response.data.results.records.length;i++){
+                                        DimensionsitemsHtml+='<a onclick="singleSelectDimension(this)">';
+                                        DimensionsitemsHtml+='<input class="expanded-list-dim-value-checkbox newclass'+i+'" type="checkbox" readonly="" />';
+                                        DimensionsitemsHtml+='<label class="dimvalue" data-tooltip-on-truncation="true"  >'+response.data.results.records[i]['Id']+'</label>';
+                                        DimensionsitemsHtml+='</a>';
+                                    }
+                                     $(".selnum").html("Show Selected (0)");
+                                    $("#DimensionsitemsHtml").html(DimensionsitemsHtml);
+                                     $("#DimensionsHtmlItems").html(DimensionsitemsHtml);
+                                }else if(selectItems=="date"){
+                         
+                                    $("#fromDate").val(createDate(response.data.results.records[0]._min));
+                                    
+                                    $("#toDate").val(createDate(response.data.results.records[0]._max));
+                                }
+                                
+                                //hide Spinner 
+                                 $("#IsProcessSpinner").hide();
+                            }, 
+                            function(response) { 
+                                   //alert("failed");
+                                   //Show Spinner 
+                                   $("#IsProcessSpinner").hide();
+                         
+                            });
+                       } 
+                    $scope.onDimensionsUpdate= function() {
+                       body = { 'query':'q = load "'+dataSetId+"/"+folderId+'";'+"q = group q by all;q = group q by '"+fieldapi+"';q = foreach q generate '"+fieldapi+"' as 'Id';q = limit q 1000;"};
+                         
+                    $http({
+                                url:"/services/data/v39.0/wave/query",  
+                                method: "POST",
+                                data: body,
+                                headers: {
+                                   "Authorization": "OAuth " + sid
+                                }
+                            })
+                            .then(function(response) {
+                               
+                                // $(".Dimensionspopup").hide();
+                                var DimensionsitemsHtml='';
+                                for(var i=0;i<response.data.results.records.length;i++){
+                                    DimensionsitemsHtml+='<a onclick="singleSelectDimension(this)">';
+                                    DimensionsitemsHtml+='<input class="expanded-list-dim-value-checkbox newclass'+i+'" type="checkbox" readonly="" />';
+                                    DimensionsitemsHtml+='<label class="dimvalue" data-tooltip-on-truncation="true"  >'+response.data.results.records[i]['Id']+'</label>';
+                                    DimensionsitemsHtml+='</a>';
+                                }
+                                $(".selnum").html("Show Selected (0)");
+                                $("#DimensionsitemsHtml").html(DimensionsitemsHtml);
+                                
+                                var arrSelecids={};
+                                var selectIds=$(updateRef).parent().find('.selectedIds').val();
+                        
+                                if(selectIds!=undefined){
+                                    selectIds=selectIds.split(',');
+                                    for(var i=0;i<selectIds.length;i++){
+                                        arrSelecids[selectIds[i]]=selectIds[i];
+                                    }
+                                   
+                                   var arrSelectids={};
+                                    for(var i=0;i<selectIds.length;i++){
+                                        arrSelectids[selectIds[i]]=selectIds[i];
+                                    }
+                                    if(selectIds.length>0){
+                                        $("#DimensionsitemsHtml .expanded-list-dim-value-checkbox").each(function( index ) {
+                                            if(arrSelectids[$(this).parent().find('.dimvalue').html()]!=undefined){
+                                                $(this).attr('checked', true); 
+                                                $(this).prop('checked', true);
+                                            }
+                                            });
+                                    } 
+                                }
+                        
+                                 $(".selectors").css('display',''); 
+                                //hide Spinner 
+                                 $("#IsProcessSpinner").hide();
+                            }, 
+                            function(response) { 
+                                  // alert("failed");
+                                   //Show Spinner 
+                                   $("#IsProcessSpinner").hide();
+                         
+                            });
+                    } 
+                   $scope.addSelectedDimensions= function() {
+                         //Show Spinner 
+                         $("#IsProcessSpinner").show();
+                            
+                            $http({
+                                 url:"/services/data/v39.0/wave/query",  
+                                method: "POST",
+                                data: body,
+                                headers: {
+                                   "Authorization": "OAuth " + sid
+                                }
+                            })
+                            .then(function(response) {
+                               
+                                //Hide Spinner 
+                                 $("#IsProcessSpinner").hide();
+                                  var selectedItemcount=0;
+                                  $('#DimensionsitemsHtml .expanded-list-dim-value-checkbox').each(function( index ) {
+                                    if($(this).prop('checked')){
+                                        selectedItemcount++;
+                                    }
+                                });
+                                
+                                //Add Items 
+                                var items='<li style="width: 100%;margin-top: 10px;background-color: #E6ECF2;padding:3px;border-radius: 6px;">'+fieldapi+' : ('+selectedItemcount+') : ('+$(".DimensionspopupBtn").find('span').html()+')</li>';
+                                $("#FilterbyItmes ul").append(items);
+
+                            }, 
+                            function(response) {                  
+                               //Hide Spinner 
+                                $("#IsProcessSpinner").hide();
+                            });
+                       }     
+                         $scope.onfiltersearchRecords= function() {
+                             
+                             if($("#filterDimInput").val()!=""){
+                                 body={"query":"q = load \""+dataSetId+"/"+folderId+"\";q = filter q by '"+fieldapi+"' matches \""+$("#filterDimInput").val().trim()+"\";q = group q by '"+fieldapi+"';q = foreach q generate '"+fieldapi+"' as '"+fieldapi+"';q = limit q 1000;"};    
+                              }else{  
+                                      body = { 'query':'q = load "'+dataSetId+"/"+folderId+'";'+"q = group q by all;q = group q by '"+fieldapi+"';q = foreach q generate '"+fieldapi+"' as 'Id';q = limit q 1000;"};
+                            
+                               }  
+                                $http({
+                                     url:"/services/data/v39.0/wave/query",  
+                                    method: "POST",
+                                    data: body,
+                                    headers: {
+                                       "Authorization": "OAuth " + sid
+                                    }
+                                })
+
+                                .then(function(response) {
+                                $("#DimensionsitemsHtml").html('');
+                                    var DimensionsitemsHtml='';
+                                   
+                                        for(var i=0;i<response.data.results.records.length;i++){
+                                            if($("#filterDimInput").val().trim()!="" && response.data.results.records[i][fieldapi]!=undefined){
+                                                  DimensionsitemsHtml+='<a onclick="singleSelectDimension(this)">';
+                                                  DimensionsitemsHtml+='<input class="expanded-list-dim-value-checkbox newclass'+i+'" type="checkbox" readonly="" />';
+                                                  DimensionsitemsHtml+='<label class="dimvalue" data-tooltip-on-truncation="true"  >'+response.data.results.records[i][fieldapi]+'</label>';
+                                                  DimensionsitemsHtml+='</a>';
+
+                                             }else{
+                                                   if(response.data.results.records[i]['Id']!=undefined){  
+                                                       DimensionsitemsHtml+='<a onclick="singleSelectDimension(this)">';
+                                                       DimensionsitemsHtml+='<input class="expanded-list-dim-value-checkbox newclass'+i+'" type="checkbox" readonly="" />';                              
+                                                       DimensionsitemsHtml+='<label class="dimvalue" data-tooltip-on-truncation="true"  >'+response.data.results.records[i]['Id']+'</label>';
+                                                       DimensionsitemsHtml+='</a>';
+                                                   }
+                                             }
+                                        }
+                                         $(".selnum").html("Show Selected (0)");
+                                        $("#DimensionsitemsHtml").html(DimensionsitemsHtml);
+    
+                                }, 
+                                function(response) {                  
+                                   //Hide Spinner 
+                                    $("#IsProcessSpinner").hide();
+                                   
+                                });
+                            }         
+                });
+
+                
+                function moveitemstwo(obj){
+             //alert('hiiiiii');
+             var Keys = $(obj).find('label').html();
+              var keyFields = DimensionsApis[$(obj).find('label').html()]; 
+              delete addFilterTO[keyFields];
+              $('#DimensionsbyItmestwoval li').filter(
+                   
+                function(){
+                        if(keyFields == $(this).closest('li').find('.selectedfield').val()){
+                        
+                        addFilterTO[keyFields] = keyFields;
+                    }
+                    else if(keyFields+' '== $(this).closest('li').find('.selectedfield').val()){
+                       addFilterTO[keyFields] = keyFields;
+                    }
+                    
+                });
+                
+              if(addFilterTO[keyFields]==undefined){
+                    addFilterTO[keyFields]=keyFields;
+             selectItems=$(obj).find('label').html();
+             var items;
+             items = '<li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onClick="setActiveRowtwo(this)">';
+                items += '<div class="DimeItemDev" onclick="editDimModeltwo(this)" style="display: inline;"><img style="cursor:pointer;position:relative; z-index:2;" title="Delete"  src="{!$Resource.Delete}" width="26px" height="12px" /></div><p style="margin-left:30px;margin-top:-25px">' + selectItems+'</p>';
+                 items+='<input type="hidden" class="selectedfield" value="'+DimensionsApis[selectItems]+'"/>';
+                items += '</li>';
+              $("#DimensionsbyItmestwoval ul").append(items).sort();
+                var itemsrec;
+                for(var i=1;i<= $("#DimensionsbyItmestwoval li").length;i++){
+                     itemsrec = i;
+                     $("#NumberIdstwo").html(itemsrec);
+                     
+                }
+                
+                 $('#DimensionsbyItmestwoval li').filter(
+                function(){
+                        var NewDims = $(this).closest('li').find('.selectedfield').val(); 
+                        NewDims = NewDims.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('distwo'+NewDims);
+                        var divvals = document.getElementById('blotwo'+NewDims);
+                        divs.style.display="block";
+                        divvals.style.display="none"; 
+                    
+                });
+         }
+         }
+         
+         function movedateitemstwo(obj){
+             var Keys = $(obj).find('label').html();
+              var keyFields = datesApis[$(obj).find('label').html()].replace('_sec_epoch',''); 
+              delete addFilterTO[keyFields];
+              $('#DatesByItmesvaltwo li').filter(
+                function(){
+                    if(keyFields == $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                        addFilterTO[keyFields] = keyFields;
+                    }
+                    else if(keyFields+' '== $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                       addFilterTO[keyFields] = keyFields;
+                    }
+                });
+             
+              if(addFilterTO[keyFields]==undefined){
+                    addFilterTO[keyFields]=keyFields;
+             selectItems=$(obj).find('label').html();
+             
+             var items;
+             items = '<li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onClick="setActiveRowdatetwo(this)">';
+                items += '<div class="dateFivDiv" onclick="editDateModeltwo(this)" style="display: inline;"><img style="cursor:pointer;position:relative; z-index:2;"  title="Delete" src="{!$Resource.Delete}" width="26px" height="12px" /></div><p style="margin-left:30px;margin-top:-25px">' + selectItems+'</p>';
+                 items+='<input type="hidden" class="selectedfield" value="'+datesApis[selectItems]+'"/>';
+                items += '</li>';
+              $("#DatesByItmesvaltwo ul").append(items).sort();
+              var itemsrec;
+                for(var i=1;i<= $("#DatesByItmesvaltwo li").length;i++){
+                     itemsrec = i;
+                     $("#NumberdateIdstwo").html(itemsrec);
+                     
+                }
+                 $('#DatesByItmesvaltwo li').filter(
+                function(){
+                        var NewDims = $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch',''); 
+                        NewDims = NewDims.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('blocktwo'+NewDims);
+                        var divvals = document.getElementById('datetwo'+NewDims);
+                        divs.style.display="none";
+                        divvals.style.display="block"; 
+                    
+                });
+         }
+         }
+         function editDimModeltwo(obj){
+             selectItems=$(obj).parent().find('.selectedfield').val();
+             var items;
+              items = selectItems;
+              $('#DimensionsbyItmestwoval li').filter(
+                function(){
+                    if(items == $(this).closest('li').find('.selectedfield').val()){
+                        
+                        $(this).remove();
+                    }
+                    else if(items+' '== $(this).closest('li').find('.selectedfield').val()){
+                        $(this).remove();
+                         
+                    }
+                });
+                delete addFilterTO[items];
+                NewDims = items.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('distwo'+NewDims);
+                        var divvals = document.getElementById('blotwo'+NewDims);
+                        divs.style.display="none";
+                        divvals.style.display="block"; 
+                var itemsrec;
+                if($("#DimensionsbyItmestwoval li").html() != undefined){
+                for(var i=1;i<= $("#DimensionsbyItmestwoval li").length;i++){
+                     itemsrec = i;
+                     $("#NumberIdstwo").html(itemsrec);
+                }
+         }
+                else{
+                    itemsrec = 0;
+                    $("#NumberdateIdstwo").html(itemsrec); 
+                }
+         }
+         function editDateModeltwo(obj){
+             
+             selectItems=$(obj).parent().find('.selectedfield').val().replace('_sec_epoch','');
+            
+              $('#DatesByItmesvaltwo li').filter(
+                function(){
+                    if( $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','') == selectItems){
+                        $(this).remove();
+                    }
+                    else if(selectItems+' '== $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                        $(this).remove();
+                    }
+                });
+                 delete addFilterTO[selectItems];
+                  NewDims = selectItems.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('blocktwo'+NewDims);
+                        var divvals = document.getElementById('datetwo'+NewDims);
+                        divs.style.display="block";
+                        divvals.style.display="none"; 
+                 var itemsrec;
+                 if($("#DatesByItmesvaltwo li").html() != undefined){
+                for(var i=1;i<= $("#DatesByItmesvaltwo li").length;i++){
+                     itemsrec = i;
+                     $("#NumberdateIdstwo").html(itemsrec);
+                     
+                }
+         }
+                else{
+                    itemsrec = 0;
+                    $("#NumberdateIdstwo").html(itemsrec); 
+                }
+         }
+                
+        function moveitemsone(obj){
+             //alert('hiiiiii');
+             var Keys = $(obj).find('label').html();
+              var keyFields = DimensionsApis[$(obj).find('label').html()]; 
+              delete addFilterTO[keyFields];
+              $('#DimensionsbyItmesone li').filter(
+                   
+                function(){
+                        if(keyFields == $(this).closest('li').find('.selectedfield').val()){
+                        
+                        addFilterTO[keyFields] = keyFields;
+                    }
+                    else if(keyFields+' '== $(this).closest('li').find('.selectedfield').val()){
+                       addFilterTO[keyFields] = keyFields;
+                    }
+                    
+                });
+                
+              if(addFilterTO[keyFields]==undefined){
+                    addFilterTO[keyFields]=keyFields;
+             selectItems=$(obj).find('label').html();
+             var items;
+             items = '<li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onClick="setActiveRowone(this)">';
+                items += '<div class="DimeItemDev" onclick="editDimModelone(this)" style="display: inline;"><img style="cursor:pointer;position:relative; z-index:2;" title="Delete"  src="{!$Resource.Delete}" width="26px" height="12px" /></div><p style="margin-left:30px;margin-top:-25px">' + selectItems+'</p>';
+                 items+='<input type="hidden" class="selectedfield" value="'+DimensionsApis[selectItems]+'"/>';
+                items += '</li>';
+              $("#DimensionsbyItmesone ul").append(items).sort();
+                var itemsrec;
+                for(var i=1;i<= $("#DimensionsbyItmesone li").length;i++){
+                     itemsrec = i;
+                     $("#NumberIdsone").html(itemsrec);
+                     
+                }
+                 $('#DimensionsbyItmesone li').filter(
+                function(){
+                        var NewDims = $(this).closest('li').find('.selectedfield').val(); 
+                        NewDims = NewDims.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('disone'+NewDims);
+                        var divvals = document.getElementById('bloone'+NewDims);
+                        divs.style.display="block";
+                        divvals.style.display="none"; 
+                    
+                });
+         }
+         }
+         
+         function movedateitemsone(obj){
+             
+             var Keys = $(obj).find('label').html();
+              var keyFields = datesApis[$(obj).find('label').html()].replace('_sec_epoch',''); 
+              delete addFilterTO[keyFields];
+              $('#DatesByItmesvalone li').filter(
+                function(){
+                    if(keyFields == $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                        addFilterTO[keyFields] = keyFields;
+                    }
+                    else if(keyFields+' '== $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                       addFilterTO[keyFields] = keyFields;
+                    }
+                });
+             
+              if(addFilterTO[keyFields]==undefined){
+                    addFilterTO[keyFields]=keyFields;
+             selectItems=$(obj).find('label').html();
+             
+             var items;
+             items = '<li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onClick="setActiveRowdateone(this)">';
+                items += '<div class="dateFivDiv" onclick="editDateModelone(this)" style="display: inline;"><img style="cursor:pointer;position:relatives; z-index:2;" title="Delete"  src="{!$Resource.Delete}" width="26px" height="12px" /></div><p style="margin-left:30px;margin-top:-25px">' + selectItems+'</p>';
+                 items+='<input type="hidden" class="selectedfield" value="'+datesApis[selectItems]+'"/>';
+                items += '</li>';
+              $("#DatesByItmesvalone ul").append(items).sort();
+              var itemsrec;
+                for(var i=1;i<= $("#DatesByItmesvalone li").length;i++){
+                     itemsrec = i;
+                     $("#NumberdateIds").html(itemsrec);
+                     
+                }
+                
+                
+                $('#DatesByItmesvalone li').filter(
+                function(){
+                        var NewDims = $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch',''); 
+                        NewDims = NewDims.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        
+                        var divs = document.getElementById('blockone'+NewDims);
+                        var divvals = document.getElementById('dateone'+NewDims);
+                        divs.style.display="none";
+                        divvals.style.display="block"; 
+                    
+                });
+         }
+         }
+         function editDimModelone(obj){
+             selectItems=$(obj).parent().find('.selectedfield').val();
+             var items;
+              items = selectItems;
+              $('#DimensionsbyItmesone li').filter(
+                function(){
+                    if(items == $(this).closest('li').find('.selectedfield').val()){
+                        
+                        $(this).remove();
+                    }
+                    else if(items+' '== $(this).closest('li').find('.selectedfield').val()){
+                        $(this).remove();
+                         
+                    }
+                });
+                delete addFilterTO[items];
+                var Dims = items.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                var divs = document.getElementById('disone'+Dims);
+                        var divvals = document.getElementById('bloone'+Dims);
+                        divs.style.display="none";
+                        divvals.style.display="block";
+                   	
+                var itemsrec;
+                if($("#DimensionsbyItmesone li").html() != undefined){
+                for(var i=1;i<= $("#DimensionsbyItmesone li").length;i++){
+                     itemsrec = i;
+                     $("#NumberIdsone").html(itemsrec);
+                }
+                }
+                else{
+                    itemsrec = 0;
+                    $("#NumberIdsone").html(itemsrec); 
+                }
+         }
+         function editDateModelone(obj){
+             
+             selectItems=$(obj).parent().find('.selectedfield').val().replace('_sec_epoch','');
+            
+              $('#DatesByItmesvalone li').filter(
+                function(){
+                    if( $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','') == selectItems){
+                        $(this).remove();
+                    }
+                    else if(selectItems+' '== $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                        $(this).remove();
+                    }
+                });
+                 delete addFilterTO[selectItems];
+                  var NewDims = selectItems.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+               
+                  var divs = document.getElementById('blockone'+NewDims);
+                        var divvals = document.getElementById('dateone'+NewDims);
+                        divs.style.display="block";
+                        divvals.style.display="none";
+                 var itemsrec;
+                  if($("#DatesByItmesvalone li").html() != undefined){
+                for(var i=1;i<= $("#DatesByItmesvalone li").length;i++){
+                     itemsrec = i;
+                     $("#NumberdateIds").html(itemsrec);
+                     
+                }
+                  }
+                else{
+                    itemsrec = 0;
+                    $("#NumberdateIds").html(itemsrec); 
+                }
+         }
+
+         function moveitems(obj){
+             var Keys = $(obj).find('label').html();
+              var keyFields = DimensionsApis[$(obj).find('label').html()]; 
+              delete addFilterTO[keyFields];
+              $('#DimensionsbyItmesval li').filter(
+                   
+                function(){
+                        if(keyFields == $(this).closest('li').find('.selectedfield').val()){
+                        
+                        addFilterTO[keyFields] = keyFields;
+                    }
+                    else if(Keys+' '== $(this).text()){
+                       addFilterTO[keyFields] = keyFields;
+                    }
+                    
+                });
+              if(addFilterTO[keyFields]==undefined){
+                    addFilterTO[keyFields]=keyFields;
+             selectItems=$(obj).find('label').html();
+             var items;
+                items = '<li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onClick="setActiveRow(this)">';
+                items += '<div class="DimeItemDev" onclick="editDimModel(this)" style="display: inline;"><img style="cursor:pointer;position:relative; z-index:2;"  title="Delete" src="{!$Resource.Delete}" width="26px" height="12px" /></div><p style="margin-left:30px;margin-top:-25px">' + selectItems+'</p>';
+                 items+='<input type="hidden" class="selectedfield" value="'+DimensionsApis[selectItems]+'"/>';
+                items += '</li>';
+                
+              $("#DimensionsbyItmesval ul").append(items).sort();
+                var itemsrec;
+                for(var i=1;i<= $("#DimensionsbyItmesval li").length;i++){
+                     itemsrec = i;
+                     $("#NumberIds").html(itemsrec);
+                     
+                }
+                $('#DimensionsbyItmesval li').filter(
+                function(){
+                        var NewDims = $(this).closest('li').find('.selectedfield').val(); 
+                        NewDims = NewDims.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('dis'+NewDims);
+                        var divvals = document.getElementById('blo'+NewDims);
+                        divs.style.display="block";
+                        divvals.style.display="none"; 
+                    
+                });
+         }
+         }
+         
+         function movedateitems(obj){
+             var Keys = $(obj).find('label').html();
+              var keyFields = datesApis[$(obj).find('label').html()].replace('_sec_epoch',''); 
+              delete addFilterTO[keyFields];
+              $('#DatesByItmesval li').filter(
+                function(){
+                    if(keyFields == $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                        addFilterTO[keyFields] = keyFields;
+                    }
+                    else if(Keys+' '== $(this).text()){
+                       addFilterTO[keyFields] = keyFields;
+                    }
+                });
+             
+              if(addFilterTO[keyFields]==undefined){
+                    addFilterTO[keyFields]=keyFields;
+             selectItems=$(obj).find('label').html();
+             
+             var items;
+             items = '<li style="cursor: pointer;width: 99%;margin-top:5px;padding: 5px;border-radius: 2px;" onClick="setActiveRowdate(this)">';
+                items += '<div class="dateFivDiv" onclick="editDateModel(this)" style="display: inline;"><img style="cursor:pointer;position:relative; z-index:2;" title="Delete"  src="{!$Resource.Delete}" width="26px" height="12px" /></div><p style="margin-left:30px;margin-top:-25px">' + selectItems+'</p>';
+                 items+='<input type="hidden" class="selectedfield" value="'+datesApis[selectItems]+'"/>';
+                items += '</li>';
+              $("#DatesByItmesval ul").append(items).sort();
+              var itemsrec;
+                for(var i=1;i<= $("#DatesByItmesval li").length;i++){
+                     itemsrec = i;
+                     $("#NumberdateIds").html(itemsrec);
+                     
+                }
+                
+                $('#DatesByItmesval li').filter(
+                function(){
+                        var NewDims = $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch',''); 
+                        NewDims = NewDims.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('block'+NewDims);
+                        var divvals = document.getElementById('date'+NewDims);
+                        divs.style.display="none";
+                        divvals.style.display="block"; 
+                    
+                });
+         }
+         }
+         function editDimModel(obj){
+             selectItems=$(obj).parent().find('.selectedfield').val();
+             var items;
+              items = selectItems;
+              $('#DimensionsbyItmesval li').filter(
+                function(){
+                    if(items == $(this).closest('li').find('.selectedfield').val()){
+                        
+                        $(this).remove();
+                    }
+                    else if(items+' '== $(this).closest('li').find('.selectedfield').val()){
+                        $(this).remove();
+                         
+                    }
+                });
+                delete addFilterTO[items];
+                var Dims = items.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                var divs = document.getElementById('dis'+Dims);
+                        var divvals = document.getElementById('blo'+Dims);
+                        divs.style.display="none";
+                        divvals.style.display="block";
+                var itemsrec;
+                if($("#DimensionsbyItmesval li").html() != undefined){
+                for(var i=1;i<= $("#DimensionsbyItmesval li").length;i++){
+                     itemsrec = i;
+                     $("#NumberIds").html(itemsrec);
+                }
+         }
+                else{
+                    itemsrec = 0;
+                    $("#NumberIds").html(itemsrec); 
+                }
+         }
+         function editDateModel(obj){
+             
+             selectItems=$(obj).parent().find('.selectedfield').val().replace('_sec_epoch','');
+            
+              $('#DatesByItmesval li').filter(
+                function(){
+                    if( $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','') == selectItems){
+                        $(this).remove();
+                    }
+                    else if(selectItems+' '== $(this).closest('li').find('.selectedfield').val().replace('_sec_epoch','')){
+                        $(this).remove();
+                    }
+                });
+                 delete addFilterTO[selectItems];
+                  NewDims = selectItems.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        var divs = document.getElementById('block'+NewDims);
+                        var divvals = document.getElementById('date'+NewDims);
+                        divs.style.display="block";
+                        divvals.style.display="none"; 
+                 var itemsrec;
+                 if($("#DatesByItmesval li").html() != undefined){
+                for(var i=1;i<= $("#DatesByItmesval li").length;i++){
+                     itemsrec = i;
+                     $("#NumberdateIds").html(itemsrec);
+                     
+                }
+         }
+                else{
+                    itemsrec = 0;
+                    $("#NumberdateIds").html(itemsrec); 
+                }
+         }
+         //Filter Records 
+         function filterMeasuresRecords() {
+            var input, filter;
+            input = document.getElementById("filterinput");
+            filter = input.value.toUpperCase();
+            var DimensionsitemsHtml = document.getElementById("DimensionsitemsHtml");
+            var labelval = DimensionsitemsHtml.getElementsByTagName("label");
+            for (i = 0; i < labelval.length; i++) {
+             if (labelval[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    labelval [i].parentElement.style.display = "";
+                } else {
+                    labelval [i].parentElement.style.display = "none";   
+                }
+            }   
+        }
+ 
+        //Filter Main Items 
+         function filterRecords() {
+            var input = document.getElementById('myInput');
+            var filter = input.value.toUpperCase();
+            $( "a" ).each(function( index ) {
+              var a=$(this).find('label').html();
+                if(a!=undefined){
+                    if (a.toUpperCase().indexOf(filter) > -1) {
+                        $(this).css("display","");
+                    } else {
+                        $(this).css("display","none");
+                    }
+                }
+            });
+            
+        }
+        
+        
+         function filterRecordsnew(panelId) {
+            
+                var input = document.getElementById('DimInput'+panelId);
+               
+                var filter = input.value.toUpperCase();
+               
+                $( ".newselectors"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                  
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+            
+            function filterRecordsDate(panelId) {
+            
+                var input = document.getElementById('EInput'+panelId);
+               
+                var filter = input.value.toUpperCase();
+                
+                $( ".Dateselectors"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                  
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+            
+            function filterRecordsnewtwo(panelId) {
+            
+                var input = document.getElementById('DimInputtwo'+panelId);
+               
+                var filter = input.value.toUpperCase();
+                
+                $( ".newselectorstwo"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                  
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+            
+            
+            function filterRecordsDatestwo(panelId) {
+            
+                var input = document.getElementById('EInputtwo'+panelId);
+              
+                var filter = input.value.toUpperCase();
+             
+                $( ".Dateselectorstwo"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                  
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+            
+            
+            function filterRecordsnewthree(panelId) {
+            
+                var input = document.getElementById('DimInputthree'+panelId);
+               // alert(input);
+                var filter = input.value.toUpperCase();
+               //  alert(filter);
+                $( ".newselectorsthree"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                  
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+            
+            
+            
+            function filterRecordsDatesthree(panelId) {
+            
+                var input = document.getElementById('EInputthree'+panelId);
+               // alert(input);
+                var filter = input.value.toUpperCase();
+               //  alert(filter);
+                $( ".Dateselectorsthree"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                  
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+       
+        
+        //Select Object DataSet 
+        function selectedObjectDataSet(urlid,foldersid,datasetsid){
+             folderId=foldersid;
+             dataSetId=datasetsid;
+             selurlid=urlid;
+         }
+         
+         //Next Button
+         function slideback(){
+                $(".filterSearch").hide();
+                $(".fieldsRecords").show();
+                $(".selecteddimText").html('Add a Filter');
+                $( ".slidebackbtn" ).hide();
+                $(".filterPanelDimensions").hide();
+                $(".filterPanelMeasures").hide();
+                $(".filterPanelDates").hide();
+                $(".Dimensionspopup").hide();
+         }
+         //Filter Items 
+         function filteritemsAll(obj){
+             selectItems=$(obj).attr('class');
+             if(selectItems!="measure" && selectItems!="dimension"){
+                 selectItems='date';
+             }
+             $(".selecteddimText").html($(obj).find('label').html());
+             if(selectItems=="dimension"){
+                    fieldapi=$(obj).attr('id');
+                    $(".filterSearch").toggle();
+                    $(".fieldsRecords").toggle();
+                    $( ".slidebackbtn" ).toggle();
+                    $(".filterPanelDimensions").show();
+                    $(".filterPanelMeasures").hide();
+                    $(".filterPanelDates").hide();
+                    $(".Dimensionspopup").hide();
+                    $(".DimensionspopupBtn").find('span').html('Equals');
+                    $(".allCheck").prop('checked', false);
+                    $(".addDimensionsBtn").show();
+                    $(".updateDimensionsBtn").hide();
+                    //HImanshu Start 
+                    $("#DimensionsitemsHtml").show();
+                    $("#filterContains").parent().hide();
+                    $("#filterDimInput").parent().show();
+                    $("#filterDimInput").parent().next().show();
+                    $("#contdimstion").hide();
+                    $("#contdimstion").parent().css('background-color','');
+                    $(".addDimensionsBtn").attr('onclick','addDimensions()');
+                    $(".addDimensionsBtn").removeClass('disabled');
+                    $(".updateDimensionsBtn").attr('onclick','UpdateDimensions()');
+                    $(".updateDimensionsBtn").removeClass('disabled');
+                    //Himanshu End 
+                
+                    //Fill Records          
+                    angular.element(document.getElementById('anguController')).scope().onGetFilterRecords();
+             }else if(selectItems=="measure"){
+                    fieldapi=$(obj).attr('id');
+                    $(".filterSearch").toggle();
+                    $(".fieldsRecords").toggle();
+                    $( ".slidebackbtn" ).toggle();
+                    $(".filterPanelDimensions").hide();
+                    $(".filterPanelMeasures").show();
+                    $(".filterPanelDates").hide();
+                    $(".Measuresdropdownbutton").find('span').html('Between');
+                    $("#minVal").show();
+                    $("#maxVal").show();           
+                    $(".fromTOVal").show();           
+                    $(".TOVal").show();
+                    $(".Measurespopup").hide();
+                    $(".updateMeasures").hide();
+                    $(".addMeasures").show();
+                    if($("#maxVal").parent().hasClass('w50')==false){
+                        $("#maxVal").parent().addClass('w50'); 
+                     }
+                    //Fill Records          
+                   angular.element(document.getElementById('anguController')).scope().onGetFilterRecords();
+               }else if(selectItems=="date"){
+                    fieldapi=$(obj).attr('id');
+                    $(".filterSearch").show();
+                    $(".fieldsRecords").hide();
+                    $( ".slidebackbtn" ).show();
+                    $(".filterPanelDimensions").hide();
+                    $(".filterPanelMeasures").hide();
+                    $(".filterPanelDates").show();
+                    $(".Absolutedate").hide();
+                    $(".addNewDateBtn").show();
+                    $(".updateDateBtn").hide();
+                    $("#fromDate").show();
+                    $("#toDate").show();
+                    $(".fromTOVal").show();
+                    $(".TOVal").show();
+                    $(".Datedropdownbutton").find('span').html('Between');
+                      //Fill Records          
+                   angular.element(document.getElementById('anguController')).scope().onGetFilterRecords();
+               }
+         }
+         
+         //Fill Select Dimension items in query 
+         function filterDimensions(){
+           
+            var qSreing ='';
+            var allKeys=Object.keys(selectedarr)+'';
+            var res = allKeys.split(","); 
+            for(var i=0;i<res.length;i++){
+                  
+                if(i==(res.length-1)){
+                   qSreing+='\"'+res[i]+'\"';
+                }else{
+                    qSreing+='\"'+res[i]+'\",';
+                }
+            }
+            
+            body = { 'query':'q = load \"'+dataSetId+"/"+folderId+'\";'+"q = group q by all;q = filter q by '"+fieldapi+"' in ["+qSreing+"];q = group q by all; q = foreach q generate count() as 'count';q = limit q 1000;"};
+        }
+        
+      
+        //Show DropdownBox 
+        function dropdownBoxListtoggle(obj,itemListName,btnname){
+            $("#minVal").show();
+            $("#maxVal").show();
+            $(".fromTOVal").show();
+            $(".TOVal").show();
+            if($("#maxVal").parent().hasClass('w50')==false){
+                $("#maxVal").parent().addClass('w50'); 
+            }
+                
+            if($(obj).hasClass('item')){
+               $("."+btnname).find('span').html($(obj).find('label').html());
+            }
+            $("."+itemListName).toggle();
+            
+            if($(obj).find('label').html()=='Is Not Null' || $(obj).find('label').html()=='Is Null'){
+                $("#minVal").hide();
+                $("#maxVal").hide();
+                $(".fromTOVal").hide();
+                $(".TOVal").hide();
+            }else if($(obj).find('label').html()=='Greater Than' 
+                    || $(obj).find('label').html()=='Greater Than Or Equal To'
+                    || $(obj).find('label').html()=='Equals'
+                    || $(obj).find('label').html()=='Does Not Equal'){
+                $("#maxVal").hide();
+                $(".TOVal").hide();
+                $(".fromTOVal").hide();
+            }else if($(obj).find('label').html()=='Less Than' || $(obj).find('label').html()=='Less Than Or Equal To'){
+                $("#minVal").hide();
+                $(".TOVal").hide();
+                 $("#maxVal").parent().removeClass('w50');
+                $(".fromTOVal").hide();
+            }else{
+                $("#maxVal").parent().addClass('w50');
+            }
+            
+            if(btnname=='Datedropdownbutton'){
+                    $("#fromDate").hide();
+                    $("#toDate").hide();
+                    $(".fromTOVal").hide();
+                    $(".TOVal").hide();
+                    
+                if($(".Absolutedateval").html()=="Between"){
+                    $("#fromDate").show();
+                    $("#toDate").show();
+                    $(".fromTOVal").show();
+                    $(".TOVal").show();
+                    if($("#toDate").parent().hasClass('floatleft')==false){
+                        $("#toDate").parent().addClass('floatleft');
+                    }
+                }else if($(".Absolutedateval").html()=="Greater Than Or Equal To"){
+                     $("#fromDate").show();
+                }else if($(".Absolutedateval").html()=="Less Than Or Equal To"){
+                     $("#toDate").show();
+                     $("#toDate").parent().removeClass('floatleft');
+                }
+            }
+            //HImanshu New Update Start
+            if(btnname=="DimensionspopupBtn" && $(".DimensionspopupBtn").find('span').html()=="Contains" ){
+                $("#contdimstion").show();
+                $("#contdimstion").parent().css('background-color','#FAF9F8');
+                $("#filterContains").parent().show();
+                $("#DimensionsitemsHtml").hide();
+                $("#filterDimInput").parent().hide();
+                $("#filterDimInput").parent().next().hide();
+                $(".addDimensionsBtn").attr('onclick','');
+                $(".addDimensionsBtn").addClass('disabled');
+                $(".updateDimensionsBtn").attr('onclick','');
+                $(".updateDimensionsBtn").addClass('disabled');
+                $("#filterContains").val('');
+            }else if(btnname=="DimensionspopupBtn" && $(".DimensionspopupBtn").find('span').html()!="Contains" ){
+                $("#DimensionsitemsHtml").show();
+                $("#filterContains").parent().hide();
+                $("#filterDimInput").parent().show();
+                $("#filterDimInput").parent().next().show();
+                $("#contdimstion").hide();
+                $("#contdimstion").parent().css('background-color','');
+                $(".addDimensionsBtn").attr('onclick','addDimensions()');
+                $(".addDimensionsBtn").removeClass('disabled');
+                $(".updateDimensionsBtn").attr('onclick','UpdateDimensions()');
+                $(".updateDimensionsBtn").removeClass('disabled');
+            }
+             //HImanshu New end  Start
+             
+           //Fill Records          
+           //angular.element(document.getElementById('anguController')).scope().onGetFilterRecords();
+        } 
+        //Hide Show Dim Contains 
+        function checklengthContains(){
+            if($("#filterContains").val().trim().length>1){
+                $(".addDimensionsBtn").attr('onclick','addDimensions()');
+                $(".addDimensionsBtn").removeClass('disabled');
+                $(".updateDimensionsBtn").attr('onclick','UpdateDimensions()');
+                $(".updateDimensionsBtn").removeClass('disabled');
+                $("#contdimstion").hide();
+            }else{
+                $(".addDimensionsBtn").attr('onclick','');
+                $(".addDimensionsBtn").addClass('disabled');
+                $(".updateDimensionsBtn").attr('onclick','');
+                $(".updateDimensionsBtn").addClass('disabled');
+                $("#contdimstion").show();
+            }
+        }
+
+        //Select UnSelect itemsDimensionsSelUnSel
+        function itemsDimensionsSelUnSel(){
+            if($(".allCheck").is(':checked')){
+                 $('#DimensionsitemsHtml .expanded-list-dim-value-checkbox').prop('checked', true);
+                 
+                  $( "#DimensionsitemsHtml .dimvalue" ).each(function( index ) {
+                 
+                      selectedarr[indexpanel+$(this).html()]=$(this).html();
+                  });
+                 
+                $(".selnum").html("Show Selected ("+$('#DimensionsitemsHtml .expanded-list-dim-value-checkbox').length+")");
+                filterDimensions();
+              }else{
+                 $('#DimensionsitemsHtml .expanded-list-dim-value-checkbox').prop('checked', false);
+                    $(".selnum").html("Show Selected ("+0+")");
+                     
+                     //remove items old selected
+                     
+                      var allKeys=Object.keys(selectedarr)+'';
+                      var res = allKeys.split(","); 
+                      for(var i=0;i<res.length;i++){
+                          delete selectedarr[indexpanel+res[i]];
+                      }
+              }
+        }
+        //Single Select Dimension
+        function singleSelectDimension(obj){
+             var selectItemsString='';
+               if($(obj).find('.expanded-list-dim-value-checkbox').prop('checked')){
+                 selectedarr[$(obj).find('.dimvalue').html()]=$(obj).find('.dimvalue').html();
+                 
+                }else{
+                     selectedarr[$(obj).find('.dimvalue').html()]=$(this).find('.dimvalue').html();
+                     delete selectedarr[$(obj).find('.dimvalue').html()];
+                }
+                var countofSelected=0;
+                var i= 0;
+                $("#DimensionsitemsHtml .expanded-list-dim-value-checkbox" ).each(function( index ) {
+                    if($('.newclass'+i).is(':checked')){
+                        countofSelected++;
+                        
+                    }
+                    i++;
+                });  
+                $(".selnum").html("Show Selected ("+countofSelected+")");
+                
+                filterDimensions();
+        }
+         $( document ).ready(function() {
+                  filterPopUpModel();
+                  
+                  
+        });
+         $( document ).ready(function() {
+                  filterPopUpModel();
+        });
+        
+        
+        function filterPopUpModel(){
+             $(".filterPanelDates").hide();
+                $('.popup').hide();
+                $(".filterSearch").hide();
+                $( ".slidebackbtn" ).hide();
+                $(".dropdownListmenu").hide();
+                $(".withoutfromTOVal").hide();
+                $(".Dimensionspopup").hide();
+        }
+        
+        function showFilter(index){
+            indexpanel=index;
+          
+            slideback();
+            if(indexpanel == "1"){
+                NewDataset();
+            }
+            if(indexpanel == "2"){
+                NewDatasettwo();
+            }
+            if(indexpanel == "3"){
+                NewDataset1();
+            }
+             
+             angular.element(document.getElementById('anguController')).scope().onGetRecords();
+        }
+        
+        function showDimension(e){
+            slideback();
+            
+             angular.element(document.getElementById('anguController')).scope().onGetDimRecords();
+               if (!e) var e = window.event; 
+                    e.cancelBubble = true;
+                    if (e.stopPropagation) e.stopPropagation()
+        }
+        
+        function showDates(){
+            slideback();
+             
+             angular.element(document.getElementById('anguController')).scope().onGetDateRecords();
+             
+        }
+        
+        function showDimensionone(){
+            slideback();
+            
+             angular.element(document.getElementById('anguController')).scope().onGetDimRecordsone();
+        }
+        
+        function showDatesone(){
+            slideback();
+             
+             angular.element(document.getElementById('anguController')).scope().onGetDateRecordsone();
+        }
+        
+        function showDimensiontwo(){
+            slideback();
+            
+             angular.element(document.getElementById('anguController')).scope().onGetDimRecordstwo();
+        }
+        
+        function showDatestwo(){
+            slideback();
+             
+             angular.element(document.getElementById('anguController')).scope().onGetDateRecordstwo();
+        }
+       
+     
+        //Add Measures Items
+        function addMeasuresItems(){
+              var keyFields=selectItems+$(".selecteddimText").html()+$(".Measuresdropdownbutton").find('span').html()+$("#minVal").val()+'-'+$("#maxVal").val(); 
+             
+              if(addFilterTO[indexpanel+keyFields]==undefined){
+                    addFilterTO[indexpanel+keyFields]=keyFields;
+                    var items;
+                    if($(".Measuresdropdownbutton").find('span').html()=="Between"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' '+$(".minValAll").val()+' - '+$(".maxValAll").val()+'</div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Greater Than"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' > '+$(".minValAll").val()+'</div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Greater Than Or Equal To"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' >= '+$(".minValAll").val()+'</div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Less Than"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' < '+$(".maxValAll").val()+'</div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Less Than Or Equal To"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' <= '+$(".maxValAll").val()+'</div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Equals"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' = '+$(".minValAll").val()+'</div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Does Not Equal"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' != '+$(".minValAll").val()+'</div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Is Null"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' Is Null </div>';
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Is Not Null"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="MeasuresDivItems" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' Is Not Null </div>';
+                    }
+        
+                    items+='<div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>';
+                    items+='<input type="hidden" class="typeofSelect" value="'+selectItems+'"/>';
+                    items+='<input type="hidden" class="minVal" value="'+$(".minValAll").val()+'"/>';
+                    items+='<input type="hidden" class="maxVal" value="'+$(".maxValAll").val()+'"/>';
+                    items+='<input type="hidden" class="filterCon" value="'+$(".Measuresdropdownbutton").find('span').html()+'"/>';
+                    items+='<input type="hidden" class="selectedfield" value="'+$(".selecteddimText").html()+'"/>';
+                    items+='<input type="hidden" class="fieldapi" value="'+fieldapi+'"/></li>';
+                    $("#"+indexpanel+" ul").append(items);
+                    
+                    addItems();                    
+                    
+            }
+           //toggle Window 
+            slideback();
+            $('.popup').toggle(500);
+        }
+
+        //Update 
+        function editFilterModel(obj){
+                    updateRef=obj;
+                    if($(obj).parent().find('.typeofSelect').val()=="measure"){
+                        if($(obj).parent().find('.minVal').val()==undefined){
+                            $(".minValAll").val(0);
+                        }else{
+                        
+                            $(".minValAll").val($(obj).parent().find('.minVal').val());
+                        }
+                        
+                        if($(obj).parent().find('.maxVal').val()==undefined){
+                            $(".maxValAll").val(0);
+                        }else{
+                        $(".maxValAll").val($(obj).parent().find('.maxVal').val());
+                        }
+                        
+                        
+                        $(".Measuresdropdownbutton").find('span').html($(obj).parent().find('.filterCon').val());
+                        $(".selecteddimText").html($(obj).parent().find('.selectedfield').val());
+                        //Show Panel
+                        $(".filterSearch").show();
+                        $(".fieldsRecords").hide();
+                        $( ".slidebackbtn" ).show();
+                        $(".filterPanelDimensions").hide();
+                        $(".filterPanelMeasures").show();
+                        $(".filterPanelDates").hide();
+                        
+                        $("#minVal").show();
+                        $("#maxVal").show();           
+                        $(".fromTOVal").show();           
+                        $(".TOVal").show();
+                        $(".Measurespopup").hide();
+                
+                        //Show All 
+                         $("#minVal").show();
+                         $("#maxVal").show();
+                         $(".fromTOVal").show();
+                         $(".TOVal").show();
+                            
+                        //Items Show 
+                        if($(obj).parent().find('.filterCon').val()=='Is Not Null' || $(obj).parent().find('.filterCon').val()=='Is Null'){
+                                $("#minVal").hide();
+                                $("#maxVal").hide();
+                                $(".fromTOVal").hide();
+                                $(".TOVal").hide();
+                            }else if($(obj).parent().find('.filterCon').val()=='Greater Than' 
+                                    ||$(obj).parent().find('.filterCon').val()=='Greater Than Or Equal To'
+                                    || $(obj).parent().find('.filterCon').val()=='Equals'
+                                    || $(obj).parent().find('.filterCon').val()=='Does Not Equal'){
+                                $("#maxVal").hide();
+                                $(".TOVal").hide();
+                                $(".fromTOVal").hide();
+                            }else if($(obj).parent().find('.filterCon').val()=='Less Than' || $(obj).parent().find('.filterCon').val()=='Less Than Or Equal To'){
+                                $("#minVal").hide();
+                                $(".TOVal").hide();
+                                 $("#maxVal").parent().removeClass('w50');
+                                $(".fromTOVal").hide();
+                            }else{
+                                $("#maxVal").parent().addClass('w50');
+                            }
+                        //Show Hide Btn
+                         $(".updateMeasures").show();
+                        $(".addMeasures").hide();
+                         setTimeout(function(){
+                             $(".Measurespopup").hide();
+                     }, 500);
+                    }else if($(obj).parent().find('.typeofSelect').val()=="dimension"){
+                        $(".addDimensionsBtn").hide();
+                        $(".updateDimensionsBtn").show();
+                        $(".filterSearch").show();
+                        $(".fieldsRecords").hide();
+                        $( ".slidebackbtn" ).show();
+                        $(".filterPanelDimensions").show();
+                         $("#filterContains").parent().hide();
+                          $("#contdimstion").parent().hide();
+                           $("#filterContains1").parent().hide();
+                          $("#contdimstion1").parent().hide();
+                           $("#filterContainstwo").parent().hide();
+                          $("#contdimstiontwo").parent().hide();
+                        $(".filterPanelMeasures").hide();
+                        $(".filterPanelDates").hide();
+                        $(".Dimensionspopup").hide();
+                        $("#DimensionsitemsHtml").show();
+                        $(".DimensionspopupBtn").find('span').html($(obj).parent().find('.filterCon').val());
+                        fieldapi=$(obj).parent().find('.fieldapi').val();
+                        updateRef=obj;
+                        angular.element(document.getElementById('anguController')).scope().onDimensionsUpdate();
+                        $(".selecteddimText").html($(obj).parent().find('.selectedfield').val());
+                        
+                        
+                        
+                        if($(".DimensionspopupBtn").find('span').html()=="Contains" ){
+                            $("#contdimstion").show();
+                            $("#contdimstion").parent().css('background-color','#FAF9F8');
+                            $("#filterContains").parent().show();
+                            $("#DimensionsitemsHtml").hide();
+                            $("#filterDimInput").parent().hide();
+                            $("#filterDimInput").parent().next().hide();
+                            $(".addDimensionsBtn").attr('onclick','');
+                            $(".addDimensionsBtn").addClass('disabled');
+                            
+                            $("#filterContains").val($(obj).parent().find('.selectedIds').val());
+                            if($("#filterContains").val().trim().length>1){
+                                $(".updateDimensionsBtn").attr('onclick','UpdateDimensions()');
+                                $(".updateDimensionsBtn").removeClass('disabled');
+                            }else{
+                                $(".updateDimensionsBtn").attr('onclick','');
+                                $(".updateDimensionsBtn").addClass('disabled');
+                            }
+                        }
+                         else{
+                             $("#filterContains").parent().hide();
+                          $("#contdimstion").parent().hide();
+                          $("#contdimstion").hide();
+                        }
+                        
+                      
+                        setTimeout(function(){
+                             $(".Dimensionspopup").hide();  
+                        }, 500);
+                    }else if($(obj).parent().find('.typeofSelect').val()=="date"){
+                    
+                        $(".filterSearch").show();
+                        $(".fieldsRecords").hide();
+                        $( ".slidebackbtn" ).show();
+                        $(".filterPanelDimensions").hide();
+                        $(".filterPanelMeasures").hide();
+                        $(".filterPanelDates").show();
+                        $(".addNewDateBtn").hide();
+                        $(".updateDateBtn").show();
+                        $(".Datedropdownbutton").find('span').html($(obj).parent().find('.filterCon').val());
+                        $(".selecteddimText").html($(obj).parent().find('.selectedfield').val());
+                        $(".fromDateAll").val($(obj).parent().find('.fromDate').val());
+                        $(".toDateAll").val($(obj).parent().find('.toDate').val());
+                    }
+                    
+                    //toggle Window 
+                    $('.popup').toggle(500);
+                    
+                }
+            //Update measure
+           function updatemeasure(){
+             var  keyFieldss=$(updateRef).parent().find('.typeofSelect').val()+$(".selecteddimText").html()+$(".Measuresdropdownbutton").find('span').html()+$("#minVal").val()+'-'+$("#maxVal").val();              
+          
+            if(addFilterTO[indexpanel+keyFieldss] == undefined){
+                if($(".Measuresdropdownbutton").find('span').html()=="Between"){
+                     $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' '+$("#minVal").val()+' - '+$("#maxVal").val());
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Greater Than"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' > '+$("#minVal").val());
+                    
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Greater Than Or Equal To"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' >= '+$("#minVal").val());
+                    
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Less Than"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' < '+$("#maxVal").val());
+                    
+                        
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Less Than Or Equal To"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' <= '+$("#maxVal").val());
+                    
+                        
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Equals"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' = '+$("#minVal").val());
+                    
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Does Not Equal"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' != '+$("#minVal").val());
+                    
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Is Null"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' Is Null ');
+                    
+                    
+                    }else if($(".Measuresdropdownbutton").find('span').html()=="Is Not Null"){
+                         $(updateRef).parent().find('.MeasuresDivItems').html($(".selecteddimText").html()+' Is Not Null');
+        
+                    }
+                  var keyFields=$(updateRef).parent().find('.typeofSelect').val()+$(".selecteddimText").html()+$(updateRef).parent().find('.filterCon').val()+$(updateRef).parent().find('.minVal').val()+'-'+$(updateRef).parent().find('.maxVal').val();  
+                  if(addFilterTO[keyFields]!=undefined){
+                    delete addFilterTO[keyFields];
+                    keyFields=$(updateRef).parent().find('.typeofSelect').val()+$(".selecteddimText").html()+$(".Measuresdropdownbutton").find('span').html()+$("#minVal").val()+'-'+$("#maxVal").val();  
+                    addFilterTO[keyFields]=keyFields;
+                  }
+                $(updateRef).parent().find('.minVal').val($("#minVal").val());
+                $(updateRef).parent().find('.maxVal').val($("#maxVal").val());
+                $(updateRef).parent().find('.filterCon').val($(".Measuresdropdownbutton").find('span').html());
+                slideback();
+                
+                var oldval=$(updateRef).parent().find('.MeasuresDivItems').html();
+               
+                var indexdiv="<div class='index'></div>";
+               // $(updateRef).parent().find('.MeasuresDivItems').html(indexdiv+oldval);
+                $(updateRef).parent().find('.MeasuresDivItems').html(oldval);
+                addItems();
+                }
+                $(".Measurespopup").hide();
+                $('.popup').toggle(500);
+           }
+            
+         //Add dimensionItems
+            function addDimensions(){
+            var countOfVal=0;
+            var selectedIds='';
+            var items;
+                $('#DimensionsitemsHtml .expanded-list-dim-value-checkbox').each(function( index ) {
+                    if($(this).prop('checked')){
+                        selectedIds+=$(this).parent().find('.dimvalue').html()+',';
+                        countOfVal++;
+                    }
+                });
+              if(countOfVal>0){  
+                  var keyFields=selectItems+$(".selecteddimText").html()+$(".DimensionspopupBtn").find('span').html()+selectedIds;  
+                  if(addFilterTO[indexpanel+keyFields]==undefined ){
+                        addFilterTO[indexpanel+keyFields]=keyFields;
+                        //HImanshu
+                        if($(".DimensionspopupBtn").find('span').html()!='Contains'){
+                            if(countOfVal<5){   
+                                items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="DimeItemDev" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+':'+selectedIds.substring(0,selectedIds.length-1)+'</div>';
+                            }else{
+                                items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div  class="DimeItemDev" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+':Include '+countOfVal+' Values</div>';
+                            }
+                            items+='<div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>';
+                            items+='<input type="hidden" class="typeofSelect" value="'+selectItems+'"/>';
+                            items+='<input type="hidden" class="selectedIds" value="'+selectedIds+'"/>';
+                            items+='<input type="hidden" class="filterCon" value="'+$(".DimensionspopupBtn").find('span').html()+'"/>';
+                           
+                           
+                            items+='<input type="hidden" class="selectedfield" value="'+$(".selecteddimText").html()+'"/>';
+                             items+='<input type="hidden" class="fieldapi" value="'+fieldapi+'"/></li>';
+                            $("#"+indexpanel+" ul").append(items);
+                         }
+                         // Himanshu Edn 
+                  } 
+              }
+              //Himanshu 
+                 var keyFields=selectItems+$(".selecteddimText").html()+$(".DimensionspopupBtn").find('span').html();  
+              if($(".DimensionspopupBtn").find('span').html()=='Contains' && addFilterTO[indexpanel+keyFields]==undefined){
+                    addFilterTO[indexpanel+keyFields]=keyFields;
+                    selectedIds=$("#filterContains").val().trim(); 
+                    items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div  class="DimeItemDev" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' matches '+$("#filterContains").val().trim()+' </div>';
+                    items+='<div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>';
+                    items+='<input type="hidden" class="typeofSelect" value="'+selectItems+'"/>';
+                    items+='<input type="hidden" class="selectedIds" value="'+selectedIds+'"/>';
+                    items+='<input type="hidden" class="filterCon" value="'+$(".DimensionspopupBtn").find('span').html()+'"/>';
+                    items+='<input type="hidden" class="selectedfield" value="'+$(".selecteddimText").html()+'"/>';
+                    items+='<input type="hidden" class="fieldapi" value="'+fieldapi+'"/></li>';
+                    $("#"+indexpanel+" ul").append(items);
+               }   
+              //HImanshu End 
+           //Close WIndow 
+            slideback();
+            $('.popup').toggle(500);     
+            
+                addItems();   
+            }
+            //Update Dimensions
+            function UpdateDimensions(){
+                     var countOfVal=0; 
+                     var selectedIds='';
+                    $('#DimensionsitemsHtml .expanded-list-dim-value-checkbox').each(function( index ) {
+                        if($(this).prop('checked')){
+                            selectedIds+=$(this).parent().find('.dimvalue').html()+',';
+                            countOfVal++;
+                        }
+                    });
+                      var keyFieldss=$(updateRef).parent().find('.typeofSelect').val()+$(".selecteddimText").html()+$(".DimensionspopupBtn").find('span').html()+selectedIds;
+            	//alert(keyFieldss + '*****'+ addFilterTO[keyFieldss]) ;		
+                 if(addFilterTO[indexpanel+keyFieldss] == undefined){
+                    if(countOfVal>0){
+                        if(countOfVal<5){   
+                           
+                            $(updateRef).parent().find('.DimeItemDev').html($(".selecteddimText").html()+':'+selectedIds.substring(0,selectedIds.length-1));
+                        }else{
+                            $(updateRef).parent().find('.DimeItemDev').html($(".selecteddimText").html()+':Include '+countOfVal+' Values');
+                        }   
+                          var keyFields=selectItems+$(".selecteddimText").html()+$(updateRef).parent().find('.filterCon').val()+$(updateRef).parent().find('.selectedIds').val();  
+                          if(addFilterTO[indexpanel+keyFields]!=undefined){
+                            delete addFilterTO[indexpanel+keyFields];
+                            keyFields=selectItems+$(".selecteddimText").html()+$(".DimensionspopupBtn").find('span').html() +selectedIds;  
+                            addFilterTO[indexpanel+keyFields]=keyFields;
+                          }
+                          $(updateRef).parent().find('.selectedIds').val(selectedIds);
+                          $(updateRef).parent().find('.filterCon').val($(".DimensionspopupBtn").find('span').html());
+                    }
+                    if($(".DimensionspopupBtn").find('span').html()=='Contains'){
+                       $(updateRef).parent().find('.DimeItemDev').html($(".selecteddimText").html()+' matches '+$("#filterContains").val().trim()+' ');
+           
+                         var keyFields=selectItems+$(".selecteddimText").html()+$(updateRef).parent().find('.filterCon').val();  
+                          if(addFilterTO[indexpanel+keyFields]!=undefined){
+                            delete addFilterTO[indexpanel+keyFields];
+                            keyFields=selectItems+$(".selecteddimText").html()+$(".DimensionspopupBtn").find('span').html();  
+                            addFilterTO[indexpanel+keyFields]=keyFields;
+                          }  
+                           $(updateRef).parent().find('.selectedIds').val( $("#filterContains").val().trim());
+                          $(updateRef).parent().find('.filterCon').val($(".DimensionspopupBtn").find('span').html());
+                    }
+                  //Close WIndow
+                slideback();
+                
+                
+                
+                var oldval=$(updateRef).parent().find('.DimeItemDev').html();
+                var indexdiv="<div class='index'></div>";
+               // $(updateRef).parent().find('.DimeItemDev').html(indexdiv+oldval);
+                $(updateRef).parent().find('.DimeItemDev').html(oldval);
+                addItems();
+              }  
+               $('.popup').toggle(500);  
+                
+          }
+          
+          
+        //Add addDateCal
+            function addDateCal(){
+             var keyFields=selectItems+$(".selecteddimText").html()+$(".Datedropdownbutton").find('span').html();  
+                   
+             if(addFilterTO[indexpanel+keyFields]==undefined){
+                    addFilterTO[indexpanel+keyFields]=keyFields;
+                    var items;
+                   if($(".Datedropdownbutton").find('span').html()=="Less Than Or Equal To"){
+                      
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="dateFivDiv" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' <= '+createDateFormate($(".toDateAll").val())+' </div>';
+                    }else if($(".Datedropdownbutton").find('span').html()=="Greater Than Or Equal To"){
+                        items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="dateFivDiv" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' >= '+createDateFormate($(".fromDateAll").val())+' </div>';
+                   }else{
+                         items='<li style="cursor: pointer;width: 99%;margin-top:5px;background-color: #E6ECF2;padding: 5px;border-radius: 2px;"><div class="index"></div><div class="dateFivDiv" onclick="editFilterModel(this)" style="display: inline;">'+$(".selecteddimText").html()+' '+createDateFormate($(".fromDateAll").val())+ ' - '+createDateFormate($(".toDateAll").val())+' </div>';
+              
+                   }
+                    items+='<div style="display: inline;float: right;padding-right: 1px;cursor: pointer;" onclick="removeItems(this)">X</div>';
+                    items+='<input type="hidden" class="typeofSelect" value="'+selectItems+'"/>';
+                    items+='<input type="hidden" class="fromDate" value="'+$(".fromDateAll").val()+'"/>';
+                    items+='<input type="hidden" class="toDate" value="'+$(".toDateAll").val()+'"/>';      
+                    items+='<input type="hidden" class="filterCon" value="'+$(".Datedropdownbutton").find('span').html()+'"/>';
+                    items+='<input type="hidden" class="selectedfield" value="'+$(".selecteddimText").html()+'"/>';
+                    items+='<input type="hidden" class="fieldapi" value="'+fieldapi+'" /></li>';
+                    $("#"+indexpanel+" ul").append(items);
+               }
+               slideback();
+                $('.popup').toggle(500); 
+                addItems();
+            }
+            
+         //Update measure
+            function updateDate(){
+                if($(".Datedropdownbutton").find('span').html()=="Less Than Or Equal To"){
+                   $(updateRef).parent().find('.dateFivDiv').html($(".selecteddimText").html()+' <= '+createDateFormate($("#toDate").val()));
+                   
+                 }else if($(".Datedropdownbutton").find('span').html()=="Greater Than Or Equal To"){
+                     $(updateRef).parent().find('.dateFivDiv').html($(".selecteddimText").html()+' >= '+createDateFormate($("#fromDate").val()));
+                
+                }else{
+                      $(updateRef).parent().find('.dateFivDiv').html($(".selecteddimText").html()+' '+createDateFormate($("#fromDate").val())+ ' - '+createDateFormate($("#toDate").val()));
+                
+                }
+                var keyFields=selectItems+$(".selecteddimText").html()+$(updateRef).parent().find('.filterCon').val();  
+                  if(addFilterTO[indexpanel+keyFields]!=undefined){
+                    delete addFilterTO[indexpanel+keyFields];
+                    keyFields=selectItems+$(".selecteddimText").html()+$(".Datedropdownbutton").find('span').html();  
+                    addFilterTO[indexpanel+keyFields]=keyFields;
+                  }
+                          
+                $(updateRef).parent().find('.fromDate').val($("#fromDate").val());
+                $(updateRef).parent().find('.toDate').val($("#toDate").val());
+                $(updateRef).parent().find('.filterCon').val($(".Datedropdownbutton").find('span').html());
+               
+               //Hide Filter Panel
+                slideback();
+                $('.popup').toggle(500);
+                
+                var oldval=$(updateRef).parent().find('.dateFivDiv').html();
+                var indexdiv="<div class='index'></div>";
+               // $(updateRef).parent().find('.dateFivDiv').html(indexdiv+oldval);
+                 $(updateRef).parent().find('.dateFivDiv').html(oldval);
+                addItems();
+            }
+            //Date Calculate
+            function createDate(dateval){
+                var date_string;
+                var myObj = $.parseJSON('{"date_created":'+dateval+'}'),
+                myDate = new Date(1000*myObj.date_created);
+                var f = new Date(1000*myObj.date_created);
+                
+              
+                var dateday=''; 
+                var monthday='';
+                if(f.getMonth()<10){
+                     monthday='0'+f.getMonth();
+                }else{
+                     monthday=f.getMonth();
+                }
+                if(f.getDate()<10){
+                     dateday='0'+f.getDate();
+                }else{
+                    dateday=f.getDate();
+                }
+                
+                 date_string = f.getFullYear() + "-" + monthday + "-" + dateday;
+                return date_string;
+            }
+            function filterDimensionsRecords(){
+                angular.element(document.getElementById('anguController')).scope().onfiltersearchRecords();   
+            }
+            function removeItems(obj){
+                var keyFields=$(obj).parent().find(".typeofSelect").val()+$(obj).parent().find(".selectedfield").val()+$(obj).parent().find(".filterCon").val();  
+                if(confirm('Are You Sure')){
+                    $(obj).parent().remove();
+                   delete addFilterTO[indexpanel+keyFields];
+                   
+                   addItems();
+                }
+             }
+             function createDateFormate(ndate){
+                 if(ndate!=''){
+                    var today = new Date(ndate);
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+                    
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var today = mm+'/'+dd+'/'+yyyy;
+                    return today;
+                    }else{
+                        return '';
+                    }
+             }
+             function addItems(){    
+                var itemsrec='';
+                
+                for(var i=0;i<$("#"+indexpanel+" .slds-scrollable li").length;i++){
+                     itemsrec+=(i+1)+' AND ';
+                }
+                if(itemsrec!=''){
+                    itemsrec=itemsrec.substring(0,itemsrec.length-5);
+                }
+                
+                $("#"+indexpanel+"FilterLogic").val(itemsrec);
+                $("#"+indexpanel+" .slds-scrollable li").each(function( index ) {
+                   // alert('Hiiiii' + index);
+                  $(this).find('.index').css('display','inline');   
+                  $(this).find('.index').html(' ('+(index+1)+') ');
+                });
+           }
+           
+           
+           	var activeRow = 0;
+        	function setActiveRow(el) {
+        		var rows = $('#movingTable li');
+        		for (var i = 0; i < rows.length; i++) {
+        			if (rows[i] == el) {
+        				rows[i].style.backgroundColor = "lightgrey";
+        				activeRow = i;
+        			} else {
+        				rows[i].style.backgroundColor = "white";
+        			}
+        		}
+        	}
+
+        	function moveActiveRow(move) {
+        		 var rows = $('#movingTable li');
+        		var oldRow = rows[activeRow].innerHTML;
+        		var newRow = rows[activeRow + move].innerHTML;
+        		rows[activeRow].innerHTML = newRow;
+        		rows[activeRow + move].innerHTML = oldRow;
+        		setActiveRow(rows[activeRow + move]);
+        	}
+        	
+        	var activeRow1 = 0;
+        	function setActiveRowone(el) {
+        		var rows = $('#movingTableone li');
+        		for (var i = 0; i < rows.length; i++) {
+        			if (rows[i] == el) {
+        				rows[i].style.backgroundColor = "lightgrey";
+        				activeRow1 = i;
+        			} else {
+        				rows[i].style.backgroundColor = "white";
+        			}
+        		}
+        	}
+
+        	function moveActiveRowone(move) {
+        		 var rows = $('#movingTableone li');
+        		var oldRow = rows[activeRow1].innerHTML;
+        		var newRow = rows[activeRow1 + move].innerHTML;
+        		rows[activeRow1].innerHTML = newRow;
+        		rows[activeRow1 + move].innerHTML = oldRow;
+        		setActiveRowone(rows[activeRow1 + move]);
+        	}
+        	
+        	var activeRow2 = 0;
+	function setActiveRowtwo(el) {
+		var rows = $('#movingTabletwo li');
+		for (var i = 0; i < rows.length; i++) {
+			if (rows[i] == el) {
+				rows[i].style.backgroundColor = "lightgrey";
+				activeRow2 = i;
+			} else {
+				rows[i].style.backgroundColor = "white";
+			}
+		}
+	}
+
+	function moveActiveRowtwo(move) {
+		 var rows = $('#movingTabletwo li');
+		var oldRow = rows[activeRow2].innerHTML;
+		var newRow = rows[activeRow2 + move].innerHTML;
+		rows[activeRow2].innerHTML = newRow;
+		rows[activeRow2 + move].innerHTML = oldRow;
+		setActiveRowtwo(rows[activeRow2 + move]);
+	}
+	
+	
+	 /************************** New Measures Start********************************/
+	                //toggleMeasures
+            function toggleMeasures(panelid,dtSetId,Fdid,event){
+               // alert('panelid '+ panelid);
+                delete checkPanelLoad[panelid];   
+                isUpdate=false;
+                selectedPanel=panelid;
+               //  alert('panelid '+ selectedPanel);
+                $("#MeasuresPanel"+panelid).toggle();
+                selectedItemsFills('count');
+                 
+                //Show Process Spinner 
+                $("#IsProcessSpinner"+panelid).css('display','');
+               // alert('panelid '+ selectedPanel);
+                //Fill Records  
+                angular.element(document.getElementById('anguController')).scope().onGetMeasureRecords();
+                  if (!e) var e = window.event; 
+                          e.cancelBubble = true;
+                          if (e.stopPropagation) e.stopPropagation();
+                
+                NewDimensions = 'true';
+            }
+            //Filter Main Items
+             function onfilterRecords(panelId) {
+            
+                var input = document.getElementById('myInput'+panelId);
+                var filter = input.value.toUpperCase();
+              //  alert(filter);
+                $( ".selectors"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+            
+            function removeItemsone(obj,panel,removselItems){
+                
+                    if(confirm('Are You Sure')){
+                       var selectedParVar=$(obj).closest('li').find('.parentSelected').val();
+                       $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                                 $(this).removeClass('selected');
+                        });
+                            
+                        $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                            if($(this).html()==selectedParVar){
+                                $(this).addClass('selected');
+                            }
+                        });
+                            
+                        var delKey=panel+$(obj).closest('li').find('.parentSelected').val()+$(obj).closest('li').find('.itemSelected').val();
+                        delete selectedElements[delKey];
+                         $(obj).closest('li').remove();
+                         
+                         
+                        
+                        
+                        if(selectedParVar=='unique'){
+                             $("#DimensionsPanelLayout"+panel).prev().show();
+                             $("#DimensionsPanelLayout"+panel).show();
+                        
+                        }else{
+                             $("#DimensionsPanelLayout"+panel).prev().hide();
+                             $("#DimensionsPanelLayout"+panel).hide();
+                        }
+                        
+                        	var itemsrec = 0;
+                    		if($("#MenuItems"+panel+" li").length != undefined ){
+                    			for(var i=1;i<= $("#MenuItems"+panel+" li").length;i++){
+                    				 itemsrec = i;
+                    		}
+                    	}
+                    	if(itemsrec == 0 ){
+                    		var divs = document.getElementById("paddingIds"+panel);
+                    		divs.style.padding = "0px";
+                    		divs.style.border = "0px solid white";
+                    	}
+                    	else{
+                    		var divs = document.getElementById("paddingIds"+panel);
+                    		divs.style.padding = "1px";
+                    		divs.style.border = "1px solid white";
+                    	}
+                    
+                         selectedItemsFills(selectedParVar);
+                         
+                         
+                           isUpdate=false;
+                            if(panel <= '5'){
+                            closepop();
+                        }else if(panel>= '6' && panel <='10'){
+                            closePopup11();
+                        }else if(panel>='11' && panel <='15'){
+                            closePopup12();
+                        }
+                           
+                    }
+                }
+                
+                function filteritems(obj,panel){
+                    // alert('Hiiiiii' );
+                   if($(obj).hasClass('disabled')==false){ 
+                     //   alert('Hiiiiii' );
+                        var selectedParent= $("#MeasuresPanel"+panel).find('.vertical').find('.selected').html();
+                        if(selectedParent=='Count'){
+                            selectedParent='count';
+                        }
+                        if(selectedParent=='Sum'){
+                            selectedParent='sum';
+                        }
+                        if(selectedParent=='Average'){
+                            selectedParent='avg';
+                        }
+                        if(selectedParent=='Maximum'){
+                            selectedParent='max';
+                        }
+                        if(selectedParent=='Minimum'){
+                            selectedParent='min';
+                        }
+                        if(selectedParent=='Stddev'){
+                            selectedParent='stddev';
+                        }
+                        if(selectedParent=='Stddevp'){
+                            selectedParent='stddevp';
+                        }
+                        if(selectedParent=='Var'){
+                            selectedParent='var';
+                        }
+                        if(selectedParent=='Varp'){
+                            selectedParent='varp';
+                        }
+                        if(selectedParent=='Unique'){
+                            selectedParent='unique';
+                        }
+                        if(selectedParent=='Median'){
+                            selectedParent='median';
+                        }
+                        if(selectedParent=='First'){
+                            selectedParent='first';
+                        }
+                        if(selectedParent=='Last'){
+                            selectedParent='last';
+                        }
+                        
+                        var itemsrec =0;
+                            for(var i=1;i<= $("#MenuItems"+panel+" li").length;i++){  
+                                 itemsrec = i;
+                                 
+                                 
+                            }
+                              var Strings = $(obj).find('label').html();
+                              Strings = Strings.replace(' ','');
+                    var boolval = true;
+                         
+                        if(isUpdate){
+                          //  alert('Hiiiiii' );
+                             var oldkey=panel+$(ref).parent().find('.parentSelected').val()+$(ref).parent().find('.itemSelected').val(); 
+                             delete selectedElements[oldkey];
+                             var items = '';
+                             var newitems = '';
+                            if(panel <= '5'){
+                                items = '1';
+                                newitems = '';
+                            }else if(panel>= '6' && panel <='10'){
+                                items = '2'
+                                newitems = '2';
+                            }else if(panel>='11' && panel <='15'){
+                                items = '3'
+                                newitems = '3';
+                            }
+                          //  alert('Hiiiiii "' +panel+selectedParent+Strings+'"');
+                             $(ref).parent().html('<li onmouseover="ShowMeasures(\''+panel+selectedParent+Strings+'\')" onmouseout="hideMeasures(\''+panel+selectedParent+Strings+'\')"><input type="hidden" class="parentSelected" value="'+selectedParent+'" /><input type="hidden" class="itemSelected"  value="'+$(obj).find('label').html()+'"/><input type="hidden" class="editSelected" value="'+selectedParent+'('+$(obj).find('label').html()+')" /><input type="hidden" class="editApi" value="'+panel+selectedParent+Strings+'" /><div class="liclasses" onclick="editItems(this,'+panel+',event)"> '+selectedParent+'('+$(obj).find('label').html()+')'+'<span style="cursor: pointer;float:right;display:none" id="'+panel+selectedParent+Strings+'"><img style="cursor:pointer;position:relative; z-index:2;" title="Edit" src="{!$Resource.Edit}" width="17px" height="10px" onclick="openLabelPopup'+items+'(this,\'Measures'+newitems+'\')"/><img style="cursor:pointer;position:relative; z-index:2;" title="Delete" src="{!$Resource.Delete}" onclick="removeItemsone(this,'+panel+',\''+$(obj).find('label').html()+'\')" width="26px" height="12px" /></span></div>');
+                             isUpdate=false;
+                              boolval = false;
+                        }else{
+                            if(itemsrec < 5 ) {
+                                 var items = '';
+                                 var newitems = '';
+                                if(panel <= '5'){
+                                    items = '1';
+                                    newitems = '';
+                                }else if(panel>= '6' && panel <='10'){
+                                    items = '2'
+                                    newitems = '2';
+                                }else if(panel>='11' && panel <='15'){
+                                    items = '3'
+                                    newitems = '3';
+                                }
+                                 $("#MenuItems"+panel).find('ul').append('<li onmouseover="ShowMeasures(\''+panel+selectedParent+Strings+'\')" onmouseout="hideMeasures(\''+panel+selectedParent+Strings+'\')"><input type="hidden" class="parentSelected" value="'+selectedParent+'" /><input type="hidden" class="itemSelected"  value="'+$(obj).find('label').html()+'"/><input type="hidden" class="editSelected" value="'+selectedParent+'('+$(obj).find('label').html()+')"/><input type="hidden" class="editApi" value="'+panel+selectedParent+Strings+'" /><div class="liclasses" onclick="editItems(this,'+panel+',event)"> '+selectedParent+'('+$(obj).find('label').html()+')'+'<span style="cursor: pointer;float:right;display:none" id="'+panel+selectedParent+Strings+'"><img style="cursor:pointer;position:relative; z-index:2;" title="Edit" src="{!$Resource.Edit}" width="17px" height="10px" onclick="openLabelPopup'+items+'(this,\'Measures'+newitems+'\')"/><img style="cursor:pointer;position:relative; z-index:2;" title="Delete" src="{!$Resource.Delete}" onclick="removeItemsone(this,'+panel+',\''+$(obj).find('label').html()+'\')" width="23px" height="12px" /></span> </div></li>');
+                                   }
+                        
+                         else{
+                             alert('You cannot Enter more than 5 Measures');
+                         }
+                        }
+                       // alert($("#MenuItems"+panel+" ul").html());
+                       
+                       if(itemsrec <5 || boolval == false) {
+                        $('#MenuItems'+panel+' li').filter(
+                        function(){
+                                var keyFieldsAll = $(this).closest('li').find('.itemSelected').val().replace(/[^a-zA-Z ]/g, "");
+                        		var keyFields = panel+$(this).closest('li').find('.itemSelected').val().replace(/[^a-zA-Z ]/g, "");;
+                        		var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        		keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        		var div = document.getElementById('NewAll'+keyFieldss);
+                        		
+                        		var divs = document.getElementById('Anals'+keyFieldss);
+                        		div.style.display = "none";
+                        		divs.style.display = "block";
+                        		
+                        	
+                        });	
+                        
+                        
+                        
+                      	var itemsrec = 0;
+                    		if($("#MenuItems"+panel+" li").length != undefined ){
+                    			for(var i=1;i<= $("#MenuItems"+panel+" li").length;i++){
+                    				 itemsrec = i;
+                    		}
+                    	}
+                    	if(itemsrec == 0 ){
+                    		var divs = document.getElementById("paddingIds"+panel);
+                    		divs.style.padding = "0px";
+                    		divs.style.border = "0px solid white";
+                    	}
+                    	else{
+                    		var divs = document.getElementById("paddingIds"+panel);
+                    		divs.style.padding = "1px";
+                    		divs.style.border = "1px solid white";
+                    	}
+	
+                         
+                        
+                        var key=panel+selectedParent+$(obj).find('label').html();
+                        //alert('keys2'+key)
+                        selectedElements[key]=key;
+                        
+                         selectedItemsFills(selectedParent);
+                       }  
+                       // $("#MeasuresPanel"+panel).toggle(); 
+                      /*  if(panel <= '5'){
+                            closepop();
+                        }else if(panel>= '6' && panel <='10'){
+                            closePopup11();
+                        }else if(panel>='11' && panel <='15'){
+                            closePopup12();
+                        } */
+                        
+                     }   
+                }
+                
+                function ShowMeasures(about)
+                     {
+                       
+                    	var div = document.getElementById(about);
+                       div.style.display = "block";
+                     
+                      } 
+                      function hideMeasures(about)
+                     {
+                          
+                    	var div = document.getElementById(about);
+                    	div.style.display = "none";
+                     
+                      } 
+                
+                function PopupEdit(panel){
+                    selectedPanel=panel;
+                    $('#MenuItemsEdit li').appendTo($('#MenuItems'+selectedPanel+' ul')); 
+                    angular.element(document.getElementById('anguController')).scope().onGetMeasureRecordsedit();
+                    filterPopUpModel();
+                }
+                function editItems(obj,panel){
+                    
+                    selectedPanel=panel;
+                    $('#MenuItems'+selectedPanel+' li').filter(
+                        function(){
+                             var key=selectedPanel+$(this).closest('li').find('.parentSelected').val()+$(this).closest('li').find('.itemSelected').val(); 
+                            
+                            selectedElements[key] = key;  
+                              
+                        }
+                        );
+                        
+                    ref=obj;
+                    isUpdate=true;
+                    NewDimensions = 'true';
+                    $("#MeasuresPanel"+panel).show();
+                    $("#MeasuresPanel"+panel).prev().show();
+                    
+                    if($(obj).closest('li').find('.parentSelected').val()=='unique'){
+                         $("#DimensionsPanelLayout"+panel).prev().show();
+                         $("#DimensionsPanelLayout"+panel).show();
+                    
+                    }else{
+                         $("#DimensionsPanelLayout"+panel).prev().hide();
+                         $("#DimensionsPanelLayout"+panel).hide();
+                    }
+                    $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                         $(this).removeClass('selected');
+                    });
+                        
+                    $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                        selectedParent = $(this).html();
+                        if(selectedParent=='Count'){
+                            selectedParent='count';
+                        }
+                        if(selectedParent=='Sum'){
+                            selectedParent='sum';
+                        }
+                        if(selectedParent=='Average'){
+                            selectedParent='avg';
+                        }
+                        if(selectedParent=='Maximum'){
+                            selectedParent='max';
+                        }
+                        if(selectedParent=='Minimum'){
+                            selectedParent='min';
+                        }
+                        if(selectedParent=='Stddev'){
+                            selectedParent='stddev';
+                        }
+                        if(selectedParent=='Stddevp'){
+                            selectedParent='stddevp';
+                        }
+                        if(selectedParent=='Var'){
+                            selectedParent='var';
+                        }
+                        if(selectedParent=='Varp'){
+                            selectedParent='varp';
+                        }
+                        if(selectedParent=='Unique'){
+                            selectedParent='unique';
+                        }
+                        if(selectedParent=='Median'){
+                            selectedParent='median';
+                        }
+                        if(selectedParent=='First'){
+                            selectedParent='first';
+                        }
+                        if(selectedParent=='Last'){
+                            selectedParent='last';
+                        }
+                        if(selectedParent==$(obj).closest('li').find('.parentSelected').val()){
+                            $(this).addClass('selected');
+                        }
+                    });
+                 //   $("#MeasuresPanel"+panel).toggle();
+                    
+                     selectedItemsFills($(obj).closest('li').find('.parentSelected').val());
+                       if (!e) var e = window.event; 
+                          e.cancelBubble = true;
+                          if (e.stopPropagation) e.stopPropagation();
+                     
+                }
+                function ParentItemsSelected(obj,panel){
+                    var selectedParent= $(obj).html();   
+                        if(selectedParent=='Count'){
+                            selectedParent='count';
+                        }
+                        if(selectedParent=='Sum'){
+                            selectedParent='sum';
+                        }
+                        if(selectedParent=='Average'){
+                            selectedParent='avg';
+                        }
+                        if(selectedParent=='Maximum'){
+                            selectedParent='max';
+                        }
+                        if(selectedParent=='Minimum'){
+                            selectedParent='min';
+                        }
+                        if(selectedParent=='Stddev'){
+                            selectedParent='stddev';
+                        }
+                        if(selectedParent=='Stddevp'){
+                            selectedParent='stddevp';
+                        }
+                        if(selectedParent=='Var'){
+                            selectedParent='var';
+                        }
+                        if(selectedParent=='Varp'){
+                            selectedParent='varp';
+                        }
+                        if(selectedParent=='Unique'){
+                            selectedParent='unique';
+                        }
+                         if(selectedParent=='Median'){
+                            selectedParent='median';
+                        }
+                        if(selectedParent=='First'){
+                            selectedParent='first';
+                        }
+                        if(selectedParent=='Last'){
+                            selectedParent='last';
+                        }
+                    if(selectedParent !='unique'){
+                        $("#MeasuresPanelLayout"+panel).prev().show();
+                        $("#MeasuresPanelLayout"+panel).show();
+                        $("#DimensionsPanelLayout"+panel).hide();
+                        $("#DimensionsPanelLayout"+panel).prev().hide();
+                    }else{
+                        $("#MeasuresPanelLayout"+panel).prev().show();
+                        $("#MeasuresPanelLayout"+panel).show();
+                        $("#DimensionsPanelLayout"+panel).show();
+                        $("#DimensionsPanelLayout"+panel).prev().show();
+                    }
+                    
+                    $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                      $(this).removeClass('selected');
+                    });
+                     $(obj).addClass('selected');
+                     
+                      selectedItemsFills(selectedParent);
+                }
+                
+                function selectedItemsFills(parentSel){
+                   
+                    $("#MeasuresPanelLayout"+selectedPanel).find('label').each(function( index ) {
+                        var key=selectedPanel+parentSel+$( this ).html(); 
+                       	var keyFields = parentSel+$( this ).html();
+                       	var keyFieldsAll = selectedPanel+$( this ).html().replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(/[^a-zA-Z ]/g, "");
+                        		var keyFieldss = keyFields.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        		keyFieldss = keyFieldss.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                        	
+                        if(selectedElements[key]==undefined){
+                            $(this).closest('a').removeClass('disabled');
+							var div = document.getElementById('NewAll'+keyFieldsAll);
+                        		var divs = document.getElementById('Anals'+keyFieldsAll);
+                        		div.style.display = "block";
+                        		divs.style.display = "none";
+                        }else{
+                            $(this).closest('a').addClass('disabled');
+                            	var div = document.getElementById('NewAll'+keyFieldsAll);
+                        		var divs = document.getElementById('Anals'+keyFieldsAll);
+                        		div.style.display = "none";
+                        		divs.style.display = "block";
+                        }
+                
+                    });
+                    
+                    if(parentSel=='unique'){   
+                         $("#DimensionsPanelLayout"+selectedPanel).find('label').each(function( index ) {
+                            var key=selectedPanel+parentSel+$( this ).html();
+                            var keyFields = parentSel+$( this ).html().replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                       	    var keyFieldsAll = selectedPanel+$( this ).html().replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(/[^a-zA-Z ]/g, "");
+                        		 keyFieldsAll = keyFieldsAll.replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','').replace(' ','');
+                            if(selectedElements[key]==undefined){
+                                $(this).closest('a').removeClass('disabled');                     
+                            }else{
+                                $(this).closest('a').addClass('disabled');
+                                var div = document.getElementById('NewAll'+keyFieldsAll);
+                        		var divs = document.getElementById('Anals'+keyFieldsAll);
+                        		div.style.display = "none";
+                        		divs.style.display = "block";
+                            }
+                            
+                            
+                    
+                        });
+                    }
+                    if(parentSel=='count'){
+                        $(".measureCount").hide();
+                        $(".measureRows").show();
+                    }else{
+                        $(".measureCount").show();
+                        $(".measureRows").hide();
+                    }
+                    
+                  
+                    
+                }
+                
+                
+                 function PopupEdit(panel){
+                    selectedPanel=panel;
+                    $('#MenuItemsEdit'+selectedPanel+' li').appendTo($('#MenuItems'+selectedPanel+' ul')); 
+                    angular.element(document.getElementById('anguController')).scope().onGetMeasureRecordsedit();
+                    filterPopUpModel();
+                     
+                }
+	 	 /************************** New Measures End********************************/
+	 	 /*********** show Selected Start ******************/
+                function showselectedfunction(){
+              //alert('Hiiiii');
+                document.getElementById('showselected').style.display = "block";
+            	
+            	document.getElementById('selectedhide').style.display = "block";
+            	document.getElementById('selectedShow').style.display = "none";
+            	//alert('Hiiiii');
+            	var DimensionsitemsHtmls='';
+            	
+            	 $("#DimensionsitemsHtml .expanded-list-dim-value-checkbox" ).each(function( index ) {
+                    if($(this).prop('checked')){
+                        DimensionsitemsHtmls+='<a>';
+                		DimensionsitemsHtmls+='<label class="dimvalue" data-tooltip-on-truncation="true"  >'+$(this).parent().find('.dimvalue').html()+'</label>';
+                		DimensionsitemsHtmls+='</a>';
+                    }
+                   
+                });
+            	
+            	//alert('Hiiiii');
+            	document.getElementById('hideslected').style.display = "none";
+            	$("#DimensionsitemsHtmlhide").html(DimensionsitemsHtmls); 
+            	//alert('Hiiiii');
+            }
+            function hideselectedfunction(){
+                document.getElementById('showselected').style.display = "none";
+            	document.getElementById('hideslected').style.display = "block";
+            	document.getElementById('selectedhide').style.display = "none";
+            	document.getElementById('selectedShow').style.display = "block";
+            	
+             }
+             
+             /*********** show Selected End ******************/
+        </script>
+</apex:component>

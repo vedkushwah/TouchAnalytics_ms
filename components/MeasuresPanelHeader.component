@@ -1,0 +1,355 @@
+<apex:component >
+      <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="SalesForce CRM" />
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.css"/>
+        <apex:styleSheet value="/sCSS/40.0/sprites/1496211442000/Theme3/default/gc/EdgeClient.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+        <style>
+            [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-    ng-cloak {
+                display: none !important;
+            }
+            .md-datepicker-calendar-pane{
+                z-index:9999;
+            }
+        </style>
+        
+        <script>
+            var selectedElements={};
+             var ref;
+             var isUpdate=false;
+             var checkPanelLoad={};
+             var selectedPanel;
+             var dataSetId;
+             var folderId; 
+             var sid = '{!$Api.Session_ID}';
+             var instance_url = '{!$Site.BaseUrl}';
+             var selurlid='';
+             
+             var app = angular.module('MeasuresPanel', ['ngMaterial']);
+             
+             app.controller('MeasuresController', function($scope,$http) {      
+             
+                $scope.onGetMeasureRecords= function() {
+                    if(checkPanelLoad[selectedPanel]==undefined){
+                    
+                        checkPanelLoad[selectedPanel]=selectedPanel;
+                       
+                        selurlid= '/services/data/v39.0/wave/datasets/'+dataSetId+'/versions/'+folderId;
+                        $http({
+                            url: selurlid+'/xmds/main',
+                            method: "GET",
+                            headers: {
+                            "Authorization": "OAuth " + sid
+                            }
+                        })
+                        .then(function(response) {  
+                            var MeasuresApi={};
+                            var Measures=[];              
+                            var Dimensions=[];
+                            var DimensionsApi={};
+                            var DimensionsLayout='';
+                            var MeasuresLayout='';
+                            
+                            for(var i=0;i<response.data.dimensions.length;i++){
+                                Dimensions[i]=response.data.dimensions[i]['label'];
+                                DimensionsApi[response.data.dimensions[i]['label']]=response.data.dimensions[i]['field'];
+                            }
+                            //Sort Records 
+                            Dimensions.sort();
+                            //For Dimensions Layout
+                            for(var i=0;i<Dimensions.length;i++){
+                                if(Dimensions[i]!=undefined){ 
+                                    DimensionsLayout+='<a class="dimension" onclick="filteritems(this,'+selectedPanel+')" id='+DimensionsApi[Dimensions[i]]+'>';
+                                    DimensionsLayout+='<svg class="icon iconType" ><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#dimension"></use>';
+                                    DimensionsLayout+='</svg><label data-tooltip-on-truncation="true" data-tooltip="#" >'+Dimensions[i]+'</label><span ></span></a>';
+                                
+                                }     
+                            } 
+                            $("#DimensionsPanelLayout"+selectedPanel).html(DimensionsLayout);
+                           
+                            //***************************************End DimensionsPanelLayout**************
+                           
+                            //Measures Layout
+                            for(var i=0;i<response.data.measures.length;i++){
+                                if(response.data.measures[i]['description']!=undefined && response.data.measures[i]['label']!=undefined ){
+                                   
+                                    Measures[i]=response.data.measures[i]['label'];
+                                    MeasuresApi[response.data.measures[i]['label']]=response.data.measures[i]['field'];
+                                }  
+                             }
+                             
+                             //Sort Measures Records 
+                                Measures.sort();
+                                
+                             //Create Layout   Measures
+                             
+                             
+                             
+                             //Default 
+                             
+                               MeasuresLayout+='<a class="measureRows measure" onclick="filteritems(this,'+selectedPanel+')" id="Rows">';
+                               MeasuresLayout+='<svg class="icon iconType" ><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#measure-1"></use>';
+                               MeasuresLayout+='</svg><label data-tooltip-on-truncation="true" data-tooltip="#" >Rows</label><span ></span></a>';
+                            
+
+                                for(var i=0;i<Measures.length;i++){
+                                        if(Measures[i]!=undefined){
+                                            MeasuresLayout+='<a class="measureCount  measure" onclick="filteritems(this,'+selectedPanel+')" id='+MeasuresApi[Measures[i]]+'>';
+                                            MeasuresLayout+='<svg class="icon iconType" ><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#measure-1"></use>';
+                                            MeasuresLayout+='</svg><label data-tooltip-on-truncation="true" data-tooltip="#" >'+Measures[i]+'</label><span ></span></a>';
+                                        }
+                                }  
+                                
+                               $("#MeasuresPanelLayout"+selectedPanel).html(MeasuresLayout);  
+                                         
+                            
+                             //Hide Process Spinner 
+                              $("#IsProcessSpinner"+selectedPanel).css('display','none');
+                              
+                               $("#MeasuresPanelLayout"+selectedPanel).prev().show();
+                                $("#MeasuresPanelLayout"+selectedPanel).show();
+                                $("#DimensionsPanelLayout"+selectedPanel).hide();
+                                $("#DimensionsPanelLayout"+selectedPanel).prev().hide();
+                                
+                                 $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                      $(this).removeClass('selected');
+                                 });
+                                
+                                $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                    if($(this).html()=='Count'){
+                                        $(this).addClass('selected');
+                                    }
+                                });
+                                    
+                                selectedItemsFills('Count');
+                                 $("#DimensionsPanelLayout"+selectedPanel).prev().hide();
+                                $("#DimensionsPanelLayout"+selectedPanel).hide();
+
+                        },
+                        function(response) { 
+                             alert("failed");
+                        }); 
+                     }else{
+                          //Hide Process Spinner 
+                                $("#IsProcessSpinner"+selectedPanel).css('display','none');
+                                $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                      $(this).removeClass('selected');
+                                 });
+                                
+                                $("#MeasuresPanel"+selectedPanel).find('.vertical a').each(function( index ) {
+                                    if($(this).html()=='Count'){
+                                        $(this).addClass('selected');
+                                    }
+                                });
+                          $("#DimensionsPanelLayout"+selectedPanel).prev().hide();      
+                          $("#DimensionsPanelLayout"+selectedPanel).hide();
+                     }       
+                }               
+            });
+       
+            //toggleMeasures
+            function toggleMeasures(panelid,dtSetId,Fdid){
+                isUpdate=false;
+                selectedPanel=panelid;
+                dataSetId=dtSetId;
+                folderId=Fdid;
+                
+                $("#MeasuresPanel"+panelid).toggle();
+                selectedItemsFills('Count');
+                 
+                //Show Process Spinner 
+                $("#IsProcessSpinner"+panelid).css('display','');
+                
+                //Fill Records          
+                angular.element(document.getElementById('anguMeasuresController')).scope().onGetMeasureRecords();
+                
+                
+                
+            }
+            //Filter Main Items
+             function onfilterRecords(panelId) {
+            
+                var input = document.getElementById('myInput'+panelId);
+                var filter = input.value.toUpperCase();
+                $( ".selectors"+panelId+" a " ).each(function( index ) {
+                  var a=$(this).find('label').html();
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+                
+            }
+            
+            function removeItems(obj,panel,removselItems){
+                    if(confirm('Are You Sure')){
+                       var selectedParVar=$(obj).closest('li').find('.parentSelected').val();
+                       $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                                 $(this).removeClass('selected');
+                        });
+                            
+                        $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                            if($(this).html()==selectedParVar){
+                                $(this).addClass('selected');
+                            }
+                        });
+                            
+                        var delKey=panel+$(obj).closest('li').find('.parentSelected').val()+$(obj).closest('li').find('.itemSelected').val();
+                        delete selectedElements[delKey];
+                         $(obj).closest('li').remove();
+                         
+                         
+                        
+                        
+                        if(selectedParVar=='Unique'){
+                             $("#DimensionsPanelLayout"+panel).prev().show();
+                             $("#DimensionsPanelLayout"+panel).show();
+                        
+                        }else{
+                             $("#DimensionsPanelLayout"+panel).prev().hide();
+                             $("#DimensionsPanelLayout"+panel).hide();
+                        }
+                    
+                         selectedItemsFills(selectedParVar);
+                         
+                         
+                           isUpdate=false;
+                           
+                    }
+                }
+                
+                function filteritems(obj,panel){
+                    
+                   if($(obj).hasClass('disabled')==false){ 
+                        var selectedParent= $("#MeasuresPanel"+panel).find('.vertical').find('.selected').html();
+                        if(selectedParent=='Average'){
+                            selectedParent='Avg';
+                        }
+                        if(selectedParent=='Maximum'){
+                            selectedParent='Max';
+                        }
+                        if(selectedParent=='Minimum'){
+                            selectedParent='Min';
+                        }
+                        if(selectedParent=='Stddev'){
+                            selectedParent='Std Dev';
+                        }
+                        if(selectedParent=='Stddevp'){
+                            selectedParent='Population std Dev';
+                        }
+                        if(selectedParent=='Var'){
+                            selectedParent='Sample Var';
+                        }
+                        if(selectedParent=='Varp'){
+                            selectedParent='Population Var';
+                        }
+                        
+                        var key=panel+$("#MeasuresPanel"+panel).find('.vertical').find('.selected').html()+$(obj).find('label').html();
+                          
+                        if(isUpdate){
+                             var oldkey=panel+$(ref).parent().find('.parentSelected').val()+$(ref).parent().find('.itemSelected').val();
+                             delete selectedElements[oldkey];
+                             $(ref).parent().html('<input type="hidden" class="parentSelected" value="'+$("#MeasuresPanel"+panel).find('.vertical').find('.selected').html()+'" /><input type="hidden" class="itemSelected"  value="'+$(obj).find('label').html()+'"/><div style="cursor: pointer;overflow:hidden;text-overflow:ellipsis;" onclick="editItems(this,'+panel+')"> '+selectedParent+' Of '+$(obj).find('label').html()+'</div><div style="cursor: pointer;" onclick="removeItems(this,'+panel+',\''+$(obj).find('label').html()+'\')">X</div>');
+                             isUpdate=false;   
+                        }else{
+                            $("#MenuItems"+panel).find('ul').append('<li><input type="hidden" class="parentSelected" value="'+$("#MeasuresPanel"+panel).find('.vertical').find('.selected').html()+'" /><input type="hidden" class="itemSelected"  value="'+$(obj).find('label').html()+'"/><div style="cursor: pointer;overflow:hidden;text-overflow:ellipsis;" onclick="editItems(this,'+panel+')"> '+selectedParent+' Of '+$(obj).find('label').html()+'</div><div style="cursor: pointer;" onclick="removeItems(this,'+panel+',\''+$(obj).find('label').html()+'\')">X</div></li>');
+                        }    
+                        selectedElements[key]=$(obj).find('label').html();
+                        
+                        $("#MeasuresPanel"+panel).toggle(); 
+                     }   
+                }
+                
+              
+                function editItems(obj,panel){
+                    ref=obj;
+                    isUpdate=true;
+                    $("#MeasuresPanel"+panel).show();
+                    $("#MeasuresPanel"+panel).prev().show();
+                    
+                    if($(obj).closest('li').find('.parentSelected').val()=='Unique'){
+                         $("#DimensionsPanelLayout"+panel).prev().show();
+                         $("#DimensionsPanelLayout"+panel).show();
+                    
+                    }else{
+                         $("#DimensionsPanelLayout"+panel).prev().hide();
+                         $("#DimensionsPanelLayout"+panel).hide();
+                    }
+                    $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                         $(this).removeClass('selected');
+                    });
+                        
+                    $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                        if($(this).html()==$(obj).closest('li').find('.parentSelected').val()){
+                            $(this).addClass('selected');
+                        }
+                    });
+                    
+                     selectedItemsFills($(obj).closest('li').find('.parentSelected').val());
+                }
+                function ParentItemsSelected(obj,panel){
+                    if($(obj).html()!='Unique'){
+                        $("#MeasuresPanelLayout"+panel).prev().show();
+                        $("#MeasuresPanelLayout"+panel).show();
+                        $("#DimensionsPanelLayout"+panel).hide();
+                        $("#DimensionsPanelLayout"+panel).prev().hide();
+                    }else{
+                        $("#MeasuresPanelLayout"+panel).prev().show();
+                        $("#MeasuresPanelLayout"+panel).show();
+                        $("#DimensionsPanelLayout"+panel).show();
+                        $("#DimensionsPanelLayout"+panel).prev().show();
+                    }
+                    
+                    $("#MeasuresPanel"+panel).find('.vertical a').each(function( index ) {
+                      $(this).removeClass('selected');
+                    });
+                     $(obj).addClass('selected');
+                     
+                      selectedItemsFills($(obj).html());
+                }
+                
+                function selectedItemsFills(parentSel){
+                    $("#MeasuresPanelLayout"+selectedPanel).find('label').each(function( index ) {
+                        var key=selectedPanel+parentSel+$( this ).html(); 
+                        
+                        if(selectedElements[key]==undefined){
+                            $(this).closest('a').removeClass('disabled');
+                        }else{
+                            $(this).closest('a').addClass('disabled');
+                        }
+                
+                    });
+                    
+                    if(parentSel=='Unique'){
+                         $("#DimensionsPanelLayout"+selectedPanel).find('label').each(function( index ) {
+                            var key=selectedPanel+parentSel+$( this ).html(); 
+                            if(selectedElements[key]==undefined){
+                                $(this).closest('a').removeClass('disabled');
+                            }else{
+                                $(this).closest('a').addClass('disabled');
+                            }
+                    
+                        });
+                    }
+                    if(parentSel=='Count'){
+                        $(".measureCount").hide();
+                        $(".measureRows").show();
+                    }else{
+                        $(".measureCount").show();
+                        $(".measureRows").hide();
+                    }
+                    
+                }
+        </script>
+            
+</apex:component>

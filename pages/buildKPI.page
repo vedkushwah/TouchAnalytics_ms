@@ -1,0 +1,131 @@
+<apex:page controller="builKPIjoeytest" showHeader="true" sidebar="true" >
+    <!--<apex:slds ></apex:slds>-->
+     
+    <!--<script language="javascript">-->
+    <!--window.onload=function()      -->
+    <!--    {  -->
+    <!--        var isConnect = '{!isConnect}';-->
+    <!--        if(isConnect == 'true'){-->
+    <!--            initAct();    -->
+    <!--        }-->
+    <!--    }-->
+    <!-- </script>-->
+    <!-- <apex:form id="frm">-->
+    <!-- <apex:actionFunction name="initAct" action="{!connectToSFDC}" rerender="accountPanel" status="status"/>-->
+    <!-- <apex:actionFunction name="accountAct" action="{!verifyAccountDetails}" rerender="contactPanel" status="status" />-->
+    <!-- <apex:outputPanel id="accountPanel">-->
+    <!--     <script language="javascript">-->
+    <!--        var isCheckAccount = '{!isCheckAccount}';-->
+    <!--        if(isCheckAccount == 'true'){-->
+    <!--            accountAct();    -->
+    <!--        } -->
+    <!--     </script>-->
+    <!-- </apex:outputPanel>-->
+     
+    <!--<apex:actionFunction name="contactAct" action="{!verifyContactDetails}" rerender="PB" status="status" />-->
+    <!--<apex:outputPanel id="contactPanel">-->
+    <!--     <script language="javascript">-->
+    <!--        var isCheckContact = '{!isCheckContact}';-->
+    <!--        if(isCheckContact == 'true'){-->
+    <!--            contactAct();    -->
+    <!--        } -->
+    <!--     </script>-->
+    <!-- </apex:outputPanel>-->
+     
+ 
+
+            
+    <!--<body>-->
+        
+    <!--    <div class="slds">-->
+    <!--     <div class="slds-grid slds-m-top--large">-->
+    <!--            <div class="slds-col slds-col-rule--right slds-p-right--large">-->
+    <!--                <div class="slds-card" > -->
+    <!--                    <header class="slds-card__header slds-grid">-->
+    <!--                        <div class="slds-col slds-media slds-media--center">-->
+    <!--                            <div class="slds-media__body">-->
+    <!--                                <h3 class="slds-text-heading--small">Purchase Product</h3>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+    <!--                    </header>-->
+    <!--                    <apex:outputPanel id="PB">-->
+    <!--                    <apex:pageMessages ></apex:pageMessages>-->
+    <!--                    <apex:actionStatus id="status" >-->
+    <!--                        <apex:facet name="start" >-->
+    <!--                          <img src="/img/loading.gif" />                    -->
+    <!--                        </apex:facet>-->
+    <!--                    </apex:actionStatus>-->
+                        
+    <!--                    <apex:outputPanel rendered="{!!displayConnectButtons}">-->
+    <!--                    <section class="slds-card__body">-->
+    <!--                        <div class="slds-scrollable--x">-->
+    <!--                           <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal">-->
+    <!--                                <thead>-->
+    <!--                                    <tr >-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">-->
+    <!--                                           Select Product-->
+    <!--                                        </th>-->
+    <!--                                        <th class="slds-medium-size--3-of-4" scope="col">-->
+    <!--                                            <apex:selectList value="{!selectedDashboard}" size="1"  styleClass="slds-select">-->
+    <!--                                                <apex:actionSupport event="onchange" action="{!buildSelected}" reRender="PB"/>-->
+    <!--                                                <apex:selectoption itemLabel="Select" itemValue="Select"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Insights (Single Auto)" itemValue="01t41000004IXmbAAG"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Insights (Single)" itemValue="01t41000004IXkHAAW"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Insights Configuration" itemValue="01t41000004IXkgAAG"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Command (Multi Auto)" itemValue="01t41000004IXmgAAG"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Command Configuration" itemValue="01t41000004IXmWAAW"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Compare (Snapshot)" itemValue="01t41000004IXkMAAW"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Compare Configuration" itemValue="01t41000004IXklAAG"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Contrast (A vs. T)" itemValue="01t41000004IXkRAAW"></apex:selectoption>-->
+    <!--                                                <apex:selectoption itemLabel="Contrast Configuration" itemValue="01t41000004IXliAAG"></apex:selectoption>-->
+    <!--                                            </apex:selectList>-->
+    <!--                                        </th>-->
+    <!--                                    </tr>-->
+    <!--                                    <tr>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">Account Balance</th>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">${!accountBalance}</th>-->
+    <!--                                    </tr>-->
+    <!--                                    <tr>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">Build Cost</th>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">${!BuildCost}</th>-->
+    <!--                                    </tr> -->
+    <!--                                    <tr>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">Coupon Code</th>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">-->
+    <!--                                            <apex:inputtext value="{!CouponCode}" styleClass="slds-input">-->
+    <!--                                                <apex:actionSupport event="onchange" action="{!getCouponInformation}" reRender="PB"  />-->
+    <!--                                            </apex:inputtext>                                                -->
+    <!--                                        </th>-->
+    <!--                                    </tr>  -->
+    <!--                                    <tr>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">Coupon Value</th>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">${!CouponValue}</th>-->
+    <!--                                    </tr>      -->
+    <!--                                    <tr>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">Total Cost</th>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">${!TotalCost}</th>-->
+    <!--                                    </tr>   -->
+    <!--                                    <tr>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">Credit Remaining</th>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col">${!CreditsRemaining}</th>-->
+    <!--                                    </tr> -->
+    <!--                                    <tr>-->
+    <!--                                        <th class="slds-medium-size--1-of-4" scope="col" colspan="2">-->
+    <!--                                            <apex:commandButton styleClass="slds-button slds-button--brand" value="Save & Cancel" rerender="PB" rendered="{!!displayConnectButtons}" action="{!saveAndCancelDashboard}"></apex:commandButton>-->
+    <!--                                            <apex:commandButton styleClass="slds-button slds-button--brand" value="Purchase & Build" rerender="PB" rendered="{!!displayConnectButtons}" action="{!purchaseAndBuildDashboard}"></apex:commandButton>                                                -->
+    <!--                                        </th>-->
+    <!--                                    </tr>                                        -->
+    <!--                                </thead>-->
+    <!--                            </table>-->
+    <!--                        </div>-->
+    <!--                    </section>-->
+    <!--                    </apex:outputPanel> -->
+                        
+    <!--                    </apex:outputPanel>   -->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <!--</body>-->
+    <!--</apex:form>-->
+</apex:page>

@@ -1,0 +1,342 @@
+<apex:page controller="Dashboard_Automation_Controller" docType="html-5.0" id="pageId" sidebar="false"  showHeader="true" standardStylesheets="false" cache="false" tabstyle="analyticscc__Touch_Analytics_UI__tab">
+  <!--  <apex:stylesheet value="{!URLFOR($Resource.jQueryDataTables, 'css/jquery.dataTables.css')}"/>    
+        <apex:stylesheet value="{!URLFOR($Resource.SLDSv0122, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.GlobalFundsJqueryUI, 'GlobalFundsJqueryUI/CustomEventEditCSS.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.GlobalFundsJqueryUI, 'GlobalFundsJqueryUI/EventJqueryMin.js')}"/>
+       <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.jQueryDataTables, 'js/jquery.dataTables.js')}"></script> 
+       
+       <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="/resources/demos/style.css"/>
+                <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                   <apex:stylesheet value="{!URLFOR($Resource.EdgeClient)}"/> 
+    <apex:styleSheet value="{!URLFOR($Resource.Wave,'Wave/css/EdgeClient.css')}" /> 
+    
+    <style>
+        .Datastyle{
+            background: rgb(46, 194, 186);
+            color: white;
+            height: 30px;
+            margin-bottom: 7px;
+            padding-left: 10px;
+            padding-top: 4px;
+            border-radius: 5px;
+            margin-left: 25px;
+            width: 96%;
+        }
+        .SalesDb{
+                margin-left: 0px !important;
+                line-height: 20px !important;
+                padding-left: 16px !important;
+                padding-right: 16px !important;
+                text-align: center !important;
+                vertical-align: middle !important;
+                background: #0070d2 !important;
+                border: 1px solid #0070d2 !important;
+                color: white !important;
+                font-weight: 500 !important;
+        }
+        .slds-input {
+            background-color: white;
+            color: #16325c;
+            border: 1px solid #d8dde6;
+            border-radius: 4px;
+            width: 100%;
+            -webkit-transition: border 0.1s linear, background-color 0.1s linear;
+            transition: border 0.1s linear, background-color 0.1s linear;
+            display: inline-block;
+            padding: 0 27px 0 12px;
+             line-height: 17px !important;
+            min-height: calc(19px + 2px) !important;
+        }
+        
+    </style>
+    <apex:form >
+    <apex:outputpanel id="valueId">
+        <apex:pageMessages />
+        <apex:actionStatus id="status">
+            <apex:facet name="start">
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 10000; background-color: black;"></div>
+                <center>
+                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 10000; margin: 15% 50%">
+                        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 150px;">
+                            <img src="{!$Resource.NewTouch_Logo}" style="float: left; margin: 8px;" width="20%" height="10%"/ >
+                            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                        </div>
+                    </div>
+                </center>
+            </apex:facet>
+        </apex:actionStatus>
+    </apex:outputpanel>
+    <apex:actionFunction name="removeRow" action="{!removeRow}" rerender="outId"/>        
+    <div>
+    <div class="Datastyle"> Dashboards</div>
+    <div style="margin-left: 13px;">
+    <span id="NewDimen"  onclick="sales('DimensionId','DatesId','MeasuresId','NewDimen','NewDate','NewMeas')" styleclass="slds-input" style="width: max-content;padding: 4px;margin-right: 5px;background:rgb(46, 194, 186);color:white;border-radius: 4px;cursor:pointer;margin-left: 13px;">Dimensions</span>
+    <span id="NewDate" onclick="sales('DatesId','MeasuresId','DimensionId','NewDate','NewMeas','NewDimen')" styleclass="slds-input" style="width: max-content;padding: 4px;margin-right: 5px;background:lightgrey;color:white;border-radius: 4px;cursor:pointer">Dates</span>
+    <span id="NewMeas" onclick="sales('MeasuresId','DimensionId','DatesId','NewMeas','NewDimen','NewDate')" styleclass="slds-input" style="width: max-content;padding: 4px;margin-right: 5px;background:lightgrey;color:white;border-radius: 4px;cursor:pointer">Measures</span>
+    </div>                              
+    <div id="DimensionId">
+        <table width="100%">
+            <th width="10%"> </th>
+            <th width="10%"> </th>
+            <th width="40%">Cardinality </th>
+            <th width="20%">Utilization % </th>
+            <th width="20%">Max #of Fields </th>
+        </table>
+        <ul>
+                <apex:outputPanel id="outId">
+                    <li style="cursor: pointer;width: 99%;margin-top:2px;background-color: white;padding: 4px;border-radius: 2px;">
+                        <table width="97%">
+                            <apex:repeat value="{!WrapperClassList}" var="var" >
+                                <tr style="background-color: #E6ECF2;height: 41px;">
+                                    <td width="1%"></td>
+                                    <td width="5%"><div style="display: inline;padding-right: 1px;cursor: pointer;" onclick="removeItem('{!var.field1}')">X</div></td>
+                                    <td width="5%"><div class="index" style="font-size:16px;font-weight:bold;display: inline;"><apex:outputText value="{!var.field1}" /></div> </td>
+                                    <td width="49%"><b> > </b><apex:inputText value="{!var.field2}" style="border-radius: 10px;width:200px;height: 27px;font-size: 14px;" id="NewIds"/><b> &amp; </b>&nbsp;&nbsp;<b> &lt; </b>&nbsp;&nbsp; <apex:inputText value="{!var.field3}" style="border-radius: 10px;width:200px;height: 27px;font-size: 14px;" id="NewIds1"/></td>
+                                    <td width="39%"><b> > </b><apex:inputText value="{!var.field4}" style="border-radius: 10px;width:200px;height: 27px;font-size: 14px;" id="NewIdstwo"/>&nbsp;&nbsp;&nbsp;&nbsp;<apex:inputText value="{!var.field5}" style="border-radius: 10px;font-size:14px;width:230px;height: 27px;font-size: 14px;" id="NewIdsthree"/></td>
+                                </tr>
+                            </apex:repeat>
+                        </table>
+                        <input type="hidden" Name="RemoveIds" id="RemoveIds" />
+                        
+                        
+                    </li>
+                </apex:outputPanel>
+        </ul>
+        <table width="100%">
+            <tr>
+                <td width="50%"><apex:commandLink value="+" action="{!addNewRow}" style="font-size: 25px;width: max-content;cursor: pointer;margin-top: -8px;color: rgb(46, 194, 186);margin-left:20px;" rerender="outId"/></td>
+                
+            </tr>
+        </table>
+        
+    </div>
+    <div id="DatesId" style="display:none">
+        
+        <p style="margin-left:25px;margin-top:10px"> Dates Selected Successfully </p>
+    </div>
+    <div id="MeasuresId" style="display:none">
+        <table width="100%">
+            <th width="2%"></th>
+            <th width="24%">Cardinality </th>
+            <th width="24%">Utilization % </th>
+            <th width="11%"></th>
+            <th width="39%">Values</th> 
+        </table>
+        <ul>
+                <apex:outputPanel id="outId2">
+                    <li style="cursor: pointer;width: 96%;margin-top:2px;background-color: #E6ECF2;padding: 4px;border-radius: 2px;margin-left: 25px;">
+                        <table width="100%">
+                            <tr>
+                                <td width="22.5%">  <b> > </b> <apex:inputText value="{!measurefield31}" style="border-radius: 10px;width:190px;height:27px;font-size:14px;"/></td>
+                                <td width="25%"><b> > </b><apex:inputText value="{!measurefield32}" style="border-radius: 10px;width:190px;height:27px;font-size:14px;"/></td>
+                                <td width="10%"><b> If 1 </b></td>
+                                <td width="36%">
+                                    <apex:selectList id="NewIds" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield10}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield1}" />
+                                    <br/>
+                                    <apex:selectList id="NewIds1" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield9}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield2}" />
+                                    <br/>
+                                                        
+                                    <apex:selectList id="NewIds2" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield8}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield3}" />
+                                    <br/>
+                                    <apex:selectList id="NewIds3" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield7}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield4}" />
+                                                        
+                                    
+                                    <br/>
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:22.5%" value="{!measurefield5}" />
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield6}" />
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </li>
+                    <li style="cursor: pointer;width: 96%;margin-top:2px;background-color: #E6ECF2;padding: 4px;border-radius: 2px;margin-left: 25px;">
+                        <table width="100%">
+                            <tr>
+                                <td width="22.5%"></td>
+                                <td width="25%"></td>
+                                <td width="10%"><b> If 2 </b></td>
+                                <td width="36%">
+                                    <apex:selectList id="NewId" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield20}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIds" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield11}">
+                                        <apex:selectOptions value="{!MeasuresList1}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:selectList id="NewId1" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield19}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIds1" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield12}">
+                                        <apex:selectOptions value="{!MeasuresList1}" />
+                                    </apex:selectList>
+                                    <br/>
+                                                         
+                                    <apex:selectList id="NewId2" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield18}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIds2" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield13}">
+                                        <apex:selectOptions value="{!MeasuresList1}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:selectList id="NewId3" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield17}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIds3" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield14}">
+                                        <apex:selectOptions value="{!MeasuresList1}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:22.5%" value="{!measurefield15}" />
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield16}" />
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </li>
+                    <li style="cursor: pointer;width: 96%;margin-top:2px;background-color: #E6ECF2;padding: 4px;border-radius: 2px;margin-left: 25px;">
+                        <table width="100%">
+                            <tr>
+                                <td width="22.5%"></td>
+                                <td width="25%"></td>
+                                <td width="10%"><b> If 3 </b></td>
+                                <td width="36%">
+                                    <apex:selectList id="NewIdss" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield30}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIdss" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield21}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:selectList id="NewIdss1" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield29}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIdss1" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield22}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                                         
+                                    <apex:selectList id="NewIdss2" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield28}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIdss2" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield23}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:selectList id="NewIdss3" styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield27}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList id="MeasInputlayoutIdss3" style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield24}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:22.5%" value="{!measurefield25}" />
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield26}" />
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </li>
+                    <li style="cursor: pointer;width: 96%;margin-top:2px;background-color: #E6ECF2;padding: 4px;border-radius: 2px;margin-left: 25px;">
+                        <table width="100%">
+                            <tr>
+                                <td width="22.5%"></td>
+                                <td width="25%"></td>
+                                <td width="10%"><b> If 4 </b></td>
+                                <td width="36%">
+                                    <apex:selectList styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield30}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield21}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:selectList styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield29}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield22}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                                         
+                                    <apex:selectList styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield28}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield23}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:selectList styleclass="slds-input" style="width: max-content" size="1" value="{!measurefield27}">
+                                        <apex:selectOptions value="{!FieldsList}" />
+                                    </apex:selectList>
+                                    
+                                    <apex:selectList style="margin: 2px;width:60%" styleclass="slds-input" size="1" value="{!measurefield24}">
+                                        <apex:selectOptions value="{!MeasuresList}" />
+                                    </apex:selectList>
+                                    <br/>
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:22.5%" value="{!measurefield25}" />
+                                    <apex:outputText styleclass="slds-input"  style="margin: 2px;width:60%" value="{!measurefield26}" />
+                                </td>
+                            </tr>
+                            
+                        </table>
+                    </li>
+                </apex:outputPanel>
+        </ul>
+        
+        
+    </div>
+    <table width="100%">
+            <tr>
+                <td width="50%"></td>
+                <td width="50%"><apex:commandButton value="Save" styleClass="SalesDb" status="status" rerender="valueId" action="{!SaveRow}" style="margin-left:20px;"/></td>
+            </tr>
+        </table>
+</div>
+<script>
+    function removeItem(newField){
+         document.getElementById('RemoveIds').value = newField;
+        removeRow();
+    }
+    function sales(val1,val2,val3,val4,val5,val6){
+        //alert(val1);
+        document.getElementById(val1).style.display = "block";
+        document.getElementById(val2).style.display = "none";
+        document.getElementById(val3).style.display = "none";
+        document.getElementById(val4).style.background = "#2EC2BA";
+        document.getElementById(val5).style.background = "grey";
+        document.getElementById(val6).style.background = "grey";
+        //alert(val1);
+    }
+</script>
+</apex:form> -->
+</apex:page>

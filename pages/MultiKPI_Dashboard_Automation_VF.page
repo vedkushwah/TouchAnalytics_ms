@@ -1,0 +1,51 @@
+<apex:page controller="Dashboard_Automation_Controller" docType="html-5.0" id="pageId" sidebar="false"  showHeader="true" standardStylesheets="false" cache="false" >
+    <apex:stylesheet value="{!URLFOR($Resource.jQueryDataTables, 'css/jquery.dataTables.css')}"/>    
+        <apex:stylesheet value="{!URLFOR($Resource.SLDSv0122, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.GlobalFundsJqueryUI, 'GlobalFundsJqueryUI/CustomEventEditCSS.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.GlobalFundsJqueryUI, 'GlobalFundsJqueryUI/EventJqueryMin.js')}"/>
+       <script type="text/javascript" language="javascript" src="{!URLFOR($Resource.jQueryDataTables, 'js/jquery.dataTables.js')}"></script> 
+       
+       <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="/resources/demos/style.css"/>
+                <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                   <apex:stylesheet value="{!URLFOR($Resource.EdgeClient)}"/> 
+    <apex:styleSheet value="{!URLFOR($Resource.Wave,'Wave/css/EdgeClient.css')}" /> 
+    
+    <style>
+        .Datastyle{
+            background: rgb(46, 194, 186);
+            color: white;
+            height: 30px;
+            margin-bottom: 7px;
+            padding-left: 10px;
+            padding-top: 4px;
+            border-radius: 5px;
+            margin-left: 25px;
+            width: 96%;
+        }
+    </style>    
+    <apex:form >
+    <apex:outputpanel id="valueId">
+        <apex:pageMessages />
+        <apex:actionStatus id="status">
+            <apex:facet name="start">
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 10000; background-color: black;"></div>
+                <center>
+                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 10000; margin: 15% 50%">
+                        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 150px;">
+                            <img src="{!$Resource.NewTouch_Logo}" style="float: left; margin: 8px;" width="20%" height="10%"/ >
+                            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                        </div>
+                    </div>
+                </center>
+            </apex:facet>
+        </apex:actionStatus>
+    </apex:outputpanel>
+    <div>
+    <div class="Datastyle"> Auto Generate Dashboards</div>
+    </div>    
+</apex:form>
+</apex:page>

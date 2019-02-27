@@ -1,0 +1,375 @@
+<apex:component >
+<apex:attribute name="panelId" description="This is the value for the component." type="String"  />
+<apex:attribute name="panelstyle" description="This is the value for the component." type="String"  />
+<style>
+       @media only screen and (max-width: 830px) {
+        .NewSldscard{
+            min-width:160px
+        }      
+    }
+    @media only screen and (min-width: 831px) {
+        .NewSldscard{
+            min-width:180px
+        }      
+    }  
+    @media only screen and (min-width: 900px) {
+        .NewSldscard{
+            min-width:220px
+        }    
+    }
+    @media only screen and (min-width: 1000px) {
+        .NewSldscard{
+            min-width:240px
+        }    
+    }
+     @media only screen and (min-width: 1100px) {
+         .NewSldscard{
+            left: 86%;
+        }     
+    }
+     @media only screen and (min-width: 1200px) {
+         .NewSldscard{
+            left: 81%;
+        } 
+    }
+    @media only screen and (min-width: 1250px) {
+         .NewSldscard{
+            left: 77%;
+        } 
+    }
+    @media only screen and (min-width: 1300px) {
+         .NewSldscard{
+            left: 76%;
+        }    
+    }
+    
+    @media only screen and (min-width: 1350px) {
+         .NewSldscard{
+            top: 20%;
+            left: 75%;
+            
+        } 
+        }    
+   
+     @media only screen and (min-width: 1400px) {
+         .NewSldscard{
+            left: 71%;
+            top:5%;
+        } 
+    }
+    @media only screen and (min-width: 1450px) {
+        .NewSldscard{
+            left: 70%;
+            top:4%;
+        } 
+    }
+    
+     @media only screen and (min-width: 1500px) {
+        .NewSldscard{
+            left: 69%;
+            top:0%;
+        } 
+        
+        
+    }
+</style>
+   <div class="pagespinner" id="IsProcessSpinner" style="display:none">
+            <div class="loading-analytics-container" data-reactid=".3">
+                <svg class="loading-analytics" data-reactid=".3.0" viewBox="-255 347 100 100" x="0px" y="0px">
+                    <path class="bar-1" d="M-207.1,398.7c-1.7-1.9-2.7-4.5-2.6-7.3c0.3-5.1,4.4-9.2,9.5-9.5c2.8-0.1,5.4,0.9,7.3,2.6c0.2,0.2,0.5,0.2,0.7,0l2.8-2.8 c0.2-0.2,0.2-0.5,0-0.7c-2.8-2.6-6.6-4.2-10.7-4c-7.9,0.3-14.3,6.6-14.5,14.5c-0.1,4.1,1.4,7.9,4,10.7c0.2,0.2,0.5,0.2,0.7,0 l2.8-2.8C-206.9,399.2-206.9,398.9-207.1,398.7z" data-reactid=".3.0.0"></path>
+                    <path class="bar-2" d="M-200.2,372c-11.3,0.3-20.2,9.7-19.6,21.1c0.6,10.4,9.2,18.7,19.6,18.9c5.5,0.1,10.5-2.1,14.2-5.6c0.2-0.2,0.5-0.2,0.7,0 l2.9,2.9c0.2,0.2,0.2,0.5,0,0.7c-4.6,4.4-10.9,7.1-17.8,7c-13.4-0.3-24.3-11.2-24.5-24.6c-0.2-13.8,10.8-25.1,24.5-25.4 c0.3,0,0.5,0.2,0.5,0.5v4C-199.7,371.8-199.9,372-200.2,372z" data-reactid=".3.0.1"></path>
+                    <path class="bar-3" d="M-178.9,413.5c-5.3,5.1-12.4,8.3-20.3,8.5c-16.4,0.3-30.2-12.9-30.6-29.3c-0.1-2.8,0.3-5.5,0.9-8c0.1-0.3-0.1-0.5-0.4-0.6 l-3.9-1c-0.3-0.1-0.5,0.1-0.6,0.4c-0.7,2.9-1.1,6-1.1,9.1c0.3,19.1,16,34.5,35.1,34.5c9.5,0,18.1-3.8,24.3-10c0.2-0.2,0.2-0.5,0-0.7 l-2.8-2.8C-178.5,413.4-178.7,413.3-178.9,413.5z" data-reactid=".3.0.2"></path>
+                </svg>
+            </div>
+        </div>
+ <!--@@ Himanshu tak -->
+ 
+   <div class="popup menu selector controlmenu filterAddMenu filter add NewSldscard"  style="{!panelstyle}" id="{!panelId}" >
+    <div class="selectorcontainer-parent w100" >
+        <div class="selectorcontainer clearfix" >
+            <div class="leftselector w50 floatleft clearfix" >
+                <div class="container" >
+                    <div class="buttonbar dark nospaceR clearfix" >
+                        <a class="btn small floatleft slideback slidebackbtn" onclick="slideback();return false;" style="background: #585858;border: none;">
+                            <svg class="icon" >
+                                <use
+                                    xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronleft">
+                                </use>
+                            </svg>
+                        </a>
+                        <label class="small selecteddim selecteddimText" >Add a Filter</label>
+                    </div>
+                </div>
+                <!--Filter Start -->
+                <div class="filterContainer filterSearch" >
+                    <div class="filterPanel filterPanelMeasures" >
+                        <div class="dropdownPanel" >
+                            <div class="dropdownbar" >
+                                <div class="Measuresdropdownbutton dropdownbutton" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')">
+                                    <span >Between</span>
+                                    <svg class="icon dropdownarrow" >
+                                        <use
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevrondown">
+                                        </use>
+                                    </svg>
+                                </div>
+                                <div class="dropdownList popup Measurespopup" style="margin-left: 1%;">
+                                    <div class="item  operator_between menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')" >
+                                        <label>Between</label>
+                                    </div>
+                                    <div class="item operator_greater menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')" >
+                                        <label >Greater Than</label>
+                                    </div>
+                                    <div class="item operator_greater_equal menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')">
+                                        <label >Greater Than Or Equal To</label>
+                                    </div>
+                                    <div class="item operator_less menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')" >
+                                        <label >Less Than</label>
+                                    </div>
+                                    <div class="item operator_less_equal menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')">
+                                        <label >Less Than Or Equal To</label>
+                                    </div>
+                                    <div class="item operator_equals menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')">
+                                        <label >Equals</label>
+                                    </div>
+                                    <div class="item operator_not_equals menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')">
+                                        <label >Does Not Equal</label>
+                                    </div>
+                                    <div class="item operator_is_null menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')">
+                                        <label >Is Null</label>
+                                    </div>
+                                    <div class="item operator_is_not_null menuItems" onclick="dropdownBoxListtoggle(this,'Measurespopup','Measuresdropdownbutton')">
+                                        <label >Is Not Null</label>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                        <div class="container w50 sliderInput floatleft withoutfromTOVal" >
+                               <input type="text" class="rangeinputfrom w100 " value="0" tabindex="-1" />
+                               <!--<md-datepicker ng-model="toDate" md-placeholder="Enter date"></md-datepicker>-->
+                         </div>
+                        <div class="container rangeSelector" >
+                            <div class="selectors values measureslider" >
+                                <div class="container rangeinputs w100 clearfix " >
+                                    <label class="small w50 muted floatleft fromTOVal" >From</label>
+                                    <label class="small w50 muted floatleft TOVal" >To</label>
+                                    
+                                        <div class="container w50 sliderInput floatleft " >
+                                            <input type="text" class="rangeinputfrom w100 minValAll" value="0" tabindex="-1" id="{!panelId}minVal" />
+                                           <!--<md-datepicker ng-model="toDate" md-placeholder="Enter date"></md-datepicker>-->
+                                        </div>
+                                        
+                                        <div class="container w50 sliderInput floatleft " >
+                                             <input type="text" class="rangeinputto w100 maxValAll" value="0" tabindex="-1" id="{!panelId}maxVal"/> 
+                                            <!--<md-datepicker ng-model="FromDate" md-placeholder="Enter date"></md-datepicker>-->
+                                            </div>
+                                        </div>
+
+                                        </div>
+                                    </div>
+                                 
+                                </div>
+                                   <a class="btn medium nospaceR main filter update filterPanelMeasures addMeasures" style="background: #2d93ed;border: none;" onclick="addMeasuresItems();return false;" >Add</a>
+                                   
+                                   <a class="btn medium nospaceR main filter update filterPanelMeasures updateMeasures" style="background: #2d93ed;border: none;" onclick="updatemeasure();return false;">Update</a>
+                                    
+                                <!-- filterPanelMeasures End -->
+                                
+                            <div class="filterPanel filterPanelDimensions" >
+                            <div class="dropdownPanel" >
+                                <div class="dropdownbar" >
+                                    <div class="dropdownbutton DimensionspopupBtn" onclick="dropdownBoxListtoggle(this,'Dimensionspopup','DimensionspopupBtn')" >
+                                        <span >Equals</span>
+                                        <svg class="icon dropdownarrow" >
+                                            <use
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevrondown">
+                                            </use>
+                                        </svg>
+                                    </div>
+                                  
+                                    <div class="dropdownList popup  Dimensionspopup" style="margin-left: 1%;">
+                                        <div class="item operator_equals" onclick="dropdownBoxListtoggle(this,'Dimensionspopup','DimensionspopupBtn')">
+                                            <label >Equals</label>
+                                        </div>
+                                        <div class="item operator_not_equals" onclick="dropdownBoxListtoggle(this,'Dimensionspopup','DimensionspopupBtn')" >
+                                            <label >Does Not Equal</label>
+                                        </div>
+                                        <div class="item operator_contains" onclick="dropdownBoxListtoggle(this,'Dimensionspopup','DimensionspopupBtn')">
+                                            <label >Contains</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container listSelector"  data-list-ready="true">
+                            <!--New ContainsEnd Start -->
+                            <div class="search valuesearch" >
+                                    
+                                    <input type="text" placeholder="Words or characters..." id="filterContains" onkeyup="checklengthContains()"/ >
+                                        <span class="searchhint resnum" ></span>
+                                        <a class="clear hide" data-tooltip="Clear Search" >
+                                            <svg class="icon">
+                                                <use
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#close">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                <!--New ContainsEnd -->    
+                                <div class="search valuesearch" >
+                                    <svg class="icon searchBoxIcon" >
+                                        <use
+                                            xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#search">
+                                        </use>
+                                    </svg>
+                                    <input type="text" placeholder="Search for values..." id="filterDimInput" onkeyup="filterDimensionsRecords()"/ >
+                                        <span class="searchhint resnum" ></span>
+                                        <a class="clear hide" data-tooltip="Clear Search" >
+                                            <svg class="icon">
+                                                <use
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#close">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="selections" >
+                                        <div class="selectedstatus select" style="margin-left: 9px;">
+                                            <input class="expanded-list-all-toggle-checkbox allCheck" type="checkbox"  onclick="itemsDimensionsSelUnSel()"/>
+                                                <span>All</span>
+                                            </div>
+                                            <a class="selectedlist selnum" id="selectedShow" onclick="showselectedfunction()">Show Selected (0)</a>
+                                            <a class="selectedlist" id="selectedhide" onclick="hideselectedfunction()" style="display:none">hide Selected</a>
+                                        </div>
+                                        <div class="values selectors" >
+                                                 <p id="contdimstion" style="color: red;font-size: 15px;">Must be At Least 2 characters</p>
+                                      
+                                                <div class="listheader squeezed" ></div>
+                                                <div id="hideslected" >
+                                                 <div id="DimensionsitemsHtml"></div>
+                                                 </div>
+                                                 
+                                                 <div id="showselected" style="display:none">
+                                                 <div id="DimensionsitemsHtmlhide"></div>
+                                                 </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="filterPanelDimensions"><a class="btn medium nospaceR main filter update updateDimensionsBtn" style="background: #2d93ed;border: none;" onclick="UpdateDimensions()">Update</a> <a class="btn medium nospaceR main filter update addDimensionsBtn" style="background: #2d93ed;border: none;" onclick="addDimensions()">Add</a></div>
+                                    </div>   
+                            <!--Filter End-->
+                            <!-- filterPanelDates -->
+                         <div class="filterPanelDates  container dateSelector">
+                         <div class="date-picker-wrapper old-calendar" style="height: 334px;">
+                            <div class="date-picker selectors values measureslider" >
+                                <div class="tabset date-picker-tab" >
+                                    <ul class="tabbar clearfix" role="tablist" >
+                                        <li id="tab453_tabbtn" class="active tabbutton datetab" role="tab" aria-controls="tab453" aria-selected="true" >
+                                            <div class="tabBtnTitle" >Absolute date range</div>
+                                        </li>
+                                       
+                                    </ul>
+                                    <div id="tab453" role="tabpanel" aria-labelledby="tab453_tabbtn" >
+                                        <div >
+                                            <div class="filterContainer" >
+                                                <div class="filterPanel" >
+                                                    <div class="dropdownPanel" >
+                                                        <div class="dropdownbar" >
+                                                            <div class="dropdownbutton Datedropdownbutton" onclick="dropdownBoxListtoggle(this,'Absolutedate','Datedropdownbutton')">
+                                                                <span class="Absolutedateval">Between</span>
+                                                                <svg class="icon dropdownarrow" >
+                                                                    <use
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevrondown">
+                                                                    </use>
+                                                                </svg>
+                                                            </div>
+                                                            <div class="dropdownList popup Absolutedate" style="margin-left:1%">
+                                                                    <div class="item  operator_between" onclick="dropdownBoxListtoggle(this,'Absolutedate','Datedropdownbutton')">
+                                                                        <label >Between</label>
+                                                                    </div>
+                                                                    <div class="item operator_greater_equal" onclick="dropdownBoxListtoggle(this,'Absolutedate','Datedropdownbutton')" >
+                                                                        <label >Greater Than Or Equal To</label>
+                                                                    </div>
+                                                                    <div class="item operator_less_equal" onclick="dropdownBoxListtoggle(this,'Absolutedate','Datedropdownbutton')">
+                                                                        <label >Less Than Or Equal To</label>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="custom-picker" >
+                                                        <div class="container rangeinputs w100 clearfix">
+                                                            <label class="small w50 muted floatleft fromTOVal">From</label>
+                                                            <label class="small w50 muted floatleft TOVal">To</label>
+                                                            <div class="container w50 sliderInput floatleft">
+                                                                <input class="rangeinputfrom w100 fromDateAll" id="{!panelId}fromDate"  type="date"  />
+                                                                </div>
+                                                                <div class="container w50 sliderInput floatleft">
+                                                                    <input class="rangeinputto w100 toDateAll" id="{!panelId}toDate"  type="date" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>  
+                                                      </div>
+                                                    </div>    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 <div ><a class="btn medium nospaceR main filter update updateDateBtn" onclick="updateDate();return false;" style="background: #2d93ed;border: none;">Update</a><a class="btn medium nospaceR main filter update addNewDateBtn" onclick="addDateCal()" style="background: #2d93ed;border: none;">Add</a></div>
+                            </div>
+                            <!-- End filterPanelDates -->
+                            <div class="container fieldsRecords"  >
+                                <span ></span>
+                                <div class="search dimsearch" >
+                                    <svg class="icon searchBoxIcon" >
+                                                    <use
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#search">
+                                                    </use>
+                                                </svg>
+                                    <input type="text" placeholder="Search for dates and dimensions..." onkeyup="filterRecords()" id="myInput"/>
+                                        <span class="searchhint resnum" ></span>
+                                        <a class="clear hide" >
+                                            <svg class="icon" >
+                                                <use
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#close">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="names selectors" >
+                                        <div class="listheader squeezed" ></div>
+                                        <div class="listheader" >Measures</div>
+                                        <div class="MeasuresLayout" ></div>
+                                      
+                                       <div class="listheader" >Dates</div>
+                                       <div class="datesLayout" ></div>
+                                       
+                                        <div class="listheader" >Dimensions</div>
+                                       <div class="DimensionsLayout" ></div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="rightselector w50 floatleft clearfix" >
+                                <div class="container" >
+                                    <div class="buttonbar dark nospaceR clearfix" >
+                                        <a class="btn small floatleft slideback" >
+                                            <svg class="icon" >
+                                                <use
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronleft">
+                                                </use>
+                                            </svg>
+                                        </a>
+                                        <label class="small selecteddim" ></label>
+                                    </div>
+                                </div>
+                                
+                                <span></span>
+                                
+                            </div>
+                          
+                        </div>
+            
+                    </div>
+                </div>
+</apex:component>

@@ -1,0 +1,144 @@
+<apex:page sidebar="false" showHeader="false">
+
+
+<html style="display:none !important;"><head><script src="/static/111213/js/perf/stub.js" type="text/javascript"></script><link class="user" href="/apexpages/slds/latest/assets/styles/salesforce-lightning-design-system-vf.min.css" rel="stylesheet" type="text/css" /><link class="user" href="/sCSS/41.0/sprites/1510252058000/Theme3/default/gc/EdgeClient.css" rel="stylesheet" type="text/css" /><link class="user" href="/sCSS/41.0/sprites/1510252058000/Theme3/default/gc/EdgeBuilder.css" rel="stylesheet" type="text/css" /><link class="user" href="/sCSS/41.0/sprites/1510252058000/Theme3/default/gc/EdgeMonitor.css" rel="stylesheet" type="text/css" /><script type="text/javascript">
+
+try{(function(){var w=self,l,p,o;if(w&&top){for(;w!==top&&(p=w.parent)&&p!==w&&(o=p.location)&&o.protocol===(l=w.location).protocol&&(o.host===l.host||(p.document&&p.document.domain===w.document.domain));w=p);if(w!==top)throw "";}({f:function(){document.documentElement?document.documentElement.style.display="":(!this.a&&(this.a=10),this.a<1E5&&(window.sfdcRetryShowWindow=this)&&setTimeout("sfdcRetryShowWindow.f()",this.a),this.a*=2)}}.f())})();}catch(e){if(top!==self)top.location=location;else throw e;}//]]></script></head><html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />
+<meta HTTP-EQUIV="Expires" content="Mon, 01 Jan 1990 12:00:00 GMT" />
+
+	<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<title>Salesforce - Developer Edition</title>
+
+<script>
+ var browserVersion = (function(){
+    var ua= navigator.userAgent, tem,
+    M= ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+    if(/trident/i.test(M[1])){
+        tem=  /\brv[ :]+(\d+)/g.exec(ua) || [];
+        return 'IE '+(tem[1] || '');
+    }
+    if(M[1]=== 'Chrome'){
+        tem= ua.match(/\bOPR\/(\d+)/)
+        if(tem!= null) return 'Opera '+tem[1];
+    }
+    M= M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
+    if((tem= ua.match(/version\/(\d+)/i))!= null) M.splice(1, 1, tem[1]);
+    return M.join(' ');
+ })().split(" ");
+
+
+ function transformPathToHash(url) {
+  var query = decodeURIComponent(url.trim());
+  var output = '';
+  var paramStartIndex = query.indexOf('?');
+  if(paramStartIndex >= 0) {
+   query = query.substring(paramStartIndex + 1);
+   var anchorFragment = '';
+   var pair;
+   var params = query.split('&');
+   for (i=0; i<params.length;i++) {
+    pair = params[i]
+    if(pair.substring(0, 5) === 'path=') {
+     anchorFragment = '#' + pair.substring(5);
+    }
+   }
+   output += anchorFragment;
+  }
+  return output;
+ }
+ if (browserVersion[0] === "MSIE" && parseInt(browserVersion[1]) < 10) {
+  window.parent.location = '/analytics/wave/browser-not-supported.apexp';
+ }
+ if(window.location.search.indexOf('path=') >= 0 && !window.location.hash) {
+  window.location.hash = transformPathToHash(decodeURIComponent(window.location.search));
+ }
+</script>
+
+
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="user-scalable=1.0,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width" name="viewport" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<link href="/analytics/wave/web/proto/images/favicon.ico" rel="shortcut icon" />
+
+</head>
+<body class="overflowhide slds-scope wave-scope">
+	<nav id="chrome"></nav>
+	<div class="hide" id="error-overlay"></div>
+	<div id="tab-container"></div>
+
+	
+	<div class="container lens sized overflowhide"></div>
+
+	
+	
+	<div style="position: absolute; left: -200px; font: 12px FontAwesome">hidden</div>
+	<div class="pagespinner"><div class="loading-analytics-container" data-reactid=".3"><svg class="loading-analytics" viewBox="0 0 100 100"><g transform="matrix(1 0 0 -1 0 100)"><rect class="bar" height="20" rx="2" ry="2" width="10" x="20" y="20"><animate attributeName="height" attributeType="XML" begin="0s" calcMode="spline" dur="1000ms" from="20" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1" keyTimes="0;0.25;0.5;0.75;1;1" repeatCount="indefinite" to="20" values="20;8;8;20;20;20"></animate></rect><rect class="bar" height="33" rx="2" ry="2" width="10" x="36" y="20"><animate attributeName="height" attributeType="XML" begin="100ms" calcMode="spline" dur="1000ms" from="33" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1" keyTimes="0;0.25;0.5;0.75;1;1" repeatCount="indefinite" to="33" values="33;8;8;33;33;33"></animate></rect><rect class="bar" height="46" rx="2" ry="2" width="10" x="52" y="20"><animate attributeName="height" attributeType="XML" begin="200ms" calcMode="spline" dur="1000ms" from="46" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1" keyTimes="0;0.25;0.5;0.75;1;1" repeatCount="indefinite" to="46" values="46;8;8;46;46;46"></animate></rect><rect class="bar" height="60" rx="2" ry="2" width="10" x="68" y="20"><animate attributeName="height" attributeType="XML" begin="300ms" calcMode="spline" dur="1000ms" from="60" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1; 0.5 0 0.5 1" keyTimes="0;0.25;0.5;0.75;1;1" repeatCount="indefinite" to="60" values="60;8;8;60;60;60"></animate></rect></g></svg></div></div>
+
+<script src="/jslibrary/1510252054000/insights/InsightsExtDeps.js" type="text/javascript"></script><span id="thePage:j_id5">
+    <script src="/jslibrary/1500492312000/insights/StreamingApi.js" type="text/javascript"></script></span>
+<script src="/lightning/lightning.out.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+if(typeof LC == "undefined" || LC == null)
+ LC = {};
+
+if(typeof LC.labels == "undefined" || LC.labels == null)
+ LC.labels = {};
+</script>
+<script src="/jslibrary/jslabels/1511307438000/en_US.js" type="text/javascript"></script>
+<script src="/jslibrary/1510251804000/insights/EdgeClient.js" type="text/javascript"></script>
+<script>edge.log.showLocalizedLabels = false;</script>
+</body>
+
+
+
+
+
+<script charset="utf-8" type="text/javascript">
+ $(".pagespinner").addClass("hide");
+
+ $(function() {
+  startApp({"app":{"appUser":{"utcOffset":-28800000,"timezone":"America/Los_Angeles","roleId":"00E360000016PmF","_type":"user","language":"eng","isAdmin":true,"preferred_username":"guest@waveanalyticsconsulting.com.demo","locale":"en_US","profilePhotoUrl":"https://analyticscloudconsulting-dev-ed--c.na30.content.force.com/profilephoto/005/T","roleName":"CEO","_uid":"00536000002nLlRAAU","email":"mahesh@analyticscc.com","username":"Guest Uesr"},"integrationUserId":"00536000002nHMoAAM","csrfToken":"VmpFPSxNakF4TnkweE1TMHpNRlF3TlRvd016bzBPQzR5TWpaYSxrQS1QMXFxNDJKeVRBWDZ0LTNnQUpTLFpUWmpaR0Zp","sessionId":"00D36000001HuBz!AQ4AQHyblkVx3e8YKJ1jKEtZNaNMFPbRcQXPQad_1mXfj6npkdGO6himjnWDNW6Pvr21UfloAbh1FeX4ibiVAyT4dmMGiJU5","webWorkerUrl":"/jslibrary/1500492312000/insights/EdgeWorker.js"},"core":{"visualforce":{"urlTemplate":"https://analyticscloudconsulting-dev-ed--analyticscc.na30.visual.force.com/apex/{1}","namespacedUrlTemplate":"https://analyticscloudconsulting-dev-ed--{0}.na30.visual.force.com/apex/{1}"},"resourcesPath":"/analytics/wave/web/proto","remote":true,"cmsMode":"true","maxNumberMeasures":4,"appRoot":"/","imageUrl":"https://analyticscloudconsulting-dev-ed--c.na30.content.force.com/file-asset","header":{"userMenu":[{"displayName":"My Profile","url":"/_ui/core/userprofile/UserProfilePage","openInNewTab":false},{"displayName":"My Settings","url":"/ui/setup/Setup?setupid=PersonalSetup","openInNewTab":false},{"displayName":"Logout","url":"/secur/logout.jsp","openInNewTab":false}],"selectedApp":"Analytics Studio","settingsMenu":[{"displayName":"Setup","url":"/setup/forcecomHomepage.apexp?setupid=ForceCom&retURL=%2Fanalytics%2Fwave%2Fwave.apexp%3Ftsid%3D02u360000019lPL","openInNewTab":false},{"displayName":"Developer Console","url":"https://analyticscloudconsulting-dev-ed.my.salesforce.com/_ui/common/apex/debug/ApexCSIPage","openInNewTab":true}],"helpUrls":{"insights.module.finder":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_home_browse.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.app":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_home_run_apps.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.stepsCustomFlex":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboard_steps_custom_flex.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.dataPrep":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_integrate_data_prep.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.library":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.dataSourceLinks":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboard_data_source_connections.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.inspector":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboards_inspector.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.pages":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboards_pages.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.editSteps":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboards_steps_edit.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.newDashboardDesigner":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboard_build_flex.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.eltComputeExpression":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_integrate_saql_transformation.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.eltMonitoring":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_integrate_data_monitor.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.actionsConfig":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboards_actions_configure.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.home":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_explorer_orient.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.dataManagementHome":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_integrate_data_manager.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.lens":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_explorer_explore_dataset.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.edgemart":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dataset.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.replication":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_integrate_configure_replication_settings.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.edit":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboard_design.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.globalFilters":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboard_widgets_scope_add_flex.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.module.eltExtract":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dataset_builder.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","insights.asset.dashboard.view":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi_dashboard_read.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com"},"secondaryLinks":[{"displayName":"AppExchange","url":"https://appexchange.salesforce.com","openInNewTab":true},{"displayName":"Developer Community","url":"http://developer.force.com","openInNewTab":true},{"displayName":"Success Community","url":"https://success.salesforce.com","openInNewTab":true}],"helpMenu":[{"displayName":"Help","url":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%2Fapex%2Fhtdoor%3Flanguage%3Den_US%26release%3D210.13.6%26instance%3DNA30&site=https%3A%2F%2Fhelp.salesforce.com","openInNewTab":true},{"pageHelp":true,"displayName":"Help for this Page","openInNewTab":true},{"displayName":"Analytics Library","url":"https://login.salesforce.com/services/auth/sso/00D30000000XsfGEAS/HTAuthProvider?startURL=%252Fapex%252Fhtdoor%253Floc%253Dhelp%2526target%253Dbi.htm%2526language%253Den_US%2526release%253D210.13.6%2526instance%253DNA30&site=https%3A%2F%2Fhelp.salesforce.com","openInNewTab":true},{"displayName":"Share Your Thoughts","url":"https://www.getfeedback.com/r/mLA2f8Ja","openInNewTab":true}],"userName":"Guest Uesr","apps":[{"displayName":"Sales","id":"02u360000011Jyi","url":"/home/home.jsp?tsid=02u360000011Jyi","openInNewTab":false},{"displayName":"Service","id":"02u360000011Jyl","url":"/home/home.jsp?tsid=02u360000011Jyl","openInNewTab":false},{"displayName":"Marketing","id":"02u360000011Jym","url":"/home/home.jsp?tsid=02u360000011Jym","openInNewTab":false},{"displayName":"App Launcher","id":"02u360000011Jyr","url":"/app/mgmt/applauncher/appLauncher.apexp?tsid=02u360000011Jyr","openInNewTab":false},{"displayName":"Community","id":"02u360000011Jys","url":"/home/home.jsp?tsid=02u360000011Jys","openInNewTab":false},{"displayName":"Site.com","id":"02u360000011Jyt","url":"/home/home.jsp?tsid=02u360000011Jyt","openInNewTab":false},{"displayName":"Salesforce Chatter","id":"02u360000011Jyu","url":"/home/home.jsp?tsid=02u360000011Jyu","openInNewTab":false},{"displayName":"Content","id":"02u360000011Jyz","url":"/home/home.jsp?tsid=02u360000011Jyz","openInNewTab":false},{"displayName":"Trailhead Data Manager","id":"02u360000011Jz0","url":"/home/home.jsp?tsid=02u360000011Jz0","openInNewTab":false},{"displayName":"Wave Jump Start","id":"02u360000015khk","url":"/home/home.jsp?tsid=02u360000015khk","openInNewTab":false},{"displayName":"Comity Dashboard Builder","id":"02u36000000C2LF","url":"/home/home.jsp?tsid=02u36000000C2LF","openInNewTab":false},{"displayName":"Sales","id":"02u36000000C3r6","url":"/home/home.jsp?tsid=02u36000000C3r6","openInNewTab":false},{"displayName":"Environment Hub","id":"02u36000000WEKb","url":"/0J1?tsid=02u36000000WEKb","openInNewTab":false},{"displayName":"Wave Labs","id":"02u36000000WFKB","url":"/home/home.jsp?tsid=02u36000000WFKB","openInNewTab":false},{"displayName":"Touch Analytics","id":"02u36000000WR3h","url":"/home/home.jsp?tsid=02u36000000WR3h","openInNewTab":false},{"displayName":"Touch Backup","id":"02u36000000Sgp1","url":"/home/home.jsp?tsid=02u36000000Sgp1","openInNewTab":false}]},"crossOrigins":["https://analyticscloudconsulting-dev-ed.my.salesforce.com","https://analyticscloudconsulting-dev-ed.lightning.force.com","https://analyticscloudconsulting-dev-ed--analyticscc.na30.visual.force.com","http://*.salesforce.com:*","https://*.salesforce.com:*","http://*.force.com:*","https://*.force.com:*","http://*.radian6.com:*","https://*.radian6.com:*","https://*.outlook.com","https://*.office365.com","https://*.office.com"],"perms":{"canEditEdgemart":true,"canEditExternalData":true,"canUseWaveTabularDownload":true,"canUseNewExplorer":false,"canUploadWorkflow":true,"canUseDataPrep":true,"isCommonCspEnabled":false,"orgHasWaveGlobalSearch":false,"canTrendReports":false,"canCreateApp":true,"isChatterPBREnabled":false,"canScheduleWorkflow":true,"hasMAD":true,"orgHasUniversalNotificationsEnabled":true,"canCreateEdgemart":true,"canViewWorkflowAndNodes":true,"orgHasCustomChoropleth":true,"canUseWaveNotifications":true,"orgHasWaveNLQ":false,"canUploadExternalData":true,"hasVAD":true,"canUseWaveSparkELT":false,"orgCanScheduleSubHourly":false,"canUseWaveNewScheduler":true,"orgHasWaveHome":false,"canUseFullAnalyticsApp":true,"orgHasWaveSharing":false,"canEditDashboard":true,"isCommonPrmEnabled":false,"canUseAppFrameworkPilotFeature":false,"isInCommunityContext":false,"isWaveCommunitiesEnabled":false,"orgHasWaveNullMeaEnabled":false,"canPostToChatter":true,"userCanCreateWorkflow":false,"canExtractSFDC":true,"canUseXmdEditor":false,"canUseWaveChatter":false,"canUseAppTemplatingFramework":true,"canUseNewDashboardBuilder":true,"orgHasExternalDataConnectors":false,"orgHasReplicationEnabled":false,"orgHasEclairNGApi":true,"canUseDataPool":false,"waveAssetEventsEnabled":true,"userCanDeleteWorkflow":true,"orgHasEinsteinDiscovery":false},"communityId":"000000000000000AAA","documentImageUrl":"https://analyticscloudconsulting-dev-ed--c.na30.content.force.com/servlet/servlet.ImageServer?oid=00D36000001HuBzEAK&id=","maxNumberGroups":4,"nbWebWorkers":4},"libs":{"dataPrepWorker":"/jslibrary/1508969088000/insights/DataPrepWorker.js","jsonworker":"/jslibrary/1500492312000/insights/JsonWorker.js"}});
+ });
+
+ function startApp(configOverrides) {
+  var params = edge.app.urlUtils.values();
+
+  var chromeMode = params.value("mode");
+  var showTitle = params.value("showTitle");
+  var showHeader = params.value("showHeader");
+  var showSharing = params.value("showSharing");
+  var hideOnError = params.value("hideOnError");
+  var height = params.value("height");
+  var formFactor = params.value("formFactor");
+  var params = {
+   chromeMode: chromeMode,
+   showTitle: showTitle,
+   showHeader: showHeader,
+   showSharing: showSharing,
+   hideOnError: hideOnError,
+   height: height,
+   formFactor: formFactor
+  }
+
+  // Add any custom mode styling to body
+  if(chromeMode) {
+   $("body").addClass(chromeMode);
+  }
+
+  edgeChrome = new edge.app.Chrome(configOverrides);
+  edgeChrome.init(params);
+
+  var devMode=false;
+  if (devMode) {
+   $(".perfContainer").remove();
+  }
+
+ }
+</script>
+
+</html></html>
+
+</apex:page>

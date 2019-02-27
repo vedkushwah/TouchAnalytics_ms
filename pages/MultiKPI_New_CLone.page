@@ -1,0 +1,1115 @@
+<apex:page id="pg" docType="html-5.0" sidebar="false" standardStylesheets="false" cache="false" showHeader="true" controller="LightningReports_Test" tabstyle="Touch_Analytics_UI__tab">
+   
+    
+    <apex:stylesheet value="{!URLFOR($Resource.SLDSv0122, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />   
+    <apex:stylesheet value="{!URLFOR($Resource.GlobalFundsJqueryUI, 'GlobalFundsJqueryUI/CustomEventEditCSS.css')}"/>
+     <!-- <apex:styleSheet value="/sCSS/40.0/sprites/1496211442000/Theme3/default/gc/EdgeClient.css" /> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <apex:stylesheet value="{!URLFOR($Resource.EdgeClient)}"/> 
+    <apex:styleSheet value="{!URLFOR($Resource.Wave,'Wave/css/EdgeClient.css')}" />
+     <html>  
+     <head>
+         <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="SalesForce CRM" />
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.css"/>
+        
+        <apex:styleSheet value="/sCSS/40.0/sprites/1496211442000/Theme3/default/gc/EdgeClient.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+        
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.4/angular-material.css"/>
+        <style>
+            [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-    ng-cloak {
+                display: none !important;
+            }
+            .md-datepicker-calendar-pane{
+                z-index:9999;
+            }
+            
+          </style>
+        
+        <script>
+            function addItems(){    
+                
+            var itemsrec='';
+            for(var i=0;i<$(".slds-scrollable li").length;i++){
+                 itemsrec+=(i+1)+' And ';
+            }
+            if(itemsrec!=''){
+                itemsrec=itemsrec.substring(0,itemsrec.length-4);
+            }
+            
+            $(".filterItems").val(itemsrec);
+       }
+        </script>
+         <script>
+            window.twotimer=    function() {
+                eventSrcID=(event.srcElement)?event.srcElement.id:'undefined';
+                eventtype=event.type;
+                status=eventSrcID+' has received a '+eventtype+' event.';
+                
+                if(event.srcElement.innerHTML =='Touch Analytics' || event.srcElement.innerHTML =='Home'){
+                   if(confirm("All of your information will be lost and you will be returned to the Home Screen"))
+                   {
+                     
+                   }else{
+                       return false;
+                   } 
+                   
+                }
+            }
+            document.onclick= twotimer; 
+            </script>
+        
+        
+     </head>
+     <apex:outputpanel id="NewIdsvla">
+        <c:Filter_Header />
+        <c:Filter_Panel panelstyle="opacity: 1;display: inline;top:0px;z-index: 9999;"  />
+       </apex:outputpanel> 
+      <body ng-cloak="ng-cloak" ng-app="demoajax" ng-controller="Demo" style="align:center" id="anguController">               
+                <apex:form id="myForm" >
+                    
+                    
+                     
+                     <apex:inputHidden value="{!SessionId}" id="SessionsId" />
+                     <apex:actionFunction name="CallAction"  action="{!DeleteAll}" rerender="theform"/> 
+                    <style>
+                        .slds .slds-tabs--default__item + .slds-tabs--default__item {
+                            margin-left: 0px;
+                        }
+                        .slds .slds-tabs--default__link {
+                            padding: 0 0px;
+                        }
+                        .slds .slds-col--padded {
+                            padding-right: 10px;
+                            padding-left: 10px;
+                        }
+                        .slds .slds-tabs--default__link{
+                            background-color: whitesmoke;
+                            text-align: center;
+                            Width: 100%;
+                        }   
+                        .slds .slds-tabs--default__item.slds-active .slds-tabs--default__link {
+                            border-color:none;
+                             background-color:#2EC2BA;;
+                            color:#FFF;
+                            border: 1px solid lightgrey;
+                        }
+                    </style>        
+                    <style>      
+                         #opaque {
+                             position: fixed;
+                             top: 0px;
+                             left: 0px;
+                             width: 100%;
+                             height: 100%;
+                             z-index: 1;
+                             display: none;
+                             background-color: gray;
+                             filter: alpha(opacity=60);
+                             opacity: 0.6;
+                             -moz-opacity:0.6;
+                             -khtml-opacity:0.6      
+                         }
+                         * html #opaque {
+                             position: absolute;
+                         }
+                        .tabyes{
+                            display:block;
+                        }
+                        .tabno{
+                            display:none
+                        } 
+                        .slds .slds-tabs--default__link {
+                            background-color: white;
+                            text-align: center;
+                            Width: 100%;
+                            border-radius:4px;
+                            border:1px Solid lightgrey;
+                        }
+                        .slds .slds-tabs--default__link {
+                            max-width: 100%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            display: block;
+                            text-decoration: none;
+                            cursor: pointer;
+                            height: 37px;
+                            line-height: 32px;
+                            padding: 0 8px;
+                            color: #54698d;
+                        }
+                        .slds ::selection {
+                            background: #015ba7 !important;
+                            color: white !important;
+                            text-shadow: none;
+                        }
+                        body #AppBodyHeader {
+                            background-image: none;
+                            font-size: 12px;
+                        }
+                         body .bPageFooter {
+                            border: none;
+                            color: #fff;
+                            font-size: 12px;
+                        }
+                        
+                         .managebutton {
+                               border: 1.35px solid lightgrey; 
+                               
+                           }
+                           .managebutton:hover{
+                               border: 1.35px solid #2EC2BA;
+                           } 
+                           
+
+                    </style>   
+                    <apex:outputpanel id="opaueId">
+                        <apex:actionStatus id="status">
+                            <apex:facet name="start">
+                                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 10000; background-color: black;"></div>
+                                <center>
+                                    <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 10000; margin: 15% 50%">
+                                        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 150px;">
+                                            <img src="{!$Resource.NewTouch_Logo}" width="20%" height = "10%" style="float: left; margin: 8px;" />
+                                            <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                                        </div>
+                                    </div>
+                                </center>
+                            </apex:facet>
+                        </apex:actionStatus>
+                    </apex:outputpanel>
+              
+                     <apex:outputpanel id="NewDB">
+                         <apex:pagemessages />
+                         <script>
+                                if('{!saveIds}' == 'true'){
+                                        closeSingleTemplatePopup();
+                                    }
+                         </script>
+                         <apex:outputpanel rendered="{!if(startpoller == true,true,false)}">  
+                       <apex:actionPoller action="{!NewClone}" reRender="NewDB" interval="5" oncomplete="NewFunctionclone()"/> 
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!DashboardAll}">         
+                        <div class="slds">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+                                    <h2 style="color: #f8f7f7;font-weight: bold;">
+                                        Overview Dashboard Created Successfully&nbsp;&nbsp;&nbsp;<apex:outputlink value="/analytics/wave/wave.apexp" style="font-weight: 300;" target="_blank">Click here to go to Einstein Analytics</apex:outputlink>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputpanel> 
+
+                     <apex:outputpanel rendered="{!TemplateSuccess}">           
+                        <div class="slds">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+                                    <h2 style="color: #f8f7f7;">
+                                        Template Created Successfully 
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputpanel>  
+
+                    <apex:outputpanel rendered="{!DashboardMarketing}">         
+                        <div class="slds">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+                                    <h2 style="color: #f8f7f7;font-weight: bold;">
+                                        Dashboard Created Successfully &nbsp;&nbsp;&nbsp;<apex:outputlink value="/analytics/wave/wave.apexp" target="_blank" style="font-weight: 300;">Click here to go to Analytics Studio</apex:outputlink>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputpanel> 
+                     <apex:outputpanel rendered="{!DashboardAllFail}">         
+                        <div class="slds">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert" style="background:#ec3030;">
+                                    <h2 style="color: #f8f7f7;">
+                                        Overview Dashboard Not Created !!!.... 
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputpanel> 
+                    <apex:outputpanel rendered="{!DashboardMarketingFail}">         
+                        <div class="slds">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert" style="background:#ec3030;">
+                                    <h2 style="color: #f8f7f7;">
+                                        Dashboard Not Created !!!.... 
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                     <apex:outputpanel rendered="{!DashboardAllFails}">         
+                        <div class="slds">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert" style="background:#ec3030;">
+                                    <h2 style="color: #f8f7f7;">
+                                        Overview Dashboard Not Created !!!.... Please select At Least 1 Dimension ,1 DateField and 1 Measure in KPI.
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputpanel>            
+                    <apex:outputpanel rendered="{!DashboardMarketingFails}">         
+                        <div class="slds">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert" style="background-color:#fff000;color:black;font-weight:500" >
+                					<h2  >
+                					        Please wait while your dashboards are generated.
+                					</h2>
+                				</div>
+                            </div>
+                        </div>
+                    </apex:outputpanel>
+                    <div class="slds" style="display:none" id="PleasewaitId">
+                            <div class="slds-notify_container slds-m-top--medium">
+                                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert" style="background-color:#fff000;color:black;font-weight:500" >
+                					<h2  >
+                					        Please wait while your dashboards are generated.
+                					</h2>
+                				</div>
+                            </div>
+                        </div>
+                     <script>
+                                    if('{!newIds}' == 'true'){
+                                        closeGeneratePopup();
+                                    }
+                                    if('{!newIdss}' == 'true'){
+                                        closeGeneratePopupsale();
+                                    }
+                                    
+
+                                </script>
+                    </apex:outputpanel>
+                    <div class="slds" style="background-color:#ccc;box-shadow: 0 0 5px #888;width:95%;margin-left:30px;margin-top:10px;box-shadow: 0 0 5px #888;">
+                        <div class="myapp" style="background-color: white;padding-top:0px;padding-bottom:0px">
+                            <div class="slds-col slds-no-flex">
+                      <div class="slds-page-header" style="border-bottom: 1px solid #d8dde6;background:none;padding: 11px 11px 12px;">
+                        <div class="slds-grid" style="margin-top: 5px;margin-bottom: 5px;">
+                            
+                            <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--4-of-12" Style="margin-top:13px">
+                            
+                                 <!--     <label class="slds-form-element__label" for="text-input-01">Name </label> -->
+                                       <!-- <div class="slds-form-element__control"> 
+                                           	<button type="button" Class=" slds-button--neutral managebutton" onclick="openSingleTemplatePopup()" style="float:left;background: white;font-weight:bold;margin-left:10px;color:rgb(101, 97, 97);line-height:25px" rerender="Forms"  status="status">Save Configuration</button>
+                                        </div> -->
+                                    
+                               
+                            </div>
+                            <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--4-of-12" style="text-align:center">
+                                
+                                
+                                        <div class="slds-form-element__control">
+                                            <img style="cursor:pointer;" src="{!$Resource.Touch_Analytics_New_Logo}" onclick="closefunctions()" width="280" height="300" />
+                                            
+                                        </div>
+                                
+                               
+                            </div>
+                             <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--4-of-12" style="    margin-top: 5px;">
+                                
+                                   <!--   <label class="slds-form-element__label" for="text-input-01">Phone</label> -->
+                                        <!--<div class="slds-form-element__control"> 
+                                               <apex:outputLink value="https://docs.google.com/forms/d/e/1FAIpQLSeVSeLboh4gOU-Vnut_CApMKd5XwrkWjJ95HfUV-8UkBwcUKA/viewform?usp=sf_link" target="_blank" style="float:right;" ><img style="cursor:pointer;" src="{!$Resource.Contactus_Active_Logo}" width="50px" height="15px" /></apex:outputLink>
+                                        </div> -->
+                                
+                                    
+                               
+                            
+                            </div>
+                        </div>   
+                    </div>
+
+                            </div>  
+                        </div>
+                  <!--  </div> -->
+                    
+                   
+                    <!-- Popup generate sucess 
+                    <div class="slds">-->
+                        <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="GeneratePopup" >
+                            <div class="slds-modal__container ">
+                                <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+                                    <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;">
+                                        <span>
+                                            <b style="font-size:15px">Dashboard</b>
+                                        </span>
+                                    </div>   
+                                    <div class="slds-form--horizontal">
+                                        <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Dashboard Name</label>
+                                            <div class="slds-form-element__control">  
+                                                <input type="text" id="DashboardName" class="slds-input" />                                             
+                                                <div id="errordash55" style="padding-left:3px;color: #d74c3b;"></div > 
+                                            </div>
+                                        </div>
+                                        
+                                         <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Select Theme</label>
+                                            <div class="slds-form-element__control">  
+                                                <apex:outputPanel id="outId" >
+                                                <apex:selectList styleclass="slds-select" size="1" value="{!Allval}" id="themeId">
+                                                	<apex:actionSupport event="onchange" action="{!singleDashboardTheme}" rerender="outId"/> 
+                                                	<apex:selectOptions value="{!NewListopt}" />
+                                                </apex:selectList> 
+                                                </apex:outputPanel>
+                                            </div>
+                                        </div>
+                                        
+                                        <!--<div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Select Drill-in #1 Theme</label>
+                                            <div class="slds-form-element__control">  
+                                                <apex:outputPanel id="outId1" >
+                                                <apex:selectList styleclass="slds-select" size="1" value="{!Allvals}" id="themeId1">
+                                                	<apex:actionSupport event="onchange" action="{!singleDashboardThemeSale}" rerender="outId1"/> 
+                                                	<apex:selectOptions value="{!NewListoptSales}" />
+                                                </apex:selectList> 
+                                                </apex:outputPanel>
+                                            </div>
+                                        </div>
+                                        <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Select Drill-in #2 Theme</label>
+                                            <div class="slds-form-element__control">  
+                                                <apex:outputPanel id="outId2" >
+                                                <apex:selectList styleclass="slds-select" size="1" value="{!Allvals}" id="themeId2">
+                                                	<apex:actionSupport event="onchange" action="{!singleDashboardThemeSale}" rerender="outId2"/> 
+                                                	<apex:selectOptions value="{!NewListoptSales}" />
+                                                </apex:selectList> 
+                                                </apex:outputPanel>
+                                            </div>
+                                        </div>
+                                        <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Select Drill-in #3 Theme</label>
+                                            <div class="slds-form-element__control">  
+                                                <apex:outputPanel id="outId3" >
+                                                <apex:selectList styleclass="slds-select" size="1" value="{!Allvals}" id="themeId3">
+                                                	<apex:actionSupport event="onchange" action="{!singleDashboardThemeSale}" rerender="outId3"/> 
+                                                	<apex:selectOptions value="{!NewListoptSales}" />
+                                                </apex:selectList> 
+                                                </apex:outputPanel>
+                                            </div>
+                                        </div>-->
+                                        
+                                        <div class="slds-form-element slds-m-top--medium slds-m-bottom--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Select App</label>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-select_container">
+                                                    <apex:selectList styleclass="slds-select" size="1" value="{!strFloderId}">
+                                                        <apex:selectOptions value="{!getFloderList}"/>
+                                                    </apex:selectList>
+                                                </div>
+                                            </div>
+                                        </div>                
+                                    </div>
+                                    <div class="slds-float--right">
+                                        <div class="slds-x-small-buttons--horizontal">
+                                            <button type="button" class="slds-button slds-button--neutral" status="status" onclick="closeGeneratePopup()" >Cancel</button>
+                                            <!--<button type="button" class="slds-button slds-button--neutral slds-button--brand" status="status" onclick="saveDashboard('{!DashboardName}')" >Submit</button>  -->
+                                            <button type="button" class="slds-button slds-button--neutral slds-button--brand" status="status" onclick="openpurchaseDB()" >Submit</button>  
+                                        </div>    
+                                    </div>   
+                                </div>
+                            </div>  
+                        </div>  
+                  <!--  </div>  -->      
+                         
+                         
+                           <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="GeneratePopup2" >
+                            <div class="slds-modal__container ">
+                                <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+                                    <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;">
+                                        <span>
+                                            <b style="font-size:15px">Dashboard</b>
+                                        </span>
+                                    </div>   
+                                    <div class="slds-form--horizontal">
+                                        <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Dashboard Name</label>
+                                            <div class="slds-form-element__control">  
+                                                <input type="text" id="DashboardNames" class="slds-input" />                                             
+                                                <div id="errordash555" style="padding-left:3px;color: #d74c3b;"></div > 
+                                            </div>
+                                        </div>
+                                        
+                                         <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Select Theme</label>
+                                            <div class="slds-form-element__control">  
+                                                <apex:outputPanel id="outIds" >
+                                                <apex:selectList styleclass="slds-select" size="1" value="{!Allvals}" id="themeIds">
+                                                	<apex:actionSupport event="onchange" action="{!singleDashboardThemeSale}" rerender="outIds"/> 
+                                                	<apex:selectOptions value="{!NewListoptSales}" />
+                                                </apex:selectList> 
+                                                </apex:outputPanel>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-m-top--medium slds-m-bottom--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Select App</label>
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-select_container">
+                                                    <apex:selectList styleclass="slds-select" size="1" value="{!strFloderId}">
+                                                        <apex:selectOptions value="{!getFloderList}"/>
+                                                    </apex:selectList>
+                                                </div>
+                                            </div>
+                                        </div>                
+                                    </div>
+                                    <div class="slds-float--right">
+                                        <div class="slds-x-small-buttons--horizontal">
+                                            <button type="button" class="slds-button slds-button--neutral" status="status" onclick="closeGeneratePopupsale()" >Cancel</button>
+                                            <button type="button" class="slds-button slds-button--neutral slds-button--brand" status="status" onclick="saveDashboardone('{!DashboardName}')" >Submit</button>  
+                                        </div>    
+                                    </div>   
+                                </div>
+                            </div>  
+                        </div>  
+                  <!--
+                    <!-- Popup generate sucess end -->   
+                    
+                    <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="purchaseDashboard" >
+                            <div class="slds-modal__container ">
+                                <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+                                    <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;">
+                                        <span>
+                                            <b style="font-size:15px">purchase Dashboards</b>
+                                        </span>
+                                    </div>   
+                                    <div class="slds-form--horizontal">
+                                        <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Account Balance: </label>
+                                            <div class="slds-form-element__control">  
+                                                <input type="text" id="AccountBalance" class="slds-input" />            
+                                            </div>
+                                        </div>
+                                        
+                                         <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Build Cost: </label>
+                                            <div class="slds-form-element__control"> 
+                                                 <input type="text" id="BuildCost" class="slds-input" /> 
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="slds-form-element slds-m-top--medium slds-m-bottom--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Coupon Code</label>
+                                            <div class="slds-form-element__control">
+                                                      <input type="text" id="CouponCode" class="slds-input" /> 
+                                                
+                                            </div>
+                                        </div> 
+                                        
+                                        <div class="slds-form-element slds-m-top--medium slds-m-bottom--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Coupon value</label>
+                                            <div class="slds-form-element__control">
+                                                      <input type="text" id="CouponCode" class="slds-input" /> 
+                                               
+                                            </div>
+                                        </div>  
+                                        
+                                        <div class="slds-form-element slds-m-top--medium slds-m-bottom--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Total Cost</label>
+                                            <div class="slds-form-element__control">
+                                                      <input type="text" id="TotalCost" class="slds-input" /> 
+                                               
+                                            </div>
+                                        </div>  
+                                        
+                                        <div class="slds-form-element slds-m-top--medium slds-m-bottom--medium">
+                                            <label class="slds-form-element__label" for="inputSample2">Credits Remaining</label>
+                                            <div class="slds-form-element__control">
+                                                      <input type="text" id="CreditsRemaining" class="slds-input" /> 
+                                               
+                                            </div>
+                                        </div>  
+                                    </div>
+                                    <div class="slds-float--right">
+                                        <div class="slds-x-small-buttons--horizontal">
+                                            <button type="button" class="slds-button slds-button--neutral" status="status" onclick="closepurchaseDB()" >Back</button>
+                                            <button type="button" class="slds-button slds-button--neutral slds-button--brand" status="status" onclick="closepurchaseDB()" >Save and Cancel</button>
+                                            <button type="button" class="slds-button slds-button--neutral slds-button--brand" status="status" onclick="" >Purchase and Build Dashboards</button>  
+                                        </div>    
+                                    </div>   
+                                </div>
+                            </div>  
+                        </div>  
+                    
+                     <!-- SingleKPI PopUp Start-->               
+                 <div class="slds-form-element" style="padding-top:0px;">
+                <div class="slds-grid slds-m-top--large" Style="margin-top:0px">     
+                
+                    <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="tstpopupTemplate" >
+                        <div class="slds-modal__container ">
+                            
+                         <apex:outputPanel id="OppEditPopup1">       
+                           <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">  
+                                <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;"><span><b style="font-size:15px">Add Configuration</b></span></div>                           
+                                          <div class="slds-form--horizontal">
+                                        <div class="slds-form-element slds-m-top--medium">
+                                            <label class="slds-form-element__label" for="inputSample2" style="font-weight:bold">Configuration Name</label>
+                                            <div class="slds-form-element__control">  
+                                                 <input type="text" id="SingleName" class="slds-input" style="margin-bottom:10px;" />
+                                            <div id="errorsingle" style="padding-left:3px;color: #d74c3b;"></div >     
+                                            </div>
+                                        </div>
+                                        </div>        
+  
+                         
+                                <div class="slds-modal__footer">
+                                    <div class="slds-x-small-buttons--horizontal">   
+                                         <button type="button" Class="slds-button slds-button--neutral" rerender="MyForm,Forms"  onclick="closeSingleTemplatePopup()" >Cancel</button> 
+                                          <button type="button" class="slds-button slds-button--neutral slds-button--brand"  onclick="singleDashboard()" >Submit</button>   
+                                    </div>    
+                                </div>   
+                            </div>
+                             </apex:outputPanel>
+                        </div>
+                    </div> 
+                   
+                </div>
+            </div> 
+                
+            <!--SingleKPI PopUp End -->                   
+                        <apex:outputPanel id="FormId">
+                         <!--   <div class="slds" style="min-height:500px;max-height: 800px;"> -->  
+                         <div>
+                                <div class="slds-tabs--default">
+                                    <ul class="slds-tabs--default__nav slds-grid slds-wrap" role="tablist" style="background-color: #F0F0F0;padding: 12px;">
+                                        <apex:variable value="{!1}" var="Row"/>
+                                        <apex:repeat value="{!SectionList}" var="line"> 
+                                            <li class="slds-tabs--default__item slds-text-heading--label slds-active slds-col--padded slds-size--1-of-2 slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--3-of-12" title="Tab 1" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-1" id="tab-default-1__item"  onmouseover="showhide3()" onmouseout="showhide4()">{!line}
+                                                
+                                               
+                                                <apex:outputpanel rendered="{!IF(line != '' || line != Null,false,true)}" >
+                                                <img style="cursor:pointer" onclick="openBox('modal','{!HTMLENCODE(line)}')" src="{!HTMLENCODE($Resource.Add)}" width="20px" height="10px" /> 
+                                                </apex:outputpanel>
+                                                
+                                                
+                                                <apex:outputpanel rendered="{!IF(line != '' && line != Null,true,false)}" >
+                                                
+                                               <!--  <img style="cursor:pointer;float:right;padding-top: 7px;display:none" onclick="openGeneratePopup('Sales')" src="{!$Resource.Touch_Symbol_Transparent}" width="21px" height="10px"  id="NotHighlighted{!Row}"/> -->
+                                                 
+                                                  <!--<img style="cursor:pointer;float:right;padding-top: 7px;display:none" onclick="openGeneratePopupSale('Sales')" title="Create Dashboard" src="{!$Resource.TA_Highlighted}" width="21px" height="10px" id="Highlighted{!Row}"/>-->
+                                               
+                                                 <img style="cursor:pointer;float:right;padding-top: 4px;display:none" onclick="confirmKPIDeletesection('modal')" title="Delete" src="{!$Resource.Delete}" width="26px" height="12px" id="Highlighteddel{!Row}"/>
+                                                
+                                                 <img style="cursor:pointer;float:right;padding-top: 7px;display:none" onclick="openBox('modal','{!HTMLENCODE(line)}')" title="Edit" src="{!HTMLENCODE($Resource.Edit)}" width="20px" height="10px" id="Highlightedadd{!Row}" /> 
+                                                
+                                                </apex:outputpanel>
+                                              </a>
+                                               
+                                            </li>
+                                             <apex:variable value="{!Row+1}" var="Row"/>
+                                        </apex:repeat> 
+                                        <apex:variable value="{!1}" var="Rowd"/>
+                                        <apex:repeat value="{!SectionList1}" var="line">
+                                            <li class="slds-tabs--default__item slds-text-heading--label slds-col--padded slds-size--1-of-2 slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--3-of-12 {!if(box1 == true,'tabyes','tabno')}" title="Tab 2" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-2" id="tab-default-2__item"  onmouseover="showhide5()" onmouseout="showhide6()">        
+                                                 
+                                                             {!line} 
+                                                  <apex:outputpanel rendered="{!IF(Line == '',true,false)}" >
+                                                <img style="cursor:pointer" onclick="openBox('modal1','{!Line}')" src="{!$Resource.Add}" width="20px" height="10px" /> 
+                                                </apex:outputpanel>
+                                               
+                                                <apex:outputpanel rendered="{!IF(Line != '',true,false)}" >
+                                                <!--  <img style="cursor:pointer;float:right;padding-top: 7px;display:block" onclick="openGeneratePopup('Success')" src="{!$Resource.Touch_Symbol_Transparent}" width="21px" height="10px" id="Id_NotHighlightedtwo{!Rowd}"/>-->
+                                              <!--    <img style="cursor:pointer;float:right;padding-top: 7px;display:none" onclick="openGeneratePopupSale('Success')" title="Create Dashboard" src="{!$Resource.TA_Highlighted}" width="21px" height="10px"  id="Id_Highlightedtwo{!Rowd}"/>-->
+                                               
+                                                 <img style="cursor:pointer;float:right;padding-top: 4px;display:none" onclick="confirmKPIDeletesection('modal1')" title="Delete" src="{!$Resource.Delete}" width="26px" height="12px" id="Id_Highlightedtwodel{!Rowd}"/>
+                                                 <img style="cursor:pointer;float:right;padding-top: 7px;display:none" onclick="openBox('modal1','{!Line}')" title="Edit" src="{!$Resource.Edit}" width="20px" height="10px" id="Id_Highlightedtwoadd{!Rowd}"/> 
+                                                </apex:outputpanel>
+                                               
+                                                </a> 
+                                                
+                                            </li>
+                                            
+                                                <li class="slds-tabs--default__item slds-text-heading--label slds-col--padded slds-size--1-of-2 slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--3-of-12 {!if(box1 == false,'tabyes','tabno')}" title="Tab 2" role="presentation">
+                                               
+                                                </li>
+                                           
+                                           <apex:variable value="{!Rowd+1}" var="Rowd"/>
+                                        </apex:repeat>
+                                        <apex:variable value="{!1}" var="Rows"/>
+                                        <apex:repeat value="{!SectionList2}" var="line">
+                                            <li class="slds-tabs--default__item slds-text-heading--label slds-col--padded slds-size--1-of-2 slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--3-of-12 {!if(box2 == true,'tabyes','tabno')}" title="Tab 3" role="presentation">
+                                                <a class="slds-tabs--default__link" href="javascript:void(0);" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-3" id="tab-default-3__item"  onmouseover="showhide7()" onmouseout="showhide8()"> 
+                                                   
+                                                             {!line} 
+                                                  <apex:outputpanel rendered="{!IF(Line == '',true,false)}" >
+                                                <img style="cursor:pointer" onclick="openBox('modal2','{!Line}')" src="{!$Resource.Add}" width="20px" height="10px" /> 
+                                                </apex:outputpanel>
+                                             
+                                                <apex:outputpanel rendered="{!IF(Line != '',true,false)}" >
+                                                  <!--   <img style="cursor:pointer;float:right;padding-top: 7px;display:block" onclick="openGeneratePopup('Marketing')" src="{!$Resource.Touch_Symbol_Transparent}" width="21px" height="10px" id="Id_HighlightedNot{!Rows}" /> -->
+                                                  <!--<img style="cursor:pointer;float:right;padding-top: 7px;display:none" onclick="openGeneratePopupSale('Marketing')" title="Create Dashboard" src="{!$Resource.TA_Highlighted}" width="21px" height="10px"  id="Id_Highlighted{!Rows}"/>-->
+                                               
+                                                 <img style="cursor:pointer;float:right;padding-top: 4px;display:none" onclick="confirmKPIDeletesection('modal2')" title="Delete" src="{!$Resource.Delete}" width="26px" height="12px" id="Id_Highlighteddel{!Rows}"/>
+                                                  <img style="cursor:pointer;float:right;padding-top: 7px;display:none" onclick="openBox('modal2','{!Line}')" title="Edit" src="{!$Resource.Edit}" width="20px" height="10px" id="Id_Highlightedadd{!Rows}"/> 
+                                                
+                                                </apex:outputpanel>
+                                               
+                                                </a>
+                                            </li>
+                                              <li class="slds-tabs--default__item slds-text-heading--label slds-col--padded slds-size--1-of-2 slds-small-size--1-of-1 slds-medium-size--2-of-6 slds-large-size--3-of-12 {!if(box2 == false,'tabyes','tabno')}" title="Tab 2" role="presentation">
+                                               
+                                            </li>
+                                            <apex:variable value="{!Rows+1}" var="Rows"/>
+                                        </apex:repeat>
+                                    </ul>
+                                    <div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="boxpopup" >
+                                       
+                                        <div class="slds-modal__container ">
+                                            <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+                                                <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;">
+                                                    <span><b style="font-size:15px">Add Section</b></span>
+                                                </div>   
+                                                <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                                                    <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--1-of-4 slds-grid--align-center slds-text-align--right - col-form-label">
+                                                        <apex:outputtext value="Section Name" styleclass="slds-input" style="border:0px"/>
+                                                    </div>
+                                                    <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--1-of-1 slds-large-size--2-of-4 slds-grid--align-center slds-p-bottom--medium">                             
+                                                        <input type="text" class="slds-input" id="boxtxTopic" placeholder="Enter Section Name"  onKeydown="Javascript: if (event.keyCode==13) SaveBox();"/>   
+                                                        <input type="hidden" class="slds-input" id="boxid" placeholder="Enter Section Name" />  
+                                                        <div id="error1" style="padding-left:3px;color: #d74c3b;"></div > 
+                                                    </div>
+                                                </div>
+                                                <div class="slds-modal__footer">
+                                                    <div class="slds-x-small-buttons--horizontal">
+                                                        <Button type="button" Class="slds-button slds-button--neutral"   onclick="closebox()"  html-formnovalidate="formnovalidate" status="Status2">Close</button>
+                                                        <button type="button" class="slds-button slds-button--neutral slds-button--brand" onClick="SaveBox(); " status="Status2" >Save</button>  
+                                                    </div>    
+                                                </div>   
+                                            </div>
+                                        </div>
+                                    </div>      
+                                    
+                                     <apex:outputPanel id="tab_default1">
+                                        <div id="tab-default-1" style="padding: 0 0;" class="slds-tabs--default__content slds-show" role="tabpanel" aria-labelledby="tab-default-1__item">
+                                            <apex:repeat value="{!SectionList}" var="line">
+                                            <apex:outputpanel rendered="{!IF(line != '',true,false)}" id="Id35">
+                                                   <c:KPI_Component myValue="{!SessionId}" DeleteValues="{!DeleteAllvalues}"/> 
+                                                    
+                                                </apex:outputpanel> 
+                                                 
+                                              
+                                            </apex:repeat>
+                                        </div>       
+                                    </apex:outputPanel> 
+                                    
+                                    <apex:outputPanel id="tab_default2" >
+                                        <div id="tab-default-2" style="padding: 0 0;" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                                            <apex:repeat value="{!SectionList1}" var="line">
+                                                <apex:outputpanel rendered="{!IF(line != '' ,true,false)}">
+                                                    <c:KPI_Component_Three myValue="{!SessionId}" DeleteValues1="{!DeleteAllvalues1}"/>
+                                                </apex:outputpanel>
+                                              
+                                                
+                                            </apex:repeat>
+                                        </div>
+                                    </apex:outputPanel>  
+                                    <apex:outputPanel id="tab_default3" >  
+                                        <div id="tab-default-3" style="padding: 0 0;" class="slds-tabs--default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+                                            <apex:repeat value="{!SectionList2}" var="line">
+                                                <apex:outputpanel rendered="{!IF(line != '' ,true,false)}">
+                                                    <c:KPI_Component_Two myValue="{!SessionId}" DeleteValues2="{!DeleteAllvalues2}"/>
+                                                </apex:outputpanel>
+                                                
+                                            </apex:repeat>
+                                        </div>
+                                    </apex:outputPanel>                     
+                                </div>
+                            </div>
+                            
+                        </apex:outputPanel>
+                        
+                    <apex:outputpanel id="NewIds" >   
+                    <div class="myapp" style="background-color: white;margin-top:0px;padding-top:10px;padding-bottom:10px">
+                            <div class="slds-col slds-no-flex">
+                                <div class="slds-button-group" role="group" style="display:block"> 
+                                    <table>
+                                        <tr>
+                                        
+                                            <td width="30%">   
+                                             </td>
+                                                   
+                                            <td width="40%">
+                                            <apex:outputpanel rendered="{!Booleanvalues}" >
+                                                <center><button type="button" Class=" slds-button--neutral managebutton" id="button12" onclick="openGeneratePopup('Overiew')" style="color:rgb(101, 97, 97);background:white;font-weight:bold;line-height:25px" disabled="true">Create Dashboard </button></center>  
+                                            </apex:outputpanel>
+                                            <apex:outputpanel rendered="{!!Booleanvalues}" >   
+                                                <center><button type="button" Class="slds-button--neutral managebutton"  onclick="openGeneratePopup('Overiew')" style="color:rgb(101, 97, 97);background:white;font-weight:bold;line-height:25px" >Create Dashboard </button></center>                                           
+                                            </apex:outputpanel>
+                                            </td>
+                                            
+                                            <td width="30%">   
+                                            <!--     <apex:commandbutton styleClass="slds-button slds-button--neutral" action="{!CloneFromPrevious}" style="float:left;background-color: #ccc;color: rgb(77, 77, 77);;font-weight:bold" rerender="myForm" value="Clone From Previous Run" status="status"/>
+                                             -->
+                                            </td>
+                                        </tr>
+                                    </table> 
+                                    <center>
+                                        
+                                        
+                                        
+                                    </center>
+                                   
+                                </div>
+                            </div>  
+                        </div>
+                        </apex:outputpanel>
+                    </div>
+                    
+                    <!--  Script Starts -->
+                     <script>
+                        var j$ = jQuery.noConflict();
+                    </script>
+                   
+                    <script>     
+                        function openGeneratePopup(name){
+                             
+                            document.getElementById("hiddenDashboardName").value = name;  
+                            document.getElementById("DashboardName").value = '';
+                            
+                            document.getElementById("GeneratePopup").className = document.getElementById("GeneratePopup").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )
+                            
+                            singleDashboardTheme();
+                            showBackDrop();
+                            return true;
+                        }
+                        
+                        
+                        function openGeneratePopupSale(name){
+                            document.getElementById("hiddenDashboardName").value = name;
+                            document.getElementById("DashboardNames").value = '';
+                            
+                            document.getElementById("GeneratePopup2").className = document.getElementById("GeneratePopup2").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )
+                            singleDashboardThemeSale();
+                            showBackDrop();
+                            return true;
+                        }
+                         function closeGeneratePopupsale(){      
+                            document.getElementById("GeneratePopup2").className = document.getElementById("GeneratePopup2").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+                            hideBackDrop();
+                            return false;
+                        } 
+                        
+                        
+                        function openpurchaseDB(){
+                        	document.getElementById("purchaseDashboard").className = document.getElementById("purchaseDashboard").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )
+                            showBackDrop();
+                            return true;
+                        }
+                        
+                        
+                        function closepurchaseDB(){
+                        	document.getElementById("purchaseDashboard").className = document.getElementById("purchaseDashboard").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+                            hideBackDrop();
+                            return false;
+                        }
+                
+                        function closeGeneratePopup(){      
+                            document.getElementById("GeneratePopup").className = document.getElementById("GeneratePopup").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+                            hideBackDrop();
+                            return false;
+                        } 
+                        function openSingleTemplatePopup(){
+                            document.getElementById("SingleName").value = ''; 
+                            document.getElementById("tstpopupTemplate").className = document.getElementById("tstpopupTemplate").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )
+                            showBackDrop();
+                            return true;
+                        }
+                        
+                        function closeSingleTemplatePopup(){      
+                            document.getElementById("tstpopupTemplate").className = document.getElementById("tstpopupTemplate").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+                            hideBackDrop();
+                            return false;
+                        } 
+                        function hideBackDrop(){    
+                            document.getElementById("backdropDiv").className =document.getElementById("backdropDiv").className.replace( /(?:^|\s)slds-modal-backdrop--open(?!\S)/g , ' slds-modal-backdrop--closed' )
+                            return false;
+                        }
+                        function showBackDrop(){ 
+                            document.getElementById("backdropDiv").className =document.getElementById("backdropDiv").className.replace( /(?:^|\s)slds-modal-backdrop--closed(?!\S)/g , ' slds-modal-backdrop--open' )
+                            return false;
+                        }
+                    </script>
+                    <script> 
+                        function openBox(box,value){
+                            //alert("Hiiiii1");
+                            document.getElementById("boxtxTopic").value = value;
+                            document.getElementById("boxvalues").value = value;
+                            
+                            document.getElementById("boxid").value = box;
+                            document.getElementById("boxpopup").className = document.getElementById("boxpopup").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' );
+                            
+                            //showBackDrop();
+                            var input = $("#boxtxTopic");
+                            //alert("Hiiiii1");
+                            var len = input.val().length;
+                            input[0].focus();
+                            input[0].setSelectionRange(len, len);
+                            if(box='modal'){
+                                document.getElementById("error1").innerHTML = ""
+                                newFunctionvalue();
+                            }
+                             if(box='modal1'){
+                                 document.getElementById("error1").innerHTML = ""
+                                newFunctionvalue1();
+                            }
+                             if(box='modal2'){
+                                 document.getElementById("error1").innerHTML = ""
+                                newFunctionvalue2();
+                            }
+                            return true;
+                            
+                        }
+                        function closebox(){       
+                            document.getElementById("boxpopup").className =
+                            document.getElementById("boxpopup").className.replace(/(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+                            hideBackDrop();
+                            return true;
+                        } 
+                       
+                    </script>
+                   
+                     <script>
+                           window.onload=function()
+                           {
+                             //alert('First');
+                             CallAction();
+                           };
+                   </script>
+                   
+                 
+                    
+                    <Script>
+                     function confirmKPIDeletesection(box) {
+                             
+                             if(confirm('Do you want to proceed?') ) {
+                             document.getElementById("boxvalue").value = box;
+                             Removesections();
+                        }
+                        returnfalse;
+                        }
+                    </Script>
+                     <script type="text/javascript">
+                        function SaveBox(){ 
+                            var KPISection = document.getElementById('boxtxTopic').value;
+                            var boxid = document.getElementById('boxid').value;
+                            if(KPISection != ''){   
+                                document.getElementById('hiddensection').value= KPISection;
+                                document.getElementById('boxvalue').value = boxid;
+                                document.getElementById("error1").innerHTML = "";
+                                boxTopics();
+                            }
+                            else{
+                                document.getElementById("error1").innerHTML = "Error: You must enter a value";
+                            }
+                        }
+                        function saveDashboard(Name){
+                            var Name = document.getElementById("DashboardName").value;
+                            if(Name != ''){
+                            var boardname = document.getElementById("hiddenDashboardName").value;
+                            document.getElementById("hiddenDashboardNames").value = Name;
+                            if(boardname == 'Overiew'){
+                                boxOveriew();
+                            }
+                            if(boardname == 'Marketing'){
+                                boxMarketing();
+                            }
+                            if(boardname == 'Sales'){
+                                Sales();
+                            }
+                            if(boardname == 'Success'){
+                                Success();
+                            }
+                            document.getElementById("errordash55").innerHTML = "";
+                            }
+                            else{
+                                document.getElementById("errordash55").innerHTML = "Error: You must enter a value";   
+                            }                        
+                        }
+                        function saveDashboardone(Name){
+                            var Name = document.getElementById("DashboardNames").value;
+                            if(Name != ''){
+                            var boardname = document.getElementById("hiddenDashboardName").value;
+                            document.getElementById("hiddenDashboardNames").value = Name;
+                            if(boardname == 'Overiew'){
+                                boxOveriew();
+                            }
+                            if(boardname == 'Marketing'){
+                                boxMarketing();
+                            }
+                            if(boardname == 'Sales'){
+                                Sales();
+                            }
+                            if(boardname == 'Success'){
+                                Success();
+                            }
+                            document.getElementById("errordash555").innerHTML = "";
+                            }
+                            else{
+                                document.getElementById("errordash555").innerHTML = "Error: You must enter a value";   
+                            }                        
+                        }
+                        
+                        function singleDashboard(){
+                            var KPISection = document.getElementById('SingleName').value;
+                            if(KPISection != ''){   
+                                document.getElementById('hiddenSingleName').value= KPISection;          
+                                document.getElementById("errorsingle").innerHTML = "";              
+                                Save();
+                            }
+                            else{
+                                if(KPISection == ''){
+                                document.getElementById("errorsingle").innerHTML = "Error: You must enter a value";
+                                }               
+                            }
+                                          
+                        } 
+                       
+                     function showhide3()
+                         {
+                            //var divval = document.getElementById('Highlighted1');
+                            var divvadel = document.getElementById('Highlighteddel1');
+                            var divvaadd = document.getElementById('Highlightedadd1');
+                     
+                       //divval.style.display = "block";
+                       divvadel.style.display = "block";
+                       divvaadd.style.display = "block";
+                     
+                      } 
+                      function showhide4()
+                         {
+                            //var divval = document.getElementById('Highlighted1');
+                            var divvadel = document.getElementById('Highlighteddel1');
+                            var divvaadd = document.getElementById('Highlightedadd1');
+                     
+                       //divval.style.display = "None";
+                       divvadel.style.display = "None";
+                       divvaadd.style.display = "None";
+                     
+                      } 
+                      
+                      
+                      function showhide5()
+                         {
+                            //var div = document.getElementById('Id_Highlightedtwo1');
+                            var divvadel = document.getElementById('Id_Highlightedtwodel1');
+                            var divvaadd = document.getElementById('Id_Highlightedtwoadd1');
+                     
+                       //div.style.display = "block";
+                       divvadel.style.display = "block";
+                       divvaadd.style.display = "block";
+                     
+                      } 
+                      function showhide6()
+                         {
+                            //var divval = document.getElementById('Id_Highlightedtwo1');
+                            var divvadel = document.getElementById('Id_Highlightedtwodel1');
+                            var divvaadd = document.getElementById('Id_Highlightedtwoadd1');
+                     
+                       //divval.style.display = "None";
+                       divvadel.style.display = "None";
+                       divvaadd.style.display = "None";
+                     
+                      } 
+                      
+                      
+                      function showhide7()
+                         {
+                            //var divval = document.getElementById('Id_Highlighted1');
+                            var divvadel = document.getElementById('Id_Highlighteddel1');
+                            var divvaadd = document.getElementById('Id_Highlightedadd1');
+                     
+                       //divval.style.display = "block";
+                       divvadel.style.display = "block";
+                       divvaadd.style.display = "block";
+                     
+                      } 
+                      function showhide8()
+                         {
+                            //var divval = document.getElementById('Id_Highlighted1');
+                            var divvadel = document.getElementById('Id_Highlighteddel1');
+                            var divvaadd = document.getElementById('Id_Highlightedadd1');
+                     
+                       //divval.style.display = "None";
+                       divvadel.style.display = "None";
+                       divvaadd.style.display = "None";
+                     
+                      } 
+                      
+                      function closefunctions(){
+                           if(confirm('All of your information will be lost and you will be returned to the Home Screen') ){ 
+                    		  window.open('/apex/TouchAnalytics_UI','_self');                               
+                    	 } 
+                    	
+                     return false;
+                    }
+                    
+                    function NewFunctionclone(){
+                        document.getElementById("PleasewaitId").style.display = "none";
+                    }
+                    function NewPleasewait(){
+                        document.getElementById("PleasewaitId").style.display = "block";
+                    }
+                    
+                    
+                    </script>
+                    <script>
+                        j$('.slds-tabs--default__link,.slds-tabs--scoped__link').click(function(){
+                            j$(this).parent().parent().find('.slds-tabs--default__link,.slds-tabs--scoped__link').attr('aria-selected','false');
+                            j$(this).attr('aria-selected','true');
+                            j$(this).parent().parent().find('.slds-tabs--default__link,.slds-tabs--scoped__link').attr('tabindex','-1');
+                            j$(this).attr('tabindex','0');
+                            j$(this).parent().addClass('slds-active').siblings().removeClass('slds-active');
+                            j$(this).parent().parent().parent().find('.'+j$(this).parent().parent().parent().find('.slds-tabs--default__content,.slds-tabs--scoped__content')[0].classList[0]).removeClass('slds-show').addClass('slds-hide');
+                            j$(this).parent().parent().parent().find('#'+j$(this).attr('aria-controls')).removeClass('slds-hide').addClass('slds-show');
+                        }); 
+                    </script>         
+                    <apex:actionFunction name="Removesections"  rerender="myForm" action="{!Removesection}" status="status"/>  
+                    <input type="hidden" name="hiddenSingleName" id="hiddenSingleName" />
+                    <input type="hidden" name="boxvalues" id="boxvalues" />
+                    <apex:actionFunction name="Save" action="{!Save}"  rerender="NewDB" status="status" />
+                    <input type="hidden" name="hiddenDashboardName" id="hiddenDashboardName" />
+                    <input type="hidden" name="hiddenDashboardNames" id="hiddenDashboardNames" />   
+                    <apex:actionFunction name="boxOveriew" action="{!SubmitOverview}"  rerender="NewDB" status="status" oncomplete="NewPleasewait()"/>
+                    <apex:actionFunction name="boxMarketing" action="{!SubmitMarketing}"  rerender="NewDB" status="status"/>
+                    <apex:actionFunction name="Sales" action="{!SubmitSales}"  rerender="NewDB" status="status"/>
+                    <apex:actionFunction name="Success" action="{!SubmitSuccess}"  rerender="NewDB" status="status"/>
+                    <input type="hidden" name="hiddensection" id="hiddensection" />
+                    <input type="hidden" name="boxvalue" id="boxvalue" />
+                    <apex:actionFunction name="boxTopics" id="boxTopics" action="{!SaveSection}"  rerender="myForm,RefreshIds" status="status"/>      
+                    <input type="hidden" name="hiddenKPIDash" id="hiddenKPIDash" />
+                    <apex:actionFunction name="newTopicsDash" id="newTopicsDash" action="{!SubmitSales}" rerender="DashId" status="status"/>
+                     <apex:actionFunction name="CallActions"  action="{!previousValue}" rerender="Forms"/> 
+                     <apex:actionFunction name="singleDashboardThemeSale"  action="{!singleDashboardThemeSale}" rerender="GeneratePopup2"/>
+                     <apex:actionFunction name="singleDashboardTheme"  action="{!singleDashboardTheme}" rerender="outId" status="status"/>
+       
+                </apex:form>
+     </body>
+     <script>
+     </script>
+     </html>
+           
+</apex:page>

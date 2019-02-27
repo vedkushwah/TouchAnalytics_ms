@@ -1,0 +1,749 @@
+<apex:page controller="SettingsController"  docType="html-5.0" standardstylesheets="false" sidebar="false" showheader="true" tabstyle="Touch_Analytics_UI__tab">   
+
+
+    
+    <script async="true">
+        function createRemoteSite(){
+            var binding = new XMLHttpRequest();  
+            var urls='{!JSENCODE(BaseUrl)}';
+            var request = '<?xml version="1.0" encoding="utf-8"?>' +
+                            '<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'+
+                                '<env:Header>' +
+                                    '<urn:SessionHeader xmlns:urn="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<urn:sessionId>{!$Api.Session_ID}</urn:sessionId>' +
+                                    '</urn:SessionHeader>' +
+                                '</env:Header>' +
+                                '<env:Body>' +
+                                    '<createMetadata xmlns="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<metadata xsi:type="RemoteSiteSetting">' +
+                                            '<fullName>ScheduleBackUpEndpoint</fullName>' +
+                                            '<disableProtocolSecurity>false</disableProtocolSecurity>' +
+                                            '<isActive>true</isActive>' +
+                                            '<url>'+urls+'</url>' +
+                                        '</metadata>' +
+                                    '</createMetadata>' +
+                                '</env:Body>' +
+                            '</env:Envelope>';
+            binding.open('POST', 'https://{!URLENCODE(HostUrl)}/services/Soap/m/31.0',true);  
+            binding.setRequestHeader('SOAPAction','""');
+            binding.setRequestHeader('Content-Type', 'text/xml');
+            binding.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var parser = new DOMParser();
+                    var doc  = parser.parseFromString(this.response, 'application/xml');
+                }
+            }
+            binding.send(request);
+            RemoteSite();
+            
+        }
+        
+        function createHostRemoteSite(){
+            var binding = new XMLHttpRequest();  
+            var urls='{!HostUrl}';
+            var request = '<?xml version="1.0" encoding="utf-8"?>' +
+                            '<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'+
+                                '<env:Header>' +
+                                    '<urn:SessionHeader xmlns:urn="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<urn:sessionId>{!$Api.Session_ID}</urn:sessionId>' +
+                                    '</urn:SessionHeader>' +
+                                '</env:Header>' +
+                                '<env:Body>' +
+                                    '<createMetadata xmlns="http://soap.sforce.com/2006/04/metadata">' +
+                                        '<metadata xsi:type="RemoteSiteSetting">' +
+                                            '<fullName>CompleteBackUpEndpoint</fullName>' +
+                                            '<disableProtocolSecurity>false</disableProtocolSecurity>' +
+                                            '<isActive>true</isActive>' +
+                                            '<url>https://'+urls+'</url>' +
+                                        '</metadata>' +
+                                    '</createMetadata>' +
+                                '</env:Body>' +
+                            '</env:Envelope>';
+            binding.open('POST', 'https://{!HostUrl}/services/Soap/m/31.0',true);
+            binding.setRequestHeader('SOAPAction','""');
+            binding.setRequestHeader('Content-Type', 'text/xml');
+            binding.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var parser = new DOMParser();
+                    var doc  = parser.parseFromString(this.response, 'application/xml');
+                }
+            }
+            binding.send(request);
+            alert('Remote Site Settings added Successfully');
+        }
+        
+        function openBox(){
+		document.getElementById("boxpopup").className = document.getElementById("boxpopup").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' );
+		showBackDrop();
+		
+		return false;
+		
+	}
+	function closebox(){       
+		document.getElementById("boxpopup").className =
+		document.getElementById("boxpopup").className.replace(/(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+		hideBackDrop();
+		return true;
+	}
+        
+    </script>
+    
+    
+    
+    
+    <html>
+    <apex:form id="form">
+        <head> 
+            <apex:stylesheet value="{!URLFOR($Resource.SLDSv0122, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+            <apex:stylesheet value="{!URLFOR($Resource.SLDS090, 'assets/styles/salesforce-lightning-design-system-vf.css')}" /> 
+  		      <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" /> 
+  		      <apex:stylesheet value="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" /> 
+  			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+
+  			<apex:includeScript value="{!URLFOR($Resource.Jquery, '/JQuery/jquery.min.js')}"/>
+  			<apex:includeScript value="{!URLFOR($Resource.Jquery, '/JQuery/bootstrap.min.js')}"/> 
+  			  <apex:stylesheet value="{!URLFOR($Resource.CSS, '/CSS/bootstrap.min.css')}"/> 
+  			
+        </head> 
+        
+        <style>
+		.zen .zen-tabMenu a {
+	    font-size: 13px;
+	    }
+	    #userNavLabel {
+	    font-size: 11px;
+	    }
+	    #tsidButton{
+	    font-size: 14px;
+	    }
+	    .headerSearchLeftRoundedCorner #phSearchInput {
+	    font-size: 12px;
+	    }
+	    .navLinks .linkElements>a {
+	    font-size: 11px;
+	    }
+	    #tsidButton {
+	    min-width: 120px;
+	    }
+	
+		.sidebarCell, #sidebarDiv {
+		width: 220px !important;
+		}
+		#sidebarDiv .menuButtonButton {
+		font-size: 0.8em !important;
+		}
+		#sidebarDiv .sidebarModuleHeader h2 {
+		font-size: 0.85em !important;
+		font-weight: bold !important;
+		margin-bottom: 0px !important;
+		}     
+		#sidebarDiv .sidebarModule .sidebarModuleBody {
+		padding: 12px 9px 10px !important;
+		}
+		a {
+		color: #333435 !important;
+		}
+		#sidebarDiv .recentItemModule .sidebarModuleBody {
+		padding: 6px 5px 10px 4px  !important;
+		}
+		#sidebarDiv .sidebarModule .sidebarModuleBody {
+		padding: 4px 5px 3px 0px !important;
+		}
+		#sidebarDiv .menuButtonMenu a {
+			padding-top: 2px !important;
+			font-size: 0.85em !important;
+		}
+		#sidebarDiv .menuButtonMenu {
+			width: 198px !important;
+		}
+		.form-horizontal .control-label {
+		font-size:12px !important;
+		}
+		.page-header {
+			padding-bottom: 2px;
+			margin: 10px 0 6px;
+			border-bottom: 1px solid #eee;
+		}  
+		#DashBoardRequired{
+		display:none;
+		}      
+        
+        </style>
+            <apex:pageMessages ></apex:pageMessages>
+            <apex:actionFunction name="RemoteSite" action="{!remoteSiteSettings}" rerender="form,opId" status="status1"/>
+         <script>     
+        function openGeneratePopup(name){
+            document.getElementById("GeneratePopup").className = document.getElementById("GeneratePopup").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )
+            showBackDrop();
+            return true;
+        }
+
+        function closeGeneratePopup(){      
+            document.getElementById("GeneratePopup").className = document.getElementById("GeneratePopup").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+            hideBackDrop();
+            return false;
+        }  
+        function openDashboardPopup(id,Values,Values1){
+            document.getElementById("DashboardPopup").className = document.getElementById("DashboardPopup").className.replace( /(?:^|\s)slds-fade-in-closed(?!\S)/g , ' slds-fade-in-open' )
+            if(id != '' && id != null){
+            document.getElementById('dashboardId').value= id;
+            document.getElementById('Values').value= Values;
+           document.getElementById('Valuesone').value= Values1;
+            dashboardCal();
+            } 
+            showBackDrop();
+            return true;
+        }
+
+        function closeDashboardPopup(){      
+            document.getElementById("DashboardPopup").className = document.getElementById("DashboardPopup").className.replace( /(?:^|\s)slds-fade-in-open(?!\S)/g , ' slds-fade-in-closed' )
+            hideBackDrop();
+            return false;
+        }         
+        function hideBackDrop(){    
+            document.getElementById("backdropDiv").className =document.getElementById("backdropDiv").className.replace( /(?:^|\s)slds-modal-backdrop--open(?!\S)/g , ' slds-modal-backdrop--closed' )
+            return false;
+        }
+        function showBackDrop(){ 
+            document.getElementById("backdropDiv").className =document.getElementById("backdropDiv").className.replace( /(?:^|\s)slds-modal-backdrop--closed(?!\S)/g , ' slds-modal-backdrop--open' )
+            return false;
+        }
+        
+	
+	
+
+        
+    </script>
+    
+   
+ 
+<apex:actionfunction name="dashboardCal"  id="dashboardCal" action="{!dashboardCal}" rerender="opp1" status="status1"/>
+<input type="hidden" id="dashboardId" name="dashboardId"/>
+<input type="hidden" id="Values" name="Values"/>
+<input type="hidden" id="Valuesone" name="Valuesone"/>
+<div class="slds">
+
+	<apex:actionStatus id="status1">
+	    <apex:facet name="start" >
+	        <div style="display:block;position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 1000; background-color: black;">
+	        </div>
+	        <center>
+	        <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+	        <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+	             <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+	             <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+	        </div>
+	        </div>
+	        </center>
+	     </apex:facet>
+	</apex:actionStatus>
+
+<apex:outputPanel rendered="{!dashboardCreated}">	
+<div class="slds-notify_container slds-m-around--large">
+  <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+    <h2>
+      Dashboard Created Successfully. &nbsp;&nbsp;&nbsp;<apex:outputlink value="/analytics/wave/wave.apexp" style="color:white !important;" target="_blank">Click here to go to Einstein Analytics</apex:outputlink>  
+    </h2> 
+  </div>
+</div>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!dashboardNotCreated}">	
+<div class="slds-notify_container slds-m-around--large">
+  <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+    <h2>Dashboard Not Created.</h2>
+  </div>
+</div>
+</apex:outputPanel>
+ 
+	<div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="GeneratePopup" >
+		<div class="slds-modal__container ">
+			<div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+			   <apex:outputPanel rendered="{!dashBoardSuccessMessage}">
+				<div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;">
+					<span>
+						<b style="font-size:15px">Dashboard backup created succesfully</b>
+					</span>
+	    		</div>   
+	           </apex:outputPanel>
+	    
+				<div class="slds-float--right">
+					<div class="slds-x-small-buttons--horizontal">
+						<button type="button" class="slds-button slds-button--neutral slds-button--brand" status="status" onclick="closeGeneratePopup()" >Close</button>
+						  
+					</div>    
+				</div>   
+			</div>
+		</div>  
+	</div> 
+	
+	<div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="boxpopup" >
+                                        <div class="slds-modal__container ">
+                                            <div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+                                                <div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;">
+                                                    <span><b style="font-size:15px">Update Backups To Keep</b></span>
+                                                </div>   
+                                                <div>
+                    								<div class="slds-grid slds-wrap slds-grid--pull-padded">
+                        								<div class="slds-p-horizontal--small slds-medium-size--1-of-2-align--left slds-text-align--left - col-form-label">Backups To Keep</div>
+                        									<div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--2-of-2 slds-p-bottom--medium" style="width:70%">
+                            									<apex:inputText value="{!numberOfBackups}" styleClass="slds-input" />
+                            							
+                        									</div>
+                    									</div>	    		
+	    											</div>
+                                                <div class="slds-modal__footer" style="padding: 5px;text-align: center;">
+                                                    <div class="slds-x-small-buttons--horizontal  slds-medium-size-align--center">
+                                                        <apex:commandButton value="Update" action="{!scheduleNumberOfBackups}" styleClass="slds-button slds-button--neutral slds-button--brand"></apex:commandButton>  
+                                                        <apex:commandButton value="Close" onclick="closebox()" styleClass="slds-button slds-button--neutral slds-button--brand"></apex:commandButton> 
+                                                    </div>    
+                                                </div>   
+                                            </div>
+                                        </div>
+                                    </div>      
+     
+	<!-- Create Dashboard -->
+	
+	<div aria-hidden="true" role="dialog" class="slds-modal slds-modal--large slds-fade-in-closed slds-modal-backdrop slds-modal-backdrop--closed "  id="DashboardPopup" >
+	        <script type="text/javascript">
+            function doSOmething(){
+                //alert('Hiiiii');
+            var NewdashboardName = document.getElementById('{!$Component.NewdashboardName}').value ;
+            //alert('Hiiiii' + NewdashboardName);
+            if(NewdashboardName != '' && NewdashboardName != null){
+            document.getElementById("DashBoardRequired").style.display="none";
+            var j = document.getElementById('{!$Component.jsonStringValue}').value ;
+            
+            //alert('Hiiiiijjjj' + j);
+				var parseJson = JSON.parse(j);
+				delete parseJson.allowPreview;
+				//alert('Hiiiiijjjj' + j);
+				delete parseJson.namespace;
+				//alert('Hiiiiijjjj' + j);
+				delete parseJson.label;
+				delete parseJson.assetSharingUrl;
+				delete parseJson.createdBy;
+				delete parseJson.createdDate;
+				delete parseJson.description;
+				delete parseJson.files; 
+				delete parseJson.id;
+				delete parseJson.lastAccessedDate;
+				delete parseJson.lastModifiedBy;
+				delete parseJson.lastModifiedDate;
+				delete parseJson.name;
+				delete parseJson.permissions;
+				delete parseJson.type;
+				delete parseJson.url;
+				delete parseJson.refreshDate;
+				delete parseJson.datasets;
+				delete parseJson.folder;
+				 
+				 //alert('Hiiiiissssss' + parseJson);
+				
+				var keyArray = [];
+				for (var key in parseJson.state.steps){
+					keyArray.push(key);
+				}
+                  //alert('mmmmmmmmmmmmm' + parseJson);
+				for (i = 0; i < keyArray.length; i++) {
+					if(parseJson.state.steps[keyArray[i]].datasets != null && parseJson.state.steps[keyArray[i]].datasets != ''){	
+				    	delete parseJson.state.steps[keyArray[i]].datasets[0].label;
+						delete parseJson.state.steps[keyArray[i]].datasets[0].url; 
+					}
+				}
+				
+				document.getElementById('jsonString').value= JSON.stringify(parseJson);
+				//alert(JSON.stringify(parseJson));
+				redirect();
+				}
+				else{
+				document.getElementById("DashBoardRequired").style.display="block";
+				}
+            }
+        </script>
+	<input type="hidden" id="jsonString" name="jsonString"/>
+	    
+	    <apex:outputPanel id="opp1">
+	    <apex:inputhidden id="jsonStringValue" value="{!dashboardJSONString}"/>
+	    <apex:actionfunction action="{!redirect}" name="redirect" status="status1"/>
+
+		<div class="slds-modal__container ">
+			<div class="slds-modal__content" style="border-top-right-radius: 4px;border-top-left-radius: 4px;position:absolute; width:600px;left:300px;top:200px;">
+				<div style="background-color: #f4f6f9;padding: 8px;margin-bottom: 10px;border-radius: 3px;">
+					<span>
+						<b style="font-size:15px">Create DashBoard</b>
+					</span>
+	    		</div>   
+	    		<div>
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                        <div class="slds-p-horizontal--small slds-medium-size--1-of-2-align--left slds-text-align--left - col-form-label">DashBoard Name</div>
+                        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--2-of-2 slds-p-bottom--medium" style="width:70%">
+                            <apex:inputText value="{!NewdashboardName}" styleClass="slds-input" id="NewdashboardName"/>
+                            <div id="DashBoardRequired">
+                            <label class="slds-form-element__label" ><font style="color:red">Required</font></label>
+                        	</div>
+                        </div>
+                    </div>	    		
+	    		</div>
+	    		<div>
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded">
+                        <div class="slds-p-horizontal--small slds-medium-size--1-of-2-align--left slds-text-align--left - col-form-label">Select App</div>
+                        <div class="slds-p-horizontal--small slds-size--1-of-2 slds-medium-size--2-of-2 slds-p-bottom--medium" style="width:70%;margin-left:45px;">
+                            <apex:selectList value="{!NewselectApp}" size="1" multiselect="false" Styleclass="slds-select" >
+						    	<apex:selectOptions value="{!selectFloder}" />
+						                     		<!-- <apex:actionSupport event="onchange"  action="{!getDashBoardData}" rerender="OutId" status="status1"/>-->
+						    </apex:selectList>
+                            
+                        </div>
+                    </div>	    		
+	    		</div>
+	    
+	    
+                 <div class="slds-modal__footer" style="padding: 5px;text-align: center;">
+                     <div class="slds-x-small-buttons--horizontal slds-medium-size-align--center" >
+                     		<Button type="button" class="slds-button slds-button--neutral slds-button--brand" onclick="doSOmething()" >Create Dashboard</button>
+                     		<button type="button" class="slds-button slds-button--neutral slds-button--brand" status="status" onclick="closeDashboardPopup()" >Close</button>
+                     </div>
+                 </div> 
+			</div>
+		</div>  
+		</apex:outputPanel>
+	</div> 	
+	 
+
+	<apex:outputPanel rendered="{!IF(remoteSiteSettings == false,true,false)}">
+		<div class="slds-x-small-buttons--horizontal slds-medium-size-align--left" style="margin-left: 440px;margin-top: 60px;">
+			<button type="button" class="buttonStyle" Style="margin-left: 10px;height: 50px;width: 350px;background:lightgray;" onclick="createHostRemoteSite(); createRemoteSite() " rerender="form"><apex:image value="{!URLFOR($Resource.Touch_Backup_Logo)}" style="height: 35px;max-width: 35px;" />
+				<b style="margin-right: 50px;font-size: 18px;">Create Remote Site Settings</b>
+			</button><br/>
+            <span><p style="margin-left: 50px;font-size:12px;">The following remote site settings will be created....</p></span>
+            <br/>
+         	<span style="color: blue;">Base URL: &nbsp; {!BaseUrl}</span><br />
+			<span style="color: blue;">Host URL: &nbsp; {!HostUrl}</span><br /> 
+         </div>
+     </apex:outputPanel> 
+     
+     <apex:outputPanel rendered="{!IF(remoteSiteSettings == true,true,false)}"> 
+     	<div class="slds-page-header" id="header" data-toggle="collapse" data-target="#demo" role="banner" style="padding: 5px;background-color:#2EC2BA;cursor:pointer">
+	        <div class="slds-grid">
+	            <div class="slds-col"> 
+	                <div class="slds-media" style="float: left;">   
+
+	                            <p style="margin-left:10px;">
+	                            <a href="#" data-toggle="collapse" data-target="#demo" id="ImageButton1">
+	                            <apex:image value="{!URLFOR($Resource.ArrowDown3)}" style="height:20px;width:20px;background-color:#2EC2BA;"/></a>
+	                            User Info
+	                            </p>     
+	                </div>
+	            </div>
+	        </div>
+        </div>
+      
+        <div id="demo" class="collapse">
+		<div class="slds-modal__content" id="content" style="text-align: webkit-center !important;background: #f4f6f9;">
+		<center>
+		<apex:outputPanel id="oppDash">
+		<apex:outputPanel rendered="{!successMessage}">
+			<div class="slds-notify_container slds-m-around--large">
+				<div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+			    	<h2>Credentials are correct</h2>
+				</div>
+			</div>
+		</apex:outputPanel>
+		<apex:outputPanel rendered="{!errorMessage}">
+			<div class="slds-notify_container slds-m-around--large">
+				<div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+					<h2>{!error}</h2>
+				</div>
+			</div>
+		</apex:outputPanel>
+			<div class="slds-box slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 " style="background: white;"> 
+				<div class="slds-grid slds-wrap">
+					<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1 slds-p-top--small">
+						<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+							<label class="slds-form-element__label" >Username&nbsp;<font style="color:red">*</font></label>
+							<div class="slds-form-element__control">
+								<div class="slds-input_container" >
+									<apex:inputText value="{!user}" Styleclass="slds-input"/>
+								</div>
+								<apex:outputPanel rendered="{!usererror}">
+								<label class="slds-form-element__label" ><font style="color:red">Required</font></label>
+								</apex:outputPanel>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap">
+					<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1 slds-p-top--small">
+						<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+							<label class="slds-form-element__label" >Password&nbsp;<font style="color:red">*</font></label>
+							<div class="slds-form-element__control">
+								<div class="slds-input_container">					
+									<apex:inputSecret value="{!password}" Styleclass="slds-input" redisplay="true"/>
+								</div>
+								<apex:outputPanel rendered="{!passworderror}">
+								<label class="slds-form-element__label" ><font style="color:red">Required</font></label>
+								</apex:outputPanel>								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="slds-grid slds-wrap">
+					<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1 slds-p-top--small">
+						<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+							<label class="slds-form-element__label" >Security Token</label>
+							<div class="slds-form-element__control">
+								<div class="slds-input_container">					
+									<apex:inputSecret value="{!securitytoken}" Styleclass="slds-input" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>	
+	
+                    <div class="slds-x-small-buttons--horizontal slds-medium-size-align--center slds-p-top--medium" >
+                        <apex:commandButton value="Submit" action="{!verifyUserDetails}" styleClass="slds-button slds-button--neutral" rerender="oppDash" status="status1" style="color:white;background:#4c4c4c;"/> 
+                    </div>
+															
+			</div>
+			</apex:outputPanel>
+			</center>	
+        </div> 
+        </div>     
+     </apex:outputPanel>
+     
+     <apex:outputPanel rendered="{!IF(remoteSiteSettings == true,true,false)}">
+     
+     <div class="slds-page-header" role="banner" data-toggle="collapse" data-target="#demo1" style="padding: 5px;background-color:#2EC2BA;cursor:pointer">   
+         <div class="slds-grid">
+             <div class="slds-col">
+                 <div class="slds-media" style="float: left;">   
+                             <p style="margin-left:10px;">
+                             <a href="#" data-toggle="collapse" data-target="#demo1">
+                             <apex:image value="{!URLFOR($Resource.ArrowDown3)}" style="height:20px;width:20px;"/></a>
+                             Daily Schedule</p>
+                 </div>
+             </div>
+         </div> 
+      </div>
+      <apex:outputPanel id="opId">
+      <div id="demo1" class="collapse">
+		  <div class="slds-modal__content" id="content" style="text-align: webkit-center !important;background: #f4f6f9;">
+				<apex:outputPanel id="oppSchdule">
+				<center>
+				<apex:outputPanel rendered="{!dashboardBackup}">	
+					<div class="slds-notify_container slds-m-around--large">
+					  <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+					    <h2>Dashboard Backup Created Successfully.</h2>
+					  </div>
+					</div>
+				</apex:outputPanel>
+				<apex:outputPanel rendered="{!dashboardBackupError}">	
+					<div class="slds-notify_container slds-m-around--large">
+					  <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+					    <h2>Dashboard Backup Not Created.</h2>
+					  </div>
+					</div>
+				</apex:outputPanel>				
+                    <apex:outputPanel rendered="{!userDetails}"> 
+						<div class="slds-notify_container slds-m-around--large">
+							<div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+								<h2>Please provide user details to Schedule Job</h2>
+							</div>
+						</div>
+				</apex:outputPanel>
+				    
+				    
+					<div class="slds-box slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 " style="background: white;">       
+		      			<div class="slds-grid slds-wrap">
+							<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 slds-p-top--medium slds-p-left--small slds-p-right--small">
+								<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+									<label class="slds-form-element__label" for="select-01">Select Time:</label>
+										<div class="slds-form-element__control">
+											<div class="slds-select_container">
+						                 		<apex:selectList value="{!listVal}" size="1" multiselect="false" Styleclass="slds-select" >
+						                     		<apex:selectOptions value="{!selectVal}" />
+						                 		</apex:selectList>				      
+											</div>
+										</div>
+								</div> 		
+							</div>
+							<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 slds-p-top--medium slds-p-left--small slds-p-right--small">
+								<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+									<label class="slds-form-element__label" for="select-01">User TimeZone is:</label>
+										<div class="slds-form-element__control">
+											<div class="slds-select_container">
+						                 		<apex:selectList value="{!timezoneVal}" size="1" multiselect="false" Styleclass="slds-select" >
+						                     		<apex:selectOptions value="{!options}" />
+						                 		</apex:selectList>				      
+											</div>
+										</div>
+								</div> 		
+							</div>
+							
+							
+							
+							<div class="slds-grid slds-wrap">
+							    <apex:outputPanel rendered="{!!backups}">
+								<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--5-of-6 slds-p-top--small">
+									<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+										<label class="slds-form-element__label" style="margin-left:0px;">Backups To Keep</label>
+										<div class="slds-form-element__control">
+											<div class="slds-input_container">					
+												<apex:inputText value="{!numberOfBackups}" Styleclass="slds-input" style="margin-left:0px;"/>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+								</apex:outputPanel>
+							</div>	
+							<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--4-of-6 slds-p-top--medium slds-text-align--left slds-p-left--small">
+							<apex:inputCheckbox value="{!chbxvalue}" style="margin-left:103px;"/> Notification after batch upload completes
+							</div>
+							
+							<apex:outputPanel rendered="{!rowTrue}" style="width:100%">
+								<div class="slds-p-top--medium slds-p-bottom--medium">
+									  <div class="slds-scrollable--x" style="max-height:500px;overflow:hidden;overflow x: none;">
+									<center>
+										<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1 slds-p-top--medium slds-p-left--small slds-p-right--small">
+											<table class="slds-table slds-table--bordered slds-table--cell-buffer"  width="100%">
+											<thead>
+												<tr class="slds-text-title--caps">
+													<th scope="col" class="slds-is-sortable slds-text-title--caps" ><b>Schedule Time</b></th>
+													<th scope="col" class="slds-is-sortable slds-text-title--caps" ><b>Scheduled By</b></th>
+													<th scope="col" class="slds-is-sortable slds-text-title--caps" ><b>Backups To Keep</b></th>
+												</tr>
+											</thead>
+											<tbody>
+												<apex:repeat value="{!values}" var="a"> 
+													<tr>
+														<td><div class="slds-truncate">{!a.Time__c}</div></td>
+														<td><div class="slds-truncate">{!a.User_Email__c}</div></td>
+														<td><div class="slds-truncate">{!a.No_of_backups__c}</div></td>
+													</tr>
+												</apex:repeat>
+											</tbody>
+											</table>							 
+										</div>
+									</center>
+									</div>
+								</div>
+							</apex:outputPanel> 							
+							
+							 <div class="slds-x-small-buttons--horizontal slds-medium-size-align--center slds-p-top--medium" style="width:100%">
+							 <center>
+		                         <apex:outputpanel rendered="{!IF(rowTrue == false,true,false)}">                                                                      
+		                            <apex:commandButton styleClass="slds-button slds-button--neutral" Style="background: #4c4c4c;color:white;" value="Start Daily Backup" action="{!scheduleBackUp}" rerender="oppSchdule" status="status1">
+		                            </apex:commandButton>
+		                         </apex:outputpanel>
+		                         <apex:outputpanel rendered="{!IF(rowTrue == true,true,false)}">                                                                          
+		                            <apex:commandButton styleClass="slds-button slds-button--neutral"  value="Stop Daily Backup" action="{!abort}" rerender="oppSchdule" status="status1" Style="background: #4c4c4c;color:white;">
+		                            </apex:commandButton>
+		                         </apex:outputpanel>
+                         			<apex:commandButton value="Backup Now" action="{!getAllDashboards}" styleClass="slds-button slds-button--neutral" Style="background: #4c4c4c;color:white;"  rerender="oppSchdule,oppBackup" status="status1" />
+                         		                                                                          
+		                            <commandlink Class="slds-button slds-button--neutral"  onclick="openBox()" Style="background: #4c4c4c;color:white;cursor:pointer;" rerender="oppSchdule">Update No of Backups
+		                           					
+		                            </commandlink>
+		                             
+		                         	
+                        	</center> 
+                        	</div>
+						</div>
+		      		</div>
+		      	</center>
+		      	</apex:outputPanel>
+	         </div>
+	          
+       </div>
+       </apex:outputPanel>
+     </apex:outputPanel>
+     <apex:outputPanel rendered="{!IF(remoteSiteSettings == true,true,false)}">
+     <div class="slds-page-header" role="banner" style="padding: 5px;background-color:#2EC2BA;">   
+         <div class="slds-grid">
+             <div class="slds-col">
+                 <div class="slds-media" style="float: left;">   
+                             <p style="margin-left:10px;">Create Dashboard From Backup</p>
+                 </div>
+             </div>
+         </div> 
+      </div>
+      <div>  
+		  <div class="slds-modal__content" id="content" style="text-align: webkit-center !important;background: #f4f6f9;">
+				<apex:outputPanel id="oppBackup">
+				<center>
+					<div class="slds-box slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 " style="background: white;">       
+		      			<div class="slds-grid slds-wrap">
+							<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 slds-p-top--medium slds-p-left--small slds-p-right--small">
+								<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+									<label class="slds-form-element__label" for="select-01">Select Backup:</label>
+										<div class="slds-form-element__control">
+											<div class="slds-select_container">
+						                 		<apex:selectList value="{!dashBoardName}" size="1" multiselect="false" Styleclass="slds-select" >
+						                     		<apex:selectOptions value="{!selectDashBoard}" />
+						                     		<apex:actionSupport event="onchange"  action="{!getDashBoardData}" rerender="OutId" status="status1"/>
+						                 		</apex:selectList>				      
+											</div>
+										</div>
+								</div> 		
+							</div>
+							<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-2 slds-p-top--medium slds-p-left--small slds-p-right--small">
+								<div class="slds-form-element slds-p-top_x-large slds-text-align--left">
+									<label class="slds-form-element__label" for="select-01">Select App:</label>
+										<div class="slds-form-element__control">
+											<div class="slds-select_container">
+						                 		<apex:selectList value="{!selectApp}" size="1" multiselect="false" Styleclass="slds-select" >
+						                     		<apex:selectOptions value="{!getFloderList}" />
+						                     		<apex:actionSupport event="onchange"  action="{!getDashBoardData}" rerender="OutId" status="status1"/>
+						                 		</apex:selectList>				      
+											</div>
+										</div>
+								</div> 		
+							</div>
+							
+							<apex:outputPanel id="OutId" style="width:100%">
+								<div class="slds-p-top--medium slds-p-bottom--medium">
+								<div class="slds-scrollable--x" style="max-height:500px; overflow-y: auto ">
+									<center>
+										<div class="slds-size--1-of-1 slds-medium-size--1-of-1 slds-large-size--1-of-1 slds-p-top--medium slds-p-left--small slds-p-right--small">
+											<table class="slds-table slds-table--bordered slds-table--cell-buffer" width="100%">
+											<thead>
+												<tr class="slds-text-title--caps">
+													<th scope="col" class="slds-is-sortable slds-text-title--caps"><b>ACTION</b></th>
+													<th scope="col" class="slds-is-sortable slds-text-title--caps"><b>DASHBOARD NAME</b></th>
+													<th scope="col" class="slds-is-sortable slds-text-title--caps"><b>APP NAME</b></th>
+												</tr>
+											</thead>
+											<tbody>
+												<apex:repeat value="{!childDashBoards}" var="child">
+													<tr>
+														<td><div class="slds-truncate">
+														<apex:image value="{!URLFOR($Resource.Touch_Backup_Logos)}" onclick="openDashboardPopup('{!HTMLENCODE(child.Id)}','{!HTMLENCODE(child.Name)}','{!HTMLENCODE(child.DashBoard_Label__c)}')" style="height:16px;max-width:18px;"/>
+														</div></td>
+														<td><div class="slds-truncate">{!child.Name}</div></td>
+														<td><div class="slds-truncate">{!child.Folder_Name__c}</div></td>
+													</tr>
+												</apex:repeat>
+											</tbody>
+											</table>							 
+										</div>
+									</center>
+									</div>
+								</div>
+							</apex:outputPanel> 							
+							
+						</div>
+					</div>
+				</center>
+				</apex:outputPanel>
+			</div>
+		</div>   
+     </apex:outputPanel>
+     
+</div>
+                    
+</apex:form> 
+</html> 
+</apex:page>

@@ -1,0 +1,3335 @@
+<apex:page controller="dataflowController" cache="false" standardStylesheets="false" action="{!connectToSFDC}" tabstyle="Touch_Analytics_UI__tab" sidebar="false" docType="html-5.0">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>Data Flow</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />  
+        <apex:stylesheet value="{!URLFOR($Resource.EdgeClient)}"/> 
+        <apex:slds />
+        <style>
+        
+             @media (min-width: 49em){
+.slds .slds-form--horizontal .slds-form-element__control {
+    width: calc(22% - (12px * 2));
+    display: inline-block;
+    text-align: left;
+    
+}
+.slds .slds-form--horizontal {
+    text-align: left;
+}
+}
+@media (min-width: 50em){
+.slds .slds-form--horizontal .slds-form-element__control {
+    width: calc(24% - (12px * 2));
+    display: inline-block;
+    text-align: left;
+    
+}
+            
+            .wrapper .slds-button--neutral {
+      display: none;
+    }
+    .wrapper:hover img {
+      /* Change the filter in here */
+    }
+    .wrapper:hover .slds-button--neutral {
+      display: block;
+      margin-left: 70px;
+      
+    }
+    
+   .wrapperclass:hover img{
+       
+   }
+   
+   
+    .wrapperclass:hover .ContactSupport{
+        display: block !important;
+    }
+    
+    .wrapperclass:hover .ContactSales{
+        display: block !important;
+    }
+            
+            #myInput {
+            background-image: url('{!$Resource.SearchIcon}');
+            background-repeat: no-repeat; 
+            font-size: 16px;
+            padding: 15px 15px 20px 50px;
+            border: 1px solid #ddd;              
+            }
+            
+            .slds ::selection {
+            background: #015ba7 !important;
+            color: white !important;
+            text-shadow: none;
+            }
+            .managebutton {
+            border: 1.35px solid lightgrey; 
+            
+            }
+            .managebutton:hover{
+            border: 1.35px solid #2EC2BA;
+            } 
+            @media only screen and (max-width: 830px) {
+            .NewSldscard{
+            min-width:160px
+            }      
+            }
+            @media only screen and (min-width: 831px) {
+            .NewSldscard{
+            min-width:180px
+            }      
+            }  
+            @media only screen and (min-width: 900px) {
+            .NewSldscard{
+            min-width:220px
+            }
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 270px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 220px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            overflow: visible;
+            padding-left: 40px;
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 220px; 
+            }
+            
+            #paddingIds{
+            width: 222px;
+            }
+            }
+            @media only screen and (min-width: 1000px) {
+            .NewSldscard{
+            min-width:240px
+            }  
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 213px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 231px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            overflow: visible;
+            padding-left: 40px;
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 231px; 
+            }
+            #paddingIds{
+            width: 234px;
+            }
+            }
+            @media only screen and (min-width: 1100px) {
+            .NewSldscard{
+            min-width:235px;
+            } 
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 241px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 241px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            overflow: visible;
+            padding-left: 40px;
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 241px; 
+            }
+            #paddingIds{
+            min-width: 244px;
+            }
+            }
+            
+            @media only screen and (min-width: 1150px) {
+            .NewSldscard{
+            min-width:246px;
+            } 
+            
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 248px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 253px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            overflow: visible;
+            padding-left: 40px;
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 253px; 
+            }
+            #paddingIds{
+            width: 256px;
+            }
+            
+            }
+            @media only screen and (min-width: 1200px) {
+            .NewSldscard{
+            min-width:260px
+            } 
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 268px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 268px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            overflow: visible;
+            padding-left: 40px;
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 268px; 
+            }
+            #paddingIds{
+            width: 271px;
+            }
+            }
+            @media only screen and (min-width: 1250px) {
+            .NewSldscard{
+            min-width:275px
+            } 
+            
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px; 
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 281px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 281px;
+            }
+            
+            .liclasses:hover{
+            background: white;
+            padding-left: 40px;
+            overflow: visible; 
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 281px; 
+            }
+            #paddingIds{
+            width: 284px;
+            }
+            }
+            @media only screen and (min-width: 1300px) {
+            .NewSldscard{
+            min-width:284px
+            } 
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px; 
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 278px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 293px;
+            }
+            
+            .liclasses:hover{
+            background: white;
+            padding-left: 40px;
+            overflow: visible; 
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 293px; 
+            }
+            #paddingIds{
+            width: 296px;
+            }
+            }
+            
+            @media only screen and (min-width: 1350px) {
+            .NewSldscard{
+            min-width:299px
+            }
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px; 
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 309px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 309px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            padding-left: 40px;
+            overflow: visible; 
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 309px; 
+            }
+            #paddingIds{
+            width: 312px;
+            }
+            }    
+            
+            @media only screen and (min-width: 1400px) {
+            .NewSldscard{
+            min-width:315px
+            }  
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px; 
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 323px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 320px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            padding-left: 40px
+            overflow: visible; 
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 320px; 
+            }
+            #paddingIds{
+            width: 323px;
+            }
+            }
+            @media only screen and (min-width: 1450px) {
+            .NewSldscard{
+            min-width:340px
+            } 
+            
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px;
+            margin-top: 0px;
+            position: absolute; 
+            height: 26px; 
+            background: white; 
+            overflow: hidden; 
+            max-width: 323px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 323px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            overflow: visible; 
+            padding-left: 40px
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 323px; 
+            }
+            #paddingIds{
+            width: 326px;
+            }
+            }
+            
+            @media only screen and (min-width: 1500px) {
+            .NewSldscard{
+            min-width:343px
+            } 
+            
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 333px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 333px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            padding-left: 40px;
+            overflow: visible; 
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 333px; 
+            }
+            #paddingIds{
+            width: 337px;
+            }
+            }
+            
+            @media only screen and (min-width: 1550px) {
+            .NewSldscard{
+            min-width:341px
+            } 
+            
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 340px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 352px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            padding-left: 40px;
+            overflow: visible; 
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 352px; 
+            }
+            #paddingIds{
+            width: 355px;
+            }
+            }
+            
+            @media only screen and (min-width: 1600px) {
+            .NewSldscard{
+            min-width:370px
+            } 
+            
+            .liclasses{
+            cursor: pointer; 
+            float: left; 
+            padding-left: 0px; 
+            position: absolute; 
+            height: 26px;
+            margin-top: 0px;
+            background: white; 
+            overflow: hidden; 
+            max-width: 346px;
+            text-overflow:ellipsis;
+            text-align: center;
+            min-width: 365px;
+            }
+            
+            .liclasses:hover{
+            background: white; 
+            padding-left: 40px;
+            overflow: visible; 
+            max-width: max-content;
+            background:#2EC2BA !important;
+            text-align: center;
+            min-width: 365px; 
+            }
+            #paddingIds{
+            width: 368px;
+            }
+            }
+            
+            
+            .textover{
+            overflow-x: scroll;;
+            }
+            
+            
+            body #AppBodyHeader {
+            background-image: none;
+            font-size: 12px
+            }
+            .slds .slds-tabs--default__item + .slds-tabs--default__item {
+            margin-left: 0px;
+            }
+            .slds .slds-tabs--default__link {
+            padding: 0 0px;
+            }
+            .slds .slds-col--padded {
+            padding-right: 10px;
+            padding-left: 10px;
+            }
+            .slds .slds-tabs--default__link{
+            background-color: whitesmoke;
+            text-align: center;
+            Width: 100%;
+            }   
+            .slds .slds-tabs--default__item.slds-active .slds-tabs--default__link {
+            border-color:none;
+            background-color:grey;
+            color:#FFF;
+            border-bottom:0px;
+            }   
+            .spinner{
+            display: block;
+            width:100%;
+            height: 100%;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            text-align:center;
+            padding:200px;
+            font:normal 16px Tahoma, Geneva, sans-serif;
+            z-index:1;
+            overflow: auto;
+            border:1px solid #CCC;
+            background-color:gray;
+            filter: alpha(opacity=60);
+            opacity: 0.6;
+            -moz-opacity:0.6;
+            -khtml-opacity:0.6
+            z-index:100;
+            line-height:20px;
+            }
+            #opaque {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            display: none;
+            background-color: gray;
+            filter: alpha(opacity=60);
+            opacity: 0.6;
+            -moz-opacity:0.6;
+            -khtml-opacity:0.6      
+            }
+            * html #opaque {
+            position: absolute;
+            }
+            .tabyes{
+            display:block;
+            }
+            .tabno{
+            display:none
+            }  
+            .slds-grid slds-m-top--large{
+            margin-top:0px;
+            }
+            
+            .buttonbar.dark .btn, .btn.dark {
+            background: #585858;
+            color: rgba(255,255,255,.95);
+            border: 0px;
+            }
+            .btn.main {
+            margin: 0;
+            color: #fff;
+            background-color: #44a2f5;
+            background: #44a2f5;
+            }
+            
+            body .bPageFooter a, body .bPageFooter {
+            border: none;
+            color: #fff;
+            font-size:12px;
+            }
+            
+            .NewclassAdd{ 
+            margin-top: 60px !important;
+            margin-left: 40px !important;
+            padding: 0px 15px 6px 15px !important;
+            font-size: 32px !important;
+            line-height: 25px !important;
+            background: lightgrey !important;
+            color: black !important;
+            }
+            .NewclassRem{ 
+            margin-top: 10px !important;
+            margin-left: 40px !important;
+            padding: 0px 15px 6px 15px !important;
+            font-size: 32px !important;
+            line-height: 25px !important;
+            background: lightgrey !important;
+            color: black !important;
+            }
+            .selected{background-color: #f2f6fa !important;text-shadow: none;color: #16325c;}
+            .names a label{overflow:hidden !important;text-overflow:ellipsis;width:0}
+            .rotate90d{transform: rotate(90deg);}
+            .accordionicon_inverse{transform: rotate(-90deg);}
+        </style>
+        
+    
+    </head>
+    <body>
+    <apex:form id="FormId">
+      
+        
+    
+        <apex:actionFunction name="openTouchHome" action="{!openTouchHome}" rerender="FormId" status="status"/>
+        <div class="slds">
+                <div class="slds-page-header" style="border-bottom: 1px solid #d8dde6;background:none;padding: 2px 35px 1px;">
+                    <div class="slds-grid" style="margin-top: 5px;margin-bottom: 5px;">
+                        <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--4-of-12" Style="margin-top:0px">
+                            <div class="slds-form-element__control">
+                                <div class="wrapper">
+                                    <img style="cursor:pointer;float:left" src="{!$Resource.Settings_Icon}" width="65px" height="65px"/> 
+                                        <button type="button" Class=" slds-button--neutral" style="color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;margin-left: 70px;margin-top:2px;padding-top:2px;padding-bottom:4px;" id="loadConfig">Configurations</button> 
+                                </div>                                    
+                            </div>   
+                        </div>
+                        <div class="slds-size--9-of-12 slds-medium-size--4-of-12 slds-small-size--4-of-12 slds-large-size--3-of-12" style="text-align:center">
+                            <div class="slds-form-element__control">
+                                <apex:image style="cursor:pointer;" value="{!$Resource.Touch_Analytics_New_Logo}" onclick="openTouchHome()" width="320" height="320"/>
+                            </div>                   
+                        </div>
+                        
+                        <div class="slds-size--9-of-12 slds-medium-size--2-of-12 slds-small-size--2-of-12 slds-large-size--2-of-12" style="">
+                              <div class="slds-form-element__control" style="text-align:right"> 
+                             <apex:outputpanel id="PBs">
+                                 
+                                    <div>
+                                      
+                                    <label style="font-size:18px;color:grey">Account balance</label>
+                                    </div >
+                                    <div style="width:100%;text-align:center;margin-left:35px">
+                                    <apex:outputpanel rendered="{!IF(accountBalance == null,false,true)}">
+                                    <b style="font-size:23px;color:grey">${!accountBalance}</b>
+                                    </apex:outputpanel>
+                                     <apex:outputpanel rendered="{!IF(accountBalance == null,true,false)}">
+                                    <b style="font-size:23px;color:red">$0</b>  
+                                    </apex:outputpanel>
+                                    </div>
+                             </apex:outputpanel>
+                                    </div>
+                                </div>
+                        
+                        <div class="slds-size--9-of-12 slds-medium-size--3-of-12 slds-small-size--3-of-12 slds-large-size--3-of-12" style="">
+                                <div class="slds-form-element__control">  
+                                           <div class="wrapperclass">
+                                            <img style="cursor:pointer;float: right;" src="{!$Resource.Contactus_Active_Logo}" width="75px" height="15px" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeVSeLboh4gOU-Vnut_CApMKd5XwrkWjJ95HfUV-8UkBwcUKA/viewform?c=0&w=1');" Id="SupportId"/>
+                                                <div>
+                                                   <apex:outputLink style="display: none; cursor:pointer;text-align: right; color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;margin-top:2px;padding-top:2px;" value="mailto:Sales@AnalyticsCc.com" styleClass="ContactSales">Contact Sales</apex:outputLink><br/> 
+                                                </div>
+                                                <div>
+                                                    <apex:outputLink style="display: none; cursor:pointer;text-align: right; color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;" value="mailto:Support@AnalyticsCc.com" styleClass="ContactSupport">Contact Support</apex:outputLink>
+                                                </div>
+                                                
+                                            <!--<button type="button" Class=" slds-button--neutral" style="color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;margin-left: 70px;margin-top:2px;padding-top:2px;padding-bottom:4px;" onclick="mailto:Sales@AnalyticsCc.com">Contact Sales</button> -->
+                                            <!--<button type="button" Class=" slds-button--neutral" style="color:rgb(77, 77, 77);background-color:white;line-height: 18px;font-weight:bold;margin-left: 70px;margin-top:2px;padding-top:2px;padding-bottom:4px;" onclick="mailto:Support@AnalyticsCc.com">Contact Support</button> -->
+                                           </div>
+                                       </div>
+                            </div>
+                    </div>   
+                </div>
+            </div> 
+            
+            
+            
+        <!--position:absolute;top:0;bottom:0;left:0;right:0;height:calc(100% - 44px);-->
+        <div class="slds" style="border: 1px solid lightgrey;width:95%;margin:auto;height:500px">
+            <div class="myapp slds-no-flex" style="background-color: white;padding-top:0px;padding-bottom:0px;height:100%">                    
+                <div class="slds-col slds-no-flex page1" style="height:100%">
+                    
+                    <div class="slds-grid slds-m-top--large" style="margin-top:0;padding-top:10px;padding-bottom:6px;height:calc(100% - 60px)">
+                        <!--Report types list-->
+                        <div class="slds-col slds-p-horizontal_medium slds-size--5-of-12 listOfReportTypes" style="box-sizing: initial;height:100%">
+                            <div class="slds-card" style="background:white;border-bottom: 1px solid #d8dde6;height:100%">
+                                <section class="slds-card__body" style="height:100%;padding:0px 0px">
+                                    <div class="slds-scrollable" style="height:100%">
+                                        <div class="search dimsearch">
+                                            <input class="myInput"  id="myInput" placeholder="Search for Report types..." type="text" />
+                                            <span class="searchhint resnum"></span> 
+                                        </div>
+                                        <div class="names selectors" style="height:calc(100% - 37px);">
+                                            <div class="listheader squeezed"></div>
+                                            <div class="listheader">Report types</div>
+                                            <div id="listOfReportTypes">
+                                                <ul>
+                                                    
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <!--Reports list-->
+                        <div class="slds-col slds-p-horizontal_medium slds-size--3-of-12 reportsList" style="box-sizing: initial;height:100%">
+                            <div class="slds-card" style="background:white;border-bottom: 1px solid #d8dde6;height:100%">
+                                <section class="slds-card__body" style="height:100%;padding:0px 0px">
+                                    <div class="slds-scrollable" style="height:100%">
+                                        <div class="search dimsearch">
+                                            <input class="myInput" id="myInput" placeholder="Search for Reports..." type="text" />
+                                            <span class="searchhint resnum"></span> 
+                                        </div>
+                                        <div class="names selectors" style="height:calc(100% - 37px);">
+                                            <div class="listheader squeezed"></div>
+                                            <div class="listheader">Reports</div>
+                                            <div id="reportsList">                                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        <!--Selected Reports list-->
+                        <div class="slds-col slds-p-horizontal_medium slds-size--3-of-12 selectedReportsList" style="box-sizing: initial;height:100%">
+                            <div class="slds-card" style="background:white;border-bottom: 1px solid #d8dde6;height:100%">
+                                <section class="slds-card__body" style="height:100%;padding:0px 0px">
+                                    <div class="slds-scrollable" style="height:100%">
+                                        <div class="search dimsearch">
+                                            <input class="myInput" id="myInput" placeholder="Search for Reports..." type="text" />
+                                            <span class="searchhint resnum"></span> 
+                                        </div>
+                                        <div class="names selectors" style="height:calc(100% - 37px);">
+                                            <div class="listheader squeezed"></div>
+                                            <div class="listheader">Selected Reports</div>
+                                            <div id="selectedReportsList">                                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-page-header" style="border-bottom: 1px solid #d8dde6;background:none;padding: 11px 11px 12px;">
+                        <div class="slds-grid">
+                            <div class="slds-col">
+                                <div class="slds-button-group" role="group" style="float:left">
+                                    <!--<button class="slds-button slds-button--neutral" id="loadConfig" style="background: white;color: rgb(77, 77, 77);;font-weight:bold;"> 
+                                        Load Config
+                                    </button>  -->                                
+                                </div>
+                            </div>
+                            <!--<div class="slds-col slds-has-flexi-truncate slds-align-middle" style="text-align:center">
+                                <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="Touch DataFlow"><span style="color:#41C1BC">Touch</span><span style="color:#ED5D22"> DataFlow</span></h1>
+                            </div>-->
+                            <div class="slds-col slds-has-flexi-truncate slds-align-middle">
+                                <div class="slds-button-group" role="group" style="float:middle">
+                                    <button class="slds-button slds-button--neutral" id="next" style="background: white;color: rgb(77, 77, 77);font-weight:bold;margin-left:10px">
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>                    
+                    </div>                        
+                </div>
+                <div class="slds-col slds-no-flex page2" style="display:none;height:100%">
+                    <div class="slds-page-header" style="border-bottom: 1px solid #d8dde6;background:none;padding: 11px 11px 12px;">
+                        <div class="slds-grid">
+                            <div class="slds-col slds-has-flexi-truncate slds-align-middle">
+                                <span id="back" style="cursor:pointer;float: left;"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+                            </div>
+                            <div class="slds-col slds-col slds-has-flexi-truncate slds-align-middle">                                
+                                <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="Touch DataFlow" style="text-align:center"><span style="color:#41C1BC">Touch</span><span style="color:#ED5D22"> DataFlow</span></h1>
+                            </div>
+                            <div class="slds-col slds-col slds-has-flexi-truncate slds-align-middle">
+                                <div class="slds-button-group" role="group" style="float:right">
+                                    <button class="slds-button slds-button--neutral" id="saveConfig" style="background: white;color: rgb(77, 77, 77);;font-weight:bold;"> <!--margin-left:10px-->
+                                        Save Config
+                                    </button>
+                                    <button class="slds-button slds-button--neutral" id="download" style="background: white;color: rgb(77, 77, 77);;font-weight:bold;">  <!--margin-left:10px-->
+                                        Download
+                                    </button>                                    
+                                </div>
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="slds slds-m-top--large" style="margin-top:0;padding: 10px 10px 6px 10px;height:calc(100% - 60px)">
+                        <h1 class="slds-page-header__title slds-truncate" title="Datasets" style="padding-bottom: 5px;">Datasets</h1>
+                        <div class="slds-card" style="background:none;border-radius:0;max-height:calc(100% - 30px);overflow:auto;">
+                            <ul class="slds-accordion">
+                                <div id="dataSetsListDiv"></div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="loader" style="display:none">
+                        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 10000; background-color: black;"></div>
+                        <center>
+                            <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 10000; margin: 15% 50%">
+                                <div style="display: inline-block; padding: 2px; background-color: #fff; width: 150px;">
+                                    <img src="{!$Resource.TA_Label}" style="float: left; margin: 8px;" width="20%" height="10%"/ >
+                                    <span style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                                </div>
+                            </div>
+                        </center>
+                    </div>
+                
+                <div class="slds-modal" aria-hidden="false" role="dialog" id="saveConfigurationModal">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <h2 class="slds-text-heading--medium">Save Configuration</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium">
+                            <form name="saveConfigurationModalForm" id="saveConfigurationModalForm">
+                                <div class="errorMessages" style="text-align:center;color:#c23934"></div>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="configname">Config Name<span class="slds-required" title="required">*</span></label>
+                                    <div class="slds-form-element__control">
+                                        <input id="configname" class="slds-input" type="text" placeholder="Config Name" required="required"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button--neutral" id="closeSaveConfigurationModal">Cancel</button>
+                            <button class="slds-button slds-button--neutral slds-button--brand" id="saveConfigurationBtn">Save</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-modal" aria-hidden="false" role="dialog" id="selectConfigurationModal">
+                    <div class="slds-modal__container">
+                        <div class="slds-modal__header">
+                            <h2 class="slds-text-heading--medium">Select Configuration</h2>
+                        </div>
+                        <div class="slds-modal__content slds-p-around--medium">
+                            <form name="selectConfigurationModalForm" id="selectConfigurationModalForm">
+                                <div class="errorMessages" style="text-align:center;color:#c23934"></div>
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="select-01">Select</label>
+                                    <div class="slds-form-element__control">
+                                        <div class="slds-select_container">
+                                            <select class="slds-select" id="selectConfigurationdd">
+                                                <!--<option value="">Please select</option>-->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button--neutral" id="closeSelectConfigurationModal">Cancel</button>
+                            <button class="slds-button slds-button--neutral slds-button--brand" id="selectConfigurationBtn">Select</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="slds-backdrop" id="backdrop"></div>
+            </div>
+        </div>
+        </apex:form>
+        <!-- JAVASCRIPT -->
+        <apex:includeScript value="https://code.jquery.com/jquery-1.12.4.js"/>
+        <script type="text/javascript">
+        var __sfdcSessionId = '{!GETSESSIONID()}';
+        </script>
+        <script src="../../soap/ajax/41.0/connection.js" type="text/javascript"></script>
+        <script>
+            
+           'use strict';
+        $(document).ajaxStart(function () {
+            $('#loader').show();
+        }).ajaxStop(function () {
+            $('#loader').hide();
+        }).ajaxError(function () {     
+            $('#loader').hide();
+        });
+        
+        $(document).ready(function(){
+            
+            var salesforce = {
+                groupedReportTypes : [],
+                reportTypes:[],
+                reportTypeInfo:{},
+                reportTypeMetaData:{},
+                reportTypeRelations:{},
+                sobjects:[],
+                sobjectsDescription:{}
+            }
+            //console.log(salesforce['sobjectsDescription']);
+            var reportTypes = {};
+            var finalObject = {};
+            var allTableFields = {};
+            var dataFlow = {};
+            var baseUrl = '/services/data/v41.0/';
+            
+            // Get Name space prefix from salesforce.
+            let namespaceprefix = '';
+            let packageNameSpacePrefix = '';
+            var getnamespaceprefix = sforce.connection.query("SELECT NamespacePrefix FROM Organization",{
+                onSuccess : function(result) {
+                    if(result.records.NamespacePrefix){
+                        namespaceprefix = result.records.NamespacePrefix+"__";
+                        packageNameSpacePrefix = namespaceprefix;
+                    }
+                    setupPage();
+                },
+                onFailure : function(error) {
+                    console.log("An error has occurred " + error);
+                }
+            });
+            
+            //window.onload = setupPage;
+            // Init after getting namespace prefix;
+            function setupPage(){
+                getAllsobjects();
+                getReports();
+                getReportTypes();                
+            }      
+            
+            // Function to get All sobjects from salesforce
+            function getAllsobjects(){
+                $.ajax(baseUrl+'sobjects',{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },success:function(response){
+                        salesforce['sobjects'] = response.sobjects;
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+            // Get All report types from salesforce using rest
+            function getReportTypes(){
+                $.ajax(baseUrl+'analytics/reportTypes',{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },success:function(response){
+                        salesforce['reportTypes'] = response;
+                        let i,len = response.length;
+                        for(i=0;i<len;i++){
+                            appendReportTypeToReportTypes(salesforce['reportTypes'][i],"reportType"+i);                            
+                        }
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+            // Append all report types to list with grouping show/hide.
+            function appendReportTypeToReportTypes(rtype,id){
+                let newRow = '<li class="list_item" id="list_item" style="display:none">' 
+                newRow += '<a id="'+id+'" title="'+rtype.label+'" style="padding-left:10px" class="dimension" parent reporttype="'+rtype.label+'" id="'+rtype.label+'">';
+                newRow += '<img style="cursor:pointer;position:relative; z-index:2;" src="{!$Resource.touch_folder}" width="15px" height="13px"/>';
+                newRow += '<label data-tooltip-on-truncation="true">'+rtype.label+'</label>';
+                newRow += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>';
+                newRow += '<svg class="icon">';
+                newRow += '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                newRow += '</svg></span></a>';
+                newRow += '<ul class="submenu" id="'+id+'" style="display:none;">';
+                let len = rtype['reportTypes'].length;
+                for(let i=0;i<len;i++){                    
+                    let type = rtype['reportTypes'][i];
+                    newRow += '<li id="sub_list_item">';
+                    newRow += '<a child class="dimension" title="'+type.label+'" reporttype="'+type.type+'" style="padding-left:20px;display:none">';
+                    newRow += '<img style="cursor:pointer;position:relative;z-index:2;" src="{!$Resource.touch_folder}" id="touch_folder" width="15px" height="10px"/>';
+                    newRow += '<img style="cursor:pointer;position:relative;z-index:2;display:none" src="{!$Resource.TA_Label}" id="TA_Label" width="15px" height="10px"/>';
+                    newRow += '<label data-tooltip-on-truncation="true">'+type.label+'</label>';
+                    newRow += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>';
+                    newRow += '<svg class="icon">';
+                    newRow += '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                    newRow += '</svg></span></a>';
+                    newRow += '<ul class="reporttyperelations" style="padding-left:30px;display:none;" id="'+type.type+'"></ul>';
+                    //<span id="reporttyperelations"></span>
+                    newRow += '</li>';
+                    salesforce['reportTypeInfo'][type.type] = type;
+                    getReportTypeMetaData(type.type);
+                }
+                newRow += '</ul>';
+                newRow += '</li>';
+                $('#listOfReportTypes > ul').append(newRow);
+            }
+            
+            //Get relations of report type
+            function getReportTypeMetaData(rtype){
+                let reptype = rtype;
+                if(reptype.endsWith("__c")){                    
+                    if(!(reptype.startsWith(namespaceprefix)) && !(reptype.indexOf(namespaceprefix) > -1)){                        
+                        reptype = namespaceprefix+reptype;                        
+                    }
+                    $.ajax(baseUrl+'analytics/reportTypes/'+reptype,{
+                        beforeSend:function(xhr){
+                            xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                        },success:function(response){
+                            appendReportTypeObjectRelationsToReportType(response,rtype);
+                            mapCustomReportTypeColumns(response.reportTypeMetadata.categories,rtype);
+                        },error:function(jqXHR, textStatus, errorThrown){
+                            console.log(jqXHR.status + ': ' + errorThrown);
+                        }
+                    });
+                }                
+            }
+            
+            
+            
+            // Function to append report type Object relation to reporttypes list
+            function appendReportTypeObjectRelationsToReportType(repTypeMetaData,rtype){
+                salesforce['reportTypeMetaData'][rtype] = repTypeMetaData;                
+                salesforce['reportTypeRelations'][rtype] = [];
+                
+                let cats = repTypeMetaData.reportTypeMetadata.categories;
+                let newRow = '', i, len = cats.length;
+                for(i=0;i<len;i++){
+                    let alphabetsArr = ['A','B','C','D','E','F','G']
+                    let obj = {};
+                    if(i>0){
+                        obj["leftObject"] = cats[i-1].label;
+                    }else if(i === 0){
+                        obj["leftObject"] = "primaryObject";
+                    }
+                    obj["rightObject"] = cats[i].label;
+                    obj["objName"] = cats[i].label;
+                    obj["mustRelated"] = true;
+                    obj["mayRelated"] = false;
+                    salesforce['reportTypeRelations'][rtype].push(obj);
+                    if(i > 0){
+                        newRow += '<li style="border:1px solid #efefef">';
+                        newRow += '<a class="dimension" title="'+cats[i].label+'" reporttype="'+rtype+'" style="background-color:#efefef;">';
+                        newRow += '<label data-tooltip-on-truncation="true">'+cats[i-1].label+' ('+alphabetsArr[i-1]+') to '+cats[i].label+' ('+alphabetsArr[i]+') Relationship</label></a>';
+                        newRow += '<p style="display:block;padding-left:8px">';
+                        newRow += '<input objectindex="'+i+'" reporttype="'+rtype+'" type="radio" id="radio-1_'+rtype+'" class="objectRelation" name="'+rtype+'_'+cats[i].label+'_'+i+'" value="mustRelated" checked="checked">';
+                        newRow += '<label for="radio-1">Each "'+alphabetsArr[i-1]+'" record must have at least one related "'+alphabetsArr[i]+'" record.</label></p>';
+                        newRow += '<p style="display:block;padding-left:8px">';
+                        newRow += '<input objectindex="'+i+'" reporttype="'+rtype+'" type="radio" id="radio-2_'+rtype+'" class="objectRelation" name="'+rtype+'_'+cats[i].label+'_'+i+'" value="mayRelated">';
+                        newRow += '<label for="radio-2">"'+alphabetsArr[i-1]+'" records may or may not have related "'+alphabetsArr[i]+'" records.</label></p>';
+                    }                    
+                }  
+                //$("#listOfReportTypes").find("ul[id='"+rtype+"'] span").append(newRow);
+                $("#listOfReportTypes").find("ul[id='"+rtype+"']").append(newRow);
+            }
+            
+            $("#listOfReportTypes").on('click','.objectRelation',function(e){
+                let self = $(this),
+                    rtype = self.attr('reporttype'),
+                    indx = parseInt(self.attr('objectindex')),
+                    checkedVal = self.val();
+                if(checkedVal === 'mustRelated'){
+                    for(let i=indx;i<salesforce['reportTypeRelations'][rtype].length;i++){
+                        salesforce['reportTypeRelations'][rtype][i]['mustRelated'] = true;
+                        salesforce['reportTypeRelations'][rtype][i]['mayRelated'] = false;
+                        let oindx = i+1;
+                        let ul = $("#listOfReportTypes").find("ul[id='"+rtype+"'] input[type=radio][objectindex="+oindx+"]").parent();
+                        ul.each(function() {    
+                            let self = $(this);
+                            self.find("input[type=radio]").show();
+                            self.find('label[for="radio-1"]').show();
+                            self.find("input[value=mustRelated]").prop('checked', true);
+                        });
+                    }
+                } else if(checkedVal === 'mayRelated'){
+                    
+                    for(let i=indx;i<salesforce['reportTypeRelations'][rtype].length;i++){
+                        salesforce['reportTypeRelations'][rtype][i]['mustRelated'] = false;
+                        salesforce['reportTypeRelations'][rtype][i]['mayRelated'] = true;
+                        let oindx = i+1;
+                        let ul = $("#listOfReportTypes").find("ul[id='"+rtype+"'] input[type=radio][objectindex="+oindx+"]").parent();
+                        ul.each(function() {  
+                            let self = $(this);
+                            self.find("input[type=radio]").hide();
+                            self.find('label[for="radio-1"]').hide();
+                            self.find("input[value=mayRelated]").prop('checked', true);
+                        });
+                    }
+                }
+                
+                
+            });
+            
+            
+            
+            
+            
+            
+            // Function for Mapping the custom reporttype columns
+            function mapCustomReportTypeColumns(categories,repType){
+                let i,catsLen = categories.length;
+                let sObjects = {};
+                for(i=0;i<catsLen;i++){
+                    let columns = categories[i].columns;
+                    for(let column in columns){
+                        let splitCol = column.split(".");
+                        if(splitCol.length === 2){
+                            if(!(splitCol[0] in sObjects)){
+                                sObjects[splitCol[0]] = [];
+                            }
+                            if(!(sObjects[splitCol[0]].includes(splitCol[1]))){
+                                sObjects[splitCol[0]].push(splitCol[1]);
+                            }
+                        }else if(splitCol.length === 3){
+                            if(!(splitCol[1] in sObjects)){
+                                sObjects[splitCol[1]] = [];
+                            }
+                            if(!(sObjects[splitCol[1]].includes(splitCol[2]))){
+                                sObjects[splitCol[1]].push(splitCol[2]);
+                            }
+                        }
+                    }
+                } 
+                loopsObjectsForMappingCustomReportTypes(sObjects,repType);
+            }
+            
+            function loopsObjectsForMappingCustomReportTypes(sObjects,repType){
+                for(let sObject in sObjects){
+                    let checkIfsobjectExists = salesforce['sobjects'].findIndex(x => x.name === sObject);
+                    if(checkIfsobjectExists > -1){
+                        if(!(sObject in salesforce['sobjectsDescription'])){
+                            let get = describeSObjectsAjax(sObject);
+                            get.done(function(response){
+                                pushFetchedCustomObjectFieldsToSFJSON(sObjects,sObject,repType,response);        
+                            });                            
+                        }else{                            
+                            pushFetchedCustomObjectFieldsToSFJSON(sObjects,sObject,repType,salesforce['sobjectsDescription'][sObject]);
+                        }
+                    }                   
+                }
+            }
+            
+            function describeSObjectsAjax(sObject){
+                return $.ajax(baseUrl+'sobjects/'+sObject+'/describe',{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    success:function(response){
+                        salesforce['sobjectsDescription'][sObject] = response;                        
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+            function pushFetchedCustomObjectFieldsToSFJSON(sObjects,sObject,repType,response){
+                for(let j=0;j<sObjects[sObject].length;j++){
+                    let index = response['fields'].findIndex(x => x.name === sObjects[sObject][j]);
+                    if(index > -1){                                    
+                        if(!(repType in SFJSON["Fields"])){
+                            SFJSON["Fields"][repType] = {};                                    
+                        }                        
+                        let field = sObject+"."+sObjects[sObject][j];
+                        SFJSON["Fields"][repType][field] = {};
+                        SFJSON["Fields"][repType][field]["Field__c"] = sObjects[sObject][j];
+                        SFJSON["Fields"][repType][field]["permissionable"] = response['fields'][index]['permissionable'];
+                        SFJSON["Fields"][repType][field]["SObject__c"] = sObject;
+                        SFJSON["Fields"][repType][field]["FieldReferenceTo__c"] = response['fields'][index]['referenceTo'].length;
+                        SFJSON["Fields"][repType][field]["FieldReferenceTo__c"] = (response['fields'][index]['referenceTo'].length > 0) ? response['fields'][index]['referenceTo'] : "null";
+                        SFJSON["Fields"][repType][field]["Queryable"] = response['queryable'];
+                    }
+                }
+            }
+            
+            
+            
+            // Show/expand child report types on click of parent
+            $('#listOfReportTypes').on('click','li a[parent]',function (e){
+                let id = $(this).attr("id");
+                $(this).find(".icon").toggleClass("rotate90d");
+                //$('#listOfReportTypes').find('ul[id="'+id+'"]').toggle();
+                $(this).next('ul').toggle();
+            });
+            
+            //show reports of reportTypes in reportsListCol.
+            $('#listOfReportTypes').on('click','a[child]',function (e) {
+                
+                $('.page1').find('.reportsList .myInput').val('');                
+                $('#listOfReportTypes').find('a.selected').removeClass('selected');
+                $(this).addClass('selected');                
+                $('#reportsList').empty();
+                
+                let type = $(this).attr("reporttype"),
+                    reports = reportTypes[type],
+                    reportslen = reports.length;
+                
+                //$('#listOfReportTypes').find('ul[id="'+type+'"] span').toggle();
+                $(this).next('ul').toggle();
+                
+                for(let i=0;i<reportslen;i++){                    
+                    let report = reports[i],
+                        reportName = report.reportMetadata.name,
+                        detailColumns = report.reportMetadata.detailColumns,
+                        reportType = report.reportMetadata.reportType,                        
+                        type = reportType.type,
+                        table = SFJSON['Fields'][type],
+                        arr = [];
+                    let detailColLen = detailColumns.length;
+                    if(table){
+                        for(let j=0;j<detailColLen;j++){                        
+                            if(detailColumns[j] in table){
+                                arr.push(table[detailColumns[j]]);
+                            }
+                        }
+                    }
+                    let arrlen = arr.length;
+                    for(let k = 0; k < arrlen; k++) {
+                        var tableName = arr[k].SObject__c;
+                        if(restricted["RestrictedObjects"].includes(tableName)){
+                            reports[i].restricted = true
+                            break;
+                        }
+                    }
+                    
+                    let newRow = '';
+                    
+                    if(reports[i].Queryable == false){
+                        newRow += '<a class="dimension" class="disabled" title="'+reports[i].attributes.reportName+'" reptype="'+type+'" repindex="'+i+'">'
+                    }else{
+                        newRow += '<a class="dimension" reptype="'+type+'" title="'+reports[i].attributes.reportName+'" repindex="'+i+'">'
+                    }
+                    if(reports[i].isSelected === true){
+                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                    }else{
+                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                    }
+                    newRow += '<label data-tooltip-on-truncation="true">'+reports[i].attributes.reportName+'</label>'
+                    newRow += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>'
+                    newRow += '<svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                    newRow += '</svg></span></a>'
+                    
+                    $('#reportsList').append(newRow);
+                    
+                } 
+            });
+            
+            //Function to get reports.
+            function getReports() {
+                sforce.connection.query("SELECT Id,LastViewedDate,Name FROM Report", {
+                    onSuccess : function(result) {
+                        if (result.size > 0) {
+                            let records = result.getArray('records'),
+                                recLength = records.length;
+                            for(let i = 0; i < recLength; i++) {
+                                let report = records[i];
+                                getReportMetaData(report.Id,report.LastViewedDate);
+                            }
+                        }
+                    },
+                    onFailure : function(error) {
+                        console.log("An error has occurred: " + error);
+                    }
+                });
+            }
+            
+            //get reportmetadata from reports and group by reportype.
+            function getReportMetaData(repId,LastViewedDate){                    
+                $.ajax(baseUrl+'analytics/reports/'+repId,{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },success:function(response){
+                        let repType = response.reportMetadata.reportType.type,
+                            repTypeInSfJson = SFJSON['Fields'][repType],
+                            reportName = response.reportMetadata.name,
+                            detailColumns = response.reportMetadata.detailColumns,
+                            detailColumnsLength = detailColumns.length;
+                        if(repTypeInSfJson){
+                            for(let i=0;i<detailColumnsLength;i++){ 
+                                if(detailColumns[i] in repTypeInSfJson){
+                                    if(repTypeInSfJson[detailColumns[i]].Queryable === false){                                     
+                                        response.Queryable = repTypeInSfJson[detailColumns[i]].Queryable;
+                                        break;
+                                    }else{
+                                        response.Queryable = repTypeInSfJson[detailColumns[i]].Queryable;
+                                    }
+                                    if(restricted["RestrictedObjects"].includes(repTypeInSfJson[detailColumns[i]]['SObject__c'])){
+                                        response.restricted = true
+                                        break;
+                                    }
+                                }
+                            }    
+                        }
+                        
+                        if(repType in reportTypes){
+                            response.LastViewedDate = LastViewedDate;
+                            response.isSelected = false;
+                            reportTypes[repType].push(response);
+                        }else{
+                            //remove if reporttype.type has name space prefix;
+                            let customreport = repType.endsWith("__c");
+                            if(customreport){
+                                if(repType.startsWith(namespaceprefix)){
+                                    repType = repType.replace(namespaceprefix,"");
+                                }                               
+                            }
+                            response.reportMetadata.reportType.type = repType;
+                            
+                            reportTypes[repType] = [];
+                            response.LastViewedDate = LastViewedDate;
+                            response.isSelected = false;
+                            reportTypes[repType].push(response);                            
+                            let rid = $('#listOfReportTypes').find("a[reporttype='"+repType+"']");
+                            if(rid){
+                                rid.show();
+                                rid.closest("#list_item").show();  
+                                rid.closest(".reporttyperelations").show();  
+                            }else{
+                                let otherreptypeid = $('#listOfReportTypes').find('a[parent][reporttype="Other Reports"]').attr('id');
+                                let newRow = '<li id="sub_list_item">';
+                                newRow += '<a child class="dimension" title="'+repType+'" reporttype="'+repType+'" style="padding-left:15px;">';
+                                newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.DimensionLabel}" width="15px" height="10px"/>';
+                                newRow += '<label data-tooltip-on-truncation="true">'+response.reportMetadata.reportType.label+'</label>';
+                                newRow += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>';
+                                newRow += '<svg class="icon">';
+                                newRow += '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                newRow += '</svg></span></a>';   
+                                newRow += '</li>';
+                                newRow += '<ul class="reporttyperelations" style="padding-left:30px;display:none;" id="'+repType+'"></ul>';
+                                //<span id="reporttyperelations" style="display:none"></span>
+                                getReportTypeMetaData(repType);
+                                $('#listOfReportTypes ul').find("ul[id='"+otherreptypeid+"']").append(newRow);
+                                if(salesforce['reportTypes']["Other Reports"] && typeof salesforce['reportTypes']["Other Reports"] === "object"){
+                                    salesforce['reportTypes']["Other Reports"].push(response.reportMetadata.reportType);
+                                }
+                            }
+                        }
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+            //Select reports function
+            $('#reportsList').on('click','a', function () {
+                var repType = $(this).attr('reptype');
+                var repIndex = parseInt($(this).attr('repindex'));
+                var Queryable = reportTypes[repType][repIndex]['Queryable'];
+                var isSelected = reportTypes[repType][repIndex]['isSelected'];
+                var isRestricted = reportTypes[repType][repIndex]['restricted'];
+                if(isSelected == false){
+                    //if(Queryable && Queryable == true){
+                        //   if(isRestricted && isRestricted == true){
+                        //      alert("This report is restricted.");
+                        //  }else{
+                                reportTypes[repType][repIndex]['isSelected'] = true;
+                                
+                                appendReportToSelectedReportsList(repType,repIndex);
+                                
+                                $(this).find("img#TA_Label").show();
+                                $(this).find("img#DimensionLabel").hide();
+                                $(this).addClass('selectedreport');
+                    let rootReptye = $('#listOfReportTypes').find('a[child][reporttype='+repType+']');
+                    rootReptye.find("img#TA_Label").show();
+                    rootReptye.find("img#touch_folder").hide();
+                    
+                        //   }
+                    //}else{
+                    //    alert("This report not queriable.");
+                    //}
+                }
+            });
+            
+            function appendReportToSelectedReportsList(repType,repIndex){
+                var newRow = '';                        
+                newRow += '<a class="dimension" reptype="'+repType+'" repindex="'+repIndex+'">'
+                newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                newRow += '<label title="'+reportTypes[repType][repIndex]['attributes']['reportName']+'" data-tooltip-on-truncation="true">'+reportTypes[repType][repIndex]['attributes']['reportName']+'</label>'
+                newRow += '</a>'
+                $("#selectedReportsList").append(newRow);
+            }
+            
+            //selected reports remove function
+            $('#selectedReportsList').on('click','a', function () {
+                var repType = $(this).attr('reptype');
+                var repIndex = parseInt($(this).attr('repindex'));
+                var isSelected = reportTypes[repType][repIndex]['isSelected'];
+                if(isSelected===true){
+                    reportTypes[repType][repIndex]['isSelected'] = false;
+                }
+                var rep = $('#reportsList').find('a[reptype="'+repType+'"][repindex="'+repIndex+'"]');
+                rep.find("img#TA_Label").hide();
+                rep.find("img#DimensionLabel").show();
+                //$(this).addClass('selectedreport');                
+                $(this).remove();
+                let selectedRepsByRepType =  $('#selectedReportsList').find('a[reptype="'+repType+'"]');
+                if(selectedRepsByRepType.length === 0){
+                    let rootReptye = $('#listOfReportTypes').find('a[child][reporttype='+repType+']');
+                    rootReptye.find("img#TA_Label").hide();
+                    rootReptye.find("img#touch_folder").show();
+                }
+            });
+            
+            // Back
+            $('#back').on('click', function () {
+                finalObject = {};
+                allTableFields = {};
+                dataFlow = {};
+                uniquetables = [];
+                
+                $('#dataSetsListDiv').empty();
+                $(".page1").show();
+                $(".page2").hide();
+            });
+            
+            
+            
+            
+            //next
+            $('#next').on('click', function () {                
+                let selectedreportslength = $('#selectedReportsList a').length;
+                if(selectedreportslength > 0){                    
+                    getAllSelectedReportsFromReportTypes();                    
+                    $(".page1").hide();
+                    $(".page2").show();
+                }else{
+                    alert("Select a report");
+                }                    
+            });
+            
+            // get All Selected Reports From Report Types
+            function getAllSelectedReportsFromReportTypes(){
+                for(let key in reportTypes){
+                    let reports = reportTypes[key],
+                        reportsLen = reports.length 
+                    for(let i=0;i<reportsLen;i++){
+                        let report = reports[i];
+                        if(report.isSelected === true){
+                            let reportName = report.reportMetadata.name,
+                                detailColumns = report.reportMetadata.detailColumns,
+                                reportType = report.reportMetadata.reportType;
+                            getDetailColumnsdata(detailColumns,reportType,reportName);
+                        }                                
+                    }                         
+                }      
+                getAllFieldsofSobject();
+                
+                //console.log(notQueriableFields);
+            }
+            
+            var notQueriableFields = [];            
+            var uniquetables = [];
+            
+            //get report detailColumns data from json
+            function getDetailColumnsdata(detailColumns,reportType,reportName){                    
+                let type=reportType.type,
+                    repTypeInSfJson = SFJSON['Fields'][type],
+                    i,len = detailColumns.length,
+                    tables = {};
+                if(repTypeInSfJson){
+                    for(i=0;i<len;i++){                        
+                        if(detailColumns[i] in repTypeInSfJson){
+                            let obj = repTypeInSfJson[detailColumns[i]];
+                            if(!(restricted['RestrictedObjects'].includes(obj['SObject__c']))){
+                                if(obj['Queryable'] === true){
+                                    let tableName = obj.SObject__c;
+                                    if (!tables[tableName]) {
+                                        tables[tableName] = [];
+                                    }
+                                    if(obj.Field__c){
+                                        if(obj.FieldReferenceTo__c == 'null'){
+                                            tables[tableName].push({'Field__c':obj.Field__c,'FieldReferenceTo__c':[],'isSelected':true,'permissionable':obj.permissionable});
+                                        }else{
+                                            tables[tableName].push({'Field__c':obj.Field__c,'FieldReferenceTo__c':[obj.FieldReferenceTo__c],'isSelected':true,'permissionable':obj.permissionable});
+                                        }
+                                    }
+                                    uniquetables.push(tableName);
+                                }else{
+                                    let fieldName = obj.SObject__c+"."+obj.Field__c;
+                                    if(!(notQueriableFields.includes(fieldName))){
+                                        notQueriableFields.push(fieldName);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                groupDetailColumnsdata(tables,type,reportName);                  
+            }
+            
+            
+            //group selected reports by sobject_c and push it to Final Object.
+            function groupDetailColumnsdata(tables,reportType,reportName){
+                for (let tableName in tables) {
+                    let restrictedFields = [];
+                    if(tableName in restricted['RestrictedFields']){
+                        restrictedFields = restricted['RestrictedFields'][tableName];
+                    }
+                    $.each(tables[tableName],function(index,value){        
+                        if(restrictedFields.length > 0){
+                            if(restrictedFields.includes(value['Field__c'])){
+                                value['isSelected'] = false;
+                            }
+                        }
+                        if(!(reportType in finalObject)){
+                            finalObject[reportType] = {};
+                        }
+                        if(!(tableName in finalObject[reportType])){ 
+                            finalObject[reportType][tableName] = {};
+                            finalObject[reportType][tableName]['fields'] = [];
+                            finalObject[reportType][tableName]['fields'].push(
+                                {'Field__c':'Id','FieldReferenceTo__c':[],'isSelected':true,'permissionable':false},
+                                {'Field__c':'LastModifiedDate','FieldReferenceTo__c':[],'isSelected':true,'permissionable':false}
+                            );
+                        }                         
+                        
+                        finalObject[reportType][tableName]['fields'].push(value);   
+                        
+                    });
+                }
+                
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+            //get all fields of the table and push it to fields of table in report isselected = false. 
+            //and remove duplicates from table
+            function getAllFieldsofSobject(){
+                let unique = uniquetables.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+                $.each(unique, function( index, value ) {
+                    $.ajax(baseUrl+'sobjects/'+value+'/describe',{
+                        beforeSend:function(xhr){
+                            xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                        },
+                        async: false,
+                        success:function(response){
+                            salesforce['sobjectsDescription'][value] = response;
+                            let fields = response.fields,
+                                tableName = response.name;
+                            $.each(fields, function( index, value ) { 
+                                if(tableName in allTableFields){
+                                    allTableFields[tableName].push({Field__c: value.name, FieldReferenceTo__c: value.referenceTo,isSelected:false,permissionable:value.permissionable});
+                                }else{
+                                    allTableFields[tableName] = [];
+                                    allTableFields[tableName].push({Field__c: value.name, FieldReferenceTo__c: value.referenceTo,isSelected:false,permissionable:value.permissionable});
+                                }
+                            });
+                        },error:function(jqXHR, textStatus, errorThrown){
+                            console.log(jqXHR.status + ': ' + errorThrown);
+                        }
+                    });
+                });
+                for(let repType in finalObject){
+                    let tableObj  = finalObject[repType];                       
+                    for(let tab in tableObj){                          
+                        $.each(allTableFields[tab],function(index,value){
+                            tableObj[tab]['fields'].push(value);        
+                        });
+                        //tableObj[tab]['fields'] = deepCopy(allTableFields[tab]);
+                        let ufields = [],
+                            uniqueObjects = [],
+                            fields = tableObj[tab]['fields'],
+                            fieldsLength = fields.length;
+                        for(let i = 0; i < fieldsLength; i++) {
+                            if(fields[i].Field__c){
+                                if(!(ufields.includes(fields[i].Field__c))){
+                                    let obj = fields[i];
+                                    for (let k = i + 1; k < fieldsLength; k++) {
+                                        if (fields[i].Field__c == fields[k].Field__c) {
+                                            if((typeof fields[k]['FieldReferenceTo__c'] === 'object') && (fields[k].FieldReferenceTo__c.length > 0)){
+                                                $.each(fields[k].FieldReferenceTo__c,function(index,value){
+                                                    if(!(obj['FieldReferenceTo__c'].includes(value))){
+                                                        obj.FieldReferenceTo__c.push(value);
+                                                    }
+                                                });
+                                                if(fields[k].isSelected === true){
+                                                    obj.isSelected = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    uniqueObjects.push(obj);
+                                    ufields.push(fields[i].Field__c);
+                                }
+                            }
+                        }
+                        tableObj[tab]['fields'] = deepCopy(uniqueObjects);
+                    }
+                }              
+                getChildRelationShips();
+            }
+            
+            //Getting child relationships foreach table in selected report types
+            function getChildRelationShips(){
+                for(let repType in finalObject){
+                    let tableObj  = finalObject[repType];
+                    for(let tab in tableObj){
+                        for(let tab2 in tableObj){                               
+                            if(tab != tab2){
+                                if(tab2 in SFJSON['ChildRelationShip']){
+                                    let child = SFJSON['ChildRelationShip'][tab2];
+                                    if(tab in child){
+                                        $.each(child[tab],function(index,value){
+                                            let found = false;
+                                            let foundIndex = null;
+                                            $.each(tableObj[tab]['fields'],function(index1,value1){
+                                                if(value1['Field__c'] == value){
+                                                    found = true;
+                                                    foundIndex = index1;
+                                                }
+                                            });
+                                            if(value['Field__c']){
+                                                if(found == false){
+                                                    tableObj[tab]['fields'].push({Field__c: value['Field__c'], FieldReferenceTo__c: tab2,isSelected:true});
+                                                }else{
+                                                    let ref = tableObj[tab]['fields'][foundIndex]['FieldReferenceTo__c'];
+                                                    if(!(ref.includes(tab2))){
+                                                        tableObj[tab]['fields'][foundIndex]['FieldReferenceTo__c'].push(tab2);
+                                                    }                                                   
+                                                    tableObj[tab]['fields'][foundIndex]['isSelected']=true;
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                prepareObjectForDataflow();                 
+            }
+            
+            function deepCopy(obj) {
+                /*if (Object.prototype.toString.call(obj) === '[object Array]') {
+                    let out = [], i = 0, len = obj.length;
+                    for ( ; i < len; i++ ) {
+                        out[i] = arguments.callee(obj[i]);
+                    }
+                    return out;
+                }
+                if (typeof obj === 'object') {
+                    let out = {}, i;
+                    for ( i in obj ) {
+                        out[i] = arguments.callee(obj[i]);
+                    }
+                    return out;
+                }
+                return obj;*/
+                return JSON.parse(JSON.stringify(obj));
+            }
+            
+            var leftObjects = {};
+            
+            function prepareObjectForDataflow(){
+                for(let reportType in finalObject){
+                    let tables = finalObject[reportType];
+                    let tabCount = {};
+                    let sobjects = [];
+                    for(let tab in tables){
+                        let count = 0;
+                        for(let tab1 in tables){
+                            if(tab != tab1){
+                                let child = SFJSON['ChildRelationShip'][tab];
+                                if(child && (tab1 in child)){
+                                    count++;
+                                }
+                            }
+                        }
+                        tabCount[tab] = count;
+                        sobjects.push(tab);
+                    }
+                    let leftObject = null;
+                    for(let key in tabCount){
+                        if(tabCount[key] == 0){
+                            leftObject = key;
+                        }
+                    }
+                    if(leftObject == null){
+                        for(let key in tabCount){
+                            if(key != 'Account' && key != 'User'){
+                                leftObject = key;
+                            }
+                        }
+                        if(leftObject == null){
+                            if('Account' in tabCount){
+                                leftObject = 'Account';
+                            }else if('User' in tabCount){
+                                leftObject = 'Account';
+                            }
+                        }
+                    }
+                    if(!(reportType in leftObjects)){
+                        leftObjects[reportType] = leftObject;
+                    }
+                    
+                    for(let table in tables){
+                        if(!('references' in tables[table])){
+                            tables[table]['references'] = {};
+                        }                        
+                        $.each(tables[table]['fields'],function(index,field){
+                            if((typeof field['FieldReferenceTo__c'] === 'object') && (field.FieldReferenceTo__c.length >0)){
+                                let refs = field.FieldReferenceTo__c;
+                                $.each(refs,function(index1,ref){
+                                    let i = sobjects.indexOf(ref);                                                
+                                    if(i != -1 && ref !=table) {
+                                        if(!(ref in finalObject[reportType][table]['references'])){
+                                            //finalObject[reportType][table]['references'][ref][field.Field__c] = deepCopy(tables[ref]['fields']);
+                                            //}else{
+                                            finalObject[reportType][table]['references'][ref] = {};                                            
+                                        }
+                                        if(field['Field__c'] in finalObject[reportType][table]['references'][ref]){
+                                            let existingFieldsInRef = finalObject[reportType][table]['references'][ref][field.Field__c];
+                                            let origfields = tables[ref]['fields'],origfieldslen = origfields.length;
+                                            for(let i=0;i<origfieldslen;i++){
+                                                let foundobj = existingFieldsInRef.find(x => x.Field__c === origfields[i]['Field__c']);
+                                                if(!foundobj){
+                                                    let obj = origfields[i];
+                                                    obj.isSelected = false;
+                                                    finalObject[reportType][table]['references'][ref][field.Field__c].push(obj);
+                                                }//else{
+                                                // console.log(foundobj);
+                                                //}
+                                            }
+                                        }else{
+                                            finalObject[reportType][table]['references'][ref][field.Field__c] = deepCopy(tables[ref]['fields']);
+                                        }
+                                    }                                   
+                                });
+                            }
+                        });
+                    }
+                }
+                prepareDatasetsAccordion();
+                console.log(finalObject);
+            }
+            
+            
+            // Prepare accordion in page2
+            function prepareDatasetsAccordion(){
+                for(let reportType in finalObject){                        
+                    let leftObject = leftObjects[reportType];
+                    if(leftObject != null){
+                        getDatsetRowsCount(leftObject,reportType);
+                        createAccordion(leftObject,reportType);                        
+                    }
+                }
+                $("#dataSetsListDiv li:first-child .slds-accordion__summary-action").click();
+            }
+            
+            function createAccordion(table,reportType){
+                let rand = IDGenerator();
+                let row = '';
+                row += '<li class="slds-accordion__list-item" id="'+rand+'" data-reptype="'+reportType+'">';
+                row += '<section class="slds-accordion__section" style="padding:0">';
+                row += '<div class="slds-accordion__summary" style="background-color: #2EC2BA;cursor: pointer;">';
+                row += '<p aria-controls="'+reportType+'" aria-expanded="true" class="slds-accordion__summary-action" style="padding: 10px;">';
+                row += '<img style="height:20px;width:20px;background-color:#2EC2BA;" src="{!$Resource.ArrowDown2}" id="ArrowDown"/>'
+                row += '<span class="slds-truncate" title="Accordion summary">'+salesforce['reportTypeInfo'][reportType]['label']+'</span>';
+                row += '</p>';
+                row += '</div>'
+                
+                row += '<div aria-hidden="true" class="slds-accordion__content" style="display:none;padding:10px" id="'+reportType+'">';
+                row += '<div id="rowCount">&nbsp;&nbsp;&nbsp;RowCount : <span id="rowsCount"></span></div><div id="showFieldsGrid" style="padding-bottom:10px"><h2>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)">Show Fields</a></h2></div>';
+                
+                row += '<div class="slds-section FieldsGrid" style="padding-left:10px;padding-right:10px;margin-top:0;display:none;"><div aria-hidden="false" class="slds-section__content">';
+                
+                row += '<nav class="tablesList" id="tablesList" role="navigation" aria-label="Breadcrumbs" style="width: fit-content;margin:0px auto 2px auto;">';
+                row += '<ol class="slds-breadcrumb slds-list_horizontal slds-wrap">';
+                row += '<li class="slds-breadcrumb__item slds-text-title_caps"><a href="javascript:void(0);" id="rootObject" leftobject="true" reporttype="'+reportType+'" reporttable="'+table+'" referedpath="['+reportType+']['+table+']">'+table+'</a></li>'
+                row += '</ol>';
+                row += '</nav>';
+                
+                
+                row += '<div class="slds-grid slds-grid_pull-padded-medium datasets" style="height:250px">'
+                
+                row += '<div class="slds-col slds-p-horizontal_medium slds-size--2-of-6 datasetTableFieldsCol" style="margin-top:10px;margin-bottom:10px;box-sizing: initial;overflow: hidden;">';
+                row += '<div class="slds-card" style="background:white;border-bottom: 1px solid #d8dde6;height:100%;overflow:auto">';
+                row += '<section class="slds-card__body" style="height:216px;padding:0px 0px">';
+                row += '<div class="slds-scrollable" style="max-height:250px">';
+                row += '<div class="search dimsearch">';
+                row += '<input id="myInput" class="myInput" placeholder="Search for Fields..." type="text" />';
+                row += '<span class="searchhint resnum"></span>'; 
+                row += '</div>';
+                row += '<div class="names selectors" style="height:191px">';
+                row += '<div class="listheader squeezed"></div>';
+                row += '<div class="listheader">All Fields</div>';
+                row += '<div id="datasetTableFieldsCol" reptype="'+reportType+'">';
+                
+                row += '</div></div></div></section></div></div>';                
+                row += '<div class="slds-col slds-p-horizontal_medium slds-size--2-of-6 selectedDatasetTableFieldsCol" style="margin-top:10px;margin-bottom:10px;box-sizing: initial;overflow: hidden;">';
+                row += '<div class="slds-card" style="background:white;border-bottom: 1px solid #d8dde6;height:100%;overflow:auto">';
+                row += '<section class="slds-card__body" style="height:216px;padding:0px 0px">';
+                row += '<div class="slds-scrollable" style="max-height:250px">';
+                row += '<div class="search dimsearch">';
+                row += '<input id="myInput" class="myInput" placeholder="Search for Fields..." type="text" />';
+                row += '<span class="searchhint resnum"></span>'; 
+                row += '</div>';
+                row += '<div class="names selectors" style="height:191px">';
+                row += '<div class="listheader squeezed"></div>';
+                row += '<div class="listheader">Selected Fields</div>';
+                row += '<div id="selectedDatasetTableFieldsCol" reptype="'+reportType+'">';
+                               
+                row += '</div></div></div></section></div></div>';                            
+                row += '</div></div>';
+                row += '</div></section></li>';
+                $('#dataSetsListDiv').append(row);
+                //createAndAppendFieldsList(table,reportType);
+                createAndAppendTableFieldsByReportTypeToAccordion(reportType,table)
+            }            
+            
+            function createAndAppendTableFieldsByReportTypeToAccordion(type,table){
+                $.each(finalObject[type][table]['fields'],function(index,value){
+                    if(value['Field__c']){
+                        if((typeof value['FieldReferenceTo__c'] === 'object') && (value.FieldReferenceTo__c.length >0)){
+                            $.each(value.FieldReferenceTo__c,function(index1,value1){
+                                if(!(restricted['RestrictedObjects'].includes(value1))){
+                                    var newRow = '<a reptype="'+type+'" repfield="'+value.Field__c+'" reptable="'+table+'" repindex="'+index+'" aria-selected="false">';
+                                    if(value.isSelected === true){
+                                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                                    }else{
+                                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                        newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                                    }
+                                    newRow += '<label id="label1" data-tooltip-on-truncation="true">'+value.Field__c+'</label>';
+                                    //if(value1 !=table) {
+                                    newRow += '<label id="label2" data-field="'+value.Field__c+'" data-type="'+type+'" data-table="'+value1+'" style="z-index:2" data-tooltip-on-truncation="true">'+value1+' >> </label>';
+                                    //}
+                                    newRow += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>';
+                                    newRow += '<svg class="icon">';
+                                    newRow += '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    newRow += '</svg></span></a>';
+                                    $('#dataSetsListDiv').find('.datasets .datasetTableFieldsCol #datasetTableFieldsCol[reptype="'+type+'"]').append(newRow);
+                                }
+                            });
+                        }else{
+                            var newRow = '<a reptype="'+type+'" repfield="'+value.Field__c+'" reptable="'+table+'" repindex="'+index+'" aria-selected="false">';
+                            if(value.isSelected === true){
+                                newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                            }else{
+                                newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                newRow += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                            }
+                            newRow += '<label id="label1" data-tooltip-on-truncation="true">'+value.Field__c+'</label>';
+                            newRow += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>';
+                            newRow += '<svg class="icon">';
+                            newRow += '<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                            newRow += '</svg></span></a>';
+                            $('#dataSetsListDiv').find('.datasets .datasetTableFieldsCol #datasetTableFieldsCol[reptype="'+type+'"]').append(newRow);
+                        }    
+                        
+                        if(value.isSelected === true){
+                            var newRow = '';
+                            newRow += '<a class="dimension" reptype="'+type+'" reptable="'+table+'" repindex="'+index+'"  aria-selected="false">';
+                            newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                            newRow += '<label data-tooltip-on-truncation="true">'+value.Field__c+'</label>';
+                            $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+type+'"]').append(newRow);
+                        }
+                    }
+                });
+                for(var ref in finalObject[type][table]['references']){
+                    $.each(finalObject[type][table]['references'][ref],function(index,field){
+                        $.each(field,function(index1,value1){
+                            if(value1.isSelected === true){
+                                var newRow ='';
+                                newRow += '<a class="dimension" id="refField" reptype="'+type+'" reptable="'+ref+'" refield ="'+index+'" repindex="'+index1+'"  refieldtable="'+table+'" aria-selected="false">';
+                                newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                                newRow += '<label data-tooltip-on-truncation="true">'+index+'.'+value1.Field__c+'</label>';
+                                $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+type+'"]').append(newRow);
+                            }
+                        });
+                    });
+                }
+            }
+            
+            
+            // Accordion show/hide functions
+            $(".slds-accordion").on('click','.slds-accordion__list-item #showFieldsGrid',function (e) {
+                e.preventDefault();
+                let $this=$(this), closest = $this.parent().find('.FieldsGrid');
+                closest.toggleClass('slds-is-open');
+                if( closest.hasClass('slds-is-open')) {
+                    $this.find('a').text('Hide Fields');
+                    closest.show();
+                }else{
+                    $this.find('a').text('Show Fields');
+                    closest.hide();
+                }
+            });
+            
+            $(".slds-accordion").on('click','.slds-accordion__list-item .slds-accordion__summary',function (e) {
+                e.preventDefault();
+                let $this = $(this) ,
+                    closest = $this.closest('section');
+                if (closest.hasClass('slds-is-open')) {
+                    closest.removeClass('slds-is-open');
+                    closest.find('img').addClass("accordionicon_inverse"); 
+                    closest.find('.slds-accordion__content').hide();
+                    closest.find(".FieldsGrid").removeClass('slds-is-open');
+                    closest.find(".FieldsGrid").hide();
+                    closest.find('#showFieldsGrid a').text('Hide Fields');
+                } else {
+                    $(".slds-accordion .slds-accordion__list-item section").removeClass('slds-is-open');
+                    $(".slds-accordion .slds-accordion__list-item .slds-accordion__content").hide();
+                    $(".slds-accordion .slds-accordion__list-item .FieldsGrid").removeClass('slds-is-open');
+                    $(".slds-accordion .slds-accordion__list-item .FieldsGrid").hide();
+                    $(".slds-accordion .slds-accordion__list-item #showFieldsGrid a").text('Show Fields');
+                    $(".slds-accordion .slds-accordion__list-item img").addClass('accordionicon_inverse');
+                    closest.addClass('slds-is-open');
+                    closest.find('.slds-accordion__content').show();
+                    closest.find('img').removeClass("accordionicon_inverse");
+                }
+                /*if( $this.closest('li').find('.FieldsGrid').hasClass('slds-is-open')) {
+                    $this.closest('li').find('#showFieldsGrid a').text('Hide Fields');
+                } else {
+                    $this.closest('li').find('#showFieldsGrid a').text('Show Fields');
+                }*/
+            });
+            
+                        
+            $('#dataSetsListDiv').on('click','.tablesList li a', function (e) {
+                e.preventDefault();
+                let $this = $(this);
+                let reporttype = $this.attr("reporttype");
+                let currenttable = $this.attr("reporttable");
+                let referedbytable = $this.attr("referedbytable");
+                let referedbytablefield = $this.attr("referedbytablefield"); 
+                let referedbytablefieldindex = $this.attr("referedbytablefieldindex"); 
+                
+                if($this.attr('leftobject')){
+                    let type = $this.attr("reporttype"),
+                        table = $this.attr("reporttable"),
+                        tables = finalObject[type];
+                    
+                    let div = $('#dataSetsListDiv').find('.datasets .datasetTableFieldsCol #datasetTableFieldsCol[reptype="'+type+'"]').closest('.FieldsGrid ').find('.tablesList');
+                    div.find('span').remove();
+                    
+                    $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+type+'"]').empty();
+                    $('#dataSetsListDiv').find('.datasets .datasetTableFieldsCol #datasetTableFieldsCol[reptype="'+type+'"]').empty();                 
+                    $(this).parent().parent().find('.myInput').val('');
+                    
+                    var sobjects = [];
+                    for(var tab in tables){
+                        sobjects.push(tab);
+                    }                    
+                    
+                    createAndAppendTableFieldsByReportTypeToAccordion(type,table);
+                    
+                }else{                
+                    appendReferenceTableFields(reporttype,currenttable,referedbytablefield,referedbytablefieldindex,referedbytable);
+                }
+                
+                let index = $this.parent('li').index(); 
+                $this.closest('ol').find('li').slice(index+1).remove();              
+                
+                
+            });
+            
+            
+            $('#dataSetsListDiv').on('click','.datasetTableFieldsCol #datasetTableFieldsCol a #label2', function (e) {
+                e.preventDefault();
+                let $this = $(this); 
+                $this.closest('.datasets').find('.myInput').val('');
+                $this.parent().find('#label1').click();
+                let type = $(this).data("type"),
+                    table = $(this).data("table"),
+                    field = $(this).data("field"),
+                    refieldindex = $(this).closest('a').attr('repindex'),
+                    refieldtable = $(this).closest('a').attr('reptable');
+                
+                appendReferenceTableFields(type,table,field,refieldindex,refieldtable);
+                
+                let div = $('#dataSetsListDiv').find('.datasets .datasetTableFieldsCol #datasetTableFieldsCol[reptype="'+type+'"]').closest('.FieldsGrid').find('ol');
+                div.append('<li class="slds-breadcrumb__item slds-text-title_caps"><a href="javascript:void(0);"  reporttype="'+type+'" reporttable="'+table+'" referedbytable="'+refieldtable+'" referedbytable="'+refieldtable+'" referedbytablefieldindex="'+refieldindex+'" referedbytablefield="'+field+'" referedpath="[references]['+table+']['+field+']">'+table+'</a></li>');
+                //sortList();
+            });
+            
+            function appendReferenceTableFields(type,table,field,refieldindex,refieldtable){
+                let tables = finalObject[type];
+                
+                if(!(table in finalObject[type][refieldtable]['references'])){
+                    finalObject[type][refieldtable]['references'][table] = {}
+                }                
+                
+                if(!(field in finalObject[type][refieldtable]['references'][table])){
+                    if(table in finalObject[type]){
+                        let obj = deepCopy(finalObject[type][table]['fields']);
+                        finalObject[type][refieldtable]['references'][table][field] = []; 
+                        $.each(obj,function(index,value){
+                            value.isSelected = false;
+                            finalObject[type][refieldtable]['references'][table][field].push(value);
+                        });
+                    }else{
+                        getRefTableFields(table,type,refieldtable,field);
+                        finalObject[type][refieldtable]['references'][table][field] = [];
+                        finalObject[type][refieldtable]['references'][table][field] = deepCopy(finalObject[type][table]['fields']); 
+                    }
+                }   
+                
+                $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+type+'"]').empty();
+                $('#dataSetsListDiv').find('.datasets .datasetTableFieldsCol #datasetTableFieldsCol[reptype="'+type+'"]').empty();                 
+                
+                let tabFields = finalObject[type][refieldtable]['references'][table][field];
+                
+                for(let j=0;j<tabFields.length;j++){
+                    let isSelected = tabFields[j]['isSelected'];
+                    if(tabFields[j].Field__c){
+                        if(isSelected==true){
+                            let newRow = '';
+                            newRow += '<a class="dimension" repfield="'+tabFields[j].Field__c+'" reptype="'+type+'" reptable="'+table+'" refield="'+field+'" repindex="'+j+'" refieldindex="'+refieldindex+'" refieldtable="'+refieldtable+'">'
+                            newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                            newRow += '<label data-tooltip-on-truncation="true">'+field+'.'+tabFields[j].Field__c+'</label>'
+                            newRow += '</a>'
+                            $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+type+'"]').append(newRow);
+                        }
+                        
+                        let newRow2 = '';
+                        
+                        if((typeof tabFields[j]['FieldReferenceTo__c'] === 'object') && (tabFields[j].FieldReferenceTo__c.length > 0)){
+                            $.each(tabFields[j].FieldReferenceTo__c,function(index,value){
+                                if(!(restricted['RestrictedObjects'].includes(value))){
+                                    newRow2 += '<a class="dimension" repfield="'+tabFields[j].Field__c+'" reptype="'+type+'" refield="'+field+'" reptable="'+table+'" repindex="'+j+'" refieldindex="'+refieldindex+'" refieldtable="'+refieldtable+'">';
+                                    if(isSelected === true){
+                                        newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                        newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                                    }else{
+                                        newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                        newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                                    }
+                                    //if(value !== table){
+                                    newRow2 += '<label id="label1" data-tooltip-on-truncation="true">'+tabFields[j].Field__c+'</label>';
+                                    newRow2 += '<label id="label2" data-field="'+tabFields[j].Field__c+'" data-type="'+type+'" data-table="'+value+'" style="z-index:2" data-tooltip-on-truncation="true">'+value+' >> </label>';
+                                    //}else{
+                                    //newRow2 += '<label id="label1" data-tooltip-on-truncation="true">'+tabFields[j].Field__c+'</label>';
+                                    //}                            
+                                    newRow2 += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>'
+                                    newRow2 += '<svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                                    newRow2 += '</svg></span></a>';
+                                }
+                            });      
+                            
+                        }else{
+                            
+                            newRow2 += '<a class="dimension" repfield="'+tabFields[j].Field__c+'" reptype="'+type+'" refield="'+field+'" reptable="'+table+'" repindex="'+j+'" refieldindex="'+refieldindex+'" refieldtable="'+refieldtable+'">';
+                            if(isSelected === true){
+                                newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                            }else{
+                                newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px;display:none" src="{!$Resource.TA_Label}" width="15px" height="10px" id="TA_Label"/>';
+                                newRow2 += '<img style="cursor:pointer;position:relative;z-index:2;margin-left:10px" src="{!$Resource.DimensionLabel}" width="15px" height="10px" id="DimensionLabel"/>';
+                            }
+                            newRow2 += '<label id="label1"  data-tooltip-on-truncation="true">'+tabFields[j].Field__c+'</label>'
+                            newRow2 += '<span class="valuesbtn"><span class="chevronLeftIcon"></span>'
+                            newRow2 += '<svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/analytics/wave/web/proto/icons/sprite.analytics.svg#chevronright"></use>';
+                            newRow2 += '</svg></span></a>';
+                            
+                        }
+                        
+                        
+                        $('#dataSetsListDiv').find('.datasets .datasetTableFieldsCol #datasetTableFieldsCol[reptype="'+type+'"]').append(newRow2);
+                    }
+                }
+            }
+            
+            
+            
+            $('#dataSetsListDiv').on('click','.selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol a', function (e) {
+                e.preventDefault();
+                let repType = $(this).attr('reptype'),
+                    repIndex = parseInt($(this).attr('repindex')),
+                    repTable = $(this).attr('repTable'),
+                    refield = $(this).attr('refield'),
+                    refieldindex = $(this).closest('a').attr('refieldindex'),
+                    refieldtable= $(this).closest('a').attr('refieldtable'),
+                    self = $(this);
+                if($(this).attr('refield')){
+                    let field = finalObject[repType][refieldtable]['references'][repTable][refield][repIndex];
+                    if(field['Field__c'] == 'Id'){
+                        let numItems = self.parent().find('a[reptable="'+repTable+'"][refield="'+refield+'"]').length;
+                        if(numItems > 1){
+                            alert(refield+'.'+field['Field__c']+" cannot be deleted");
+                            return;
+                        }
+                    }
+                    finalObject[repType][refieldtable]['references'][repTable][refield][repIndex]['isSelected'] = false;
+                    let row = $(this).closest('.datasets').find('.datasetTableFieldsCol #datasetTableFieldsCol a[reptype="'+repType+'"][reptable="'+repTable+'"][repindex="'+repIndex+'"][refield="'+refield+'"]');
+                    row.find("img#TA_Label").hide();
+                    row.find("img#DimensionLabel").show();
+                    self.remove();
+                    
+                }else{
+                    let field = finalObject[repType][repTable]['fields'][repIndex];
+                    if(field['Field__c'] == 'Id'){
+                        let numItems = self.parent().find('a').length;
+                        if(numItems > 1){
+                            alert(field['Field__c']+" cannot be deleted");
+                            return;
+                        }
+                    }
+                    
+                    $.each(field.FieldReferenceTo__c,function(index,value){
+                        if(value in finalObject[repType][repTable]['references']){
+                            let fd = field['Field__c'];
+                            if(fd in finalObject[repType][repTable]['references'][value]){
+                                let row = self.parent().find('a[reptype="'+repType+'"][reptable="'+value+'"][refield="'+fd+'"]');
+                                row.remove();
+                                delete finalObject[repType][repTable]['references'][value][fd];
+                            }
+                        }
+                    });
+                    
+                    finalObject[repType][repTable]['fields'][repIndex]['isSelected'] = false;
+                    let row = $(this).closest('.datasets').find('.datasetTableFieldsCol #datasetTableFieldsCol a[reptype="'+repType+'"][reptable="'+repTable+'"][repindex="'+repIndex+'"]');
+                    row.find("img#TA_Label").hide();
+                    row.find("img#DimensionLabel").show();
+                    self.remove();
+                }
+            });
+            
+            $('#dataSetsListDiv').on('click','.datasetTableFieldsCol #datasetTableFieldsCol a #label1', function (e) {
+                e.preventDefault();
+                let reptype      = $(this).closest('a').attr('reptype'),
+                    repindex     = parseInt($(this).closest('a').attr('repindex')),
+                    reptable     = $(this).closest('a').attr('reptable'),
+                    refield      = $(this).closest('a').attr('refield'),
+                    refieldindex = $(this).closest('a').attr('refieldindex'),
+                    refieldtable = $(this).closest('a').attr('refieldtable');
+                if($(this).closest('a').attr('refield')){
+                    if(refield in finalObject[reptype][refieldtable]['references'][reptable]){
+                        let repfield = $(this).closest('a').attr('repfield');
+                        let restrictedFields = [];
+                        if(reptable in restricted['RestrictedFields']){
+                            restrictedFields = restricted['RestrictedFields'][reptable];
+                        }
+                        if(restrictedFields.length > 0){
+                            if(restrictedFields.includes(repfield)){
+                                alert("This field cannot be selected");
+                                return;
+                            }
+                        }
+                        finalObject[reptype][refieldtable]['fields'][refieldindex]['isSelected'] = true;
+                        let obj = finalObject[reptype][refieldtable]['references'][reptable][refield];
+                        for(let i=0;i<obj.length;i++){
+                            if(obj[i].Field__c == 'Id'){
+                                if(obj[i]['isSelected'] == false){
+                                    if(reptable in finalObject[reptype]){
+                                        finalObject[reptype][reptable]['fields'][i]['isSelected'] = true;
+                                    }
+                                    finalObject[reptype][refieldtable]['references'][reptable][refield][i]['isSelected'] = true;
+                                    let newRow = '';
+                                    newRow += '<a class="dimension" repfield="'+obj[i].Field__c+'" reptype="'+reptype+'" reptable="'+reptable+'" refield="'+refield+'" repindex="'+i+'" refieldindex="'+refieldindex+'" refieldtable="'+refieldtable+'">'
+                                    newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                                    newRow += '<label data-tooltip-on-truncation="true">'+refield+'.'+obj[i].Field__c+'</label>'
+                                    newRow += '</a>'
+                                    $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+reptype+'"]').append(newRow);
+                                    let fi = $(this).closest('a').parent().find('a[repfield="Id"]');
+                                    fi.find("img#TA_Label").show();
+                                    fi.find("img#DimensionLabel").hide();
+                                }
+                                break;
+                            }
+                        }
+                        let isSelected = obj[repindex]['isSelected'];
+                        if(isSelected == false){
+                            if(reptable in finalObject[reptype]){
+                                finalObject[reptype][reptable]['fields'][repindex]['isSelected'] = true;
+                            }
+                            finalObject[reptype][refieldtable]['references'][reptable][refield][repindex]['isSelected'] = true;
+                            let newRow = '';
+                            newRow += '<a class="dimension" repfield="'+obj[repindex]['Field__c']+'" reptype="'+reptype+'" reptable="'+reptable+'" refield="'+refield+'" repindex="'+repindex+'" refieldindex="'+refieldindex+'" refieldtable="'+refieldtable+'">'
+                            newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                            newRow += '<label data-tooltip-on-truncation="true">'+refield+'.'+obj[repindex]['Field__c']+'</label>'
+                            newRow += '</a>'
+                            $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+reptype+'"]').append(newRow);
+                            $(this).closest('a').find("img#TA_Label").show();
+                            $(this).closest('a').find("img#DimensionLabel").hide();
+                        }
+                    }
+                    
+                }else{
+                    let repfield = $(this).closest('a').attr('repfield');
+                    let restrictedFields = [];
+                    if(reptable in restricted['RestrictedFields']){
+                        restrictedFields = restricted['RestrictedFields'][reptable];
+                    }
+                    if(restrictedFields.length > 0){
+                        if(restrictedFields.includes(repfield)){
+                            alert("This field cannot be selected");
+                            return;
+                        }
+                    }
+                    let obj = finalObject[reptype][reptable]['fields']
+                    for(let i=0;i<obj.length;i++){
+                        if(obj[i].Field__c == 'Id'){
+                            if(obj[i]['isSelected'] == false){
+                                finalObject[reptype][reptable]['fields'][i].isSelected = true;
+                                let newRow = '';
+                                newRow += '<a class="dimension" reptype="'+reptype+'" reptable="'+reptable+'" repindex="'+i+'">'
+                                newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                                newRow += '<label data-tooltip-on-truncation="true">'+finalObject[reptype][reptable]['fields'][i]['Field__c']+'</label>'
+                                newRow += '</a>'
+                                $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+reptype+'"]').append(newRow);
+                                let fi = $(this).closest('a').parent().find('a[repfield="Id"]');
+                                fi.find("img#TA_Label").show();
+                                fi.find("img#DimensionLabel").hide();
+                            }
+                            break;
+                        }
+                    }
+                    let isSelected = finalObject[reptype][reptable]['fields'][repindex].isSelected;
+                    if(isSelected == false){
+                        finalObject[reptype][reptable]['fields'][repindex].isSelected = true;
+                        let newRow = '';
+                        newRow += '<a class="dimension" reptype="'+reptype+'" reptable="'+reptable+'" repindex="'+repindex+'">'
+                        newRow += '<img style="cursor:pointer;position:relative; z-index:2;margin-left:10px" src="{!$Resource.Delete}" title="Delete" width="26px" height="12px" />'                        
+                        newRow += '<label data-tooltip-on-truncation="true">'+finalObject[reptype][reptable]['fields'][repindex]['Field__c']+'</label>'
+                        newRow += '</a>'
+                        $('#dataSetsListDiv').find('.datasets .selectedDatasetTableFieldsCol #selectedDatasetTableFieldsCol[reptype="'+reptype+'"]').append(newRow);
+                        $(this).closest('a').find("img#TA_Label").show();
+                        $(this).closest('a').find("img#DimensionLabel").hide();
+                    }
+                }
+            });
+            
+            
+            //Function to get Rows count of a table.
+            function getDatsetRowsCount(tabName,repType) {                    
+                sforce.connection.query('SELECT COUNT() FROM '+tabName,function (result) {
+                    $("#dataSetsListDiv").find("li[data-reptype='" + repType + "'] #rowsCount").html(result.size);
+                },function(error) {
+                    console.log("An error has occurred: " + error);
+                });
+            }
+            
+                        
+            
+            let leftObject_title;
+            
+            
+            function generateDataFlow(){ 
+                dataFlow = {};
+                for(let reptype in finalObject){                                                
+                    let reptypeobj = finalObject[reptype];
+                    let tabRelations = {};
+                    let leftObject = leftObjects[reptype];
+                    
+                    let selectedLeftObjectFields = [];
+                    $.each(reptypeobj[leftObject]['fields'],function(inde,val){
+                        if(val.isSelected == true){
+                            selectedLeftObjectFields.push(val);
+                        }
+                    });
+                    
+                    generateExtractNodeForDataFlow(reptypeobj,leftObject);
+                    
+                    if(selectedLeftObjectFields.length > 0){
+                        for(let tab in reptypeobj){
+                            tabRelations[tab] = []
+                            for(let tab1 in reptypeobj){                                
+                                if(tab != tab1){
+                                    if(tab in SFJSON['ChildRelationShip']){
+                                        let child = SFJSON['ChildRelationShip'][tab];
+                                        if(tab1 in child){
+                                            let obj = {};
+                                            obj[tab1] = child[tab1];
+                                            tabRelations[tab].push(obj);
+                                        }
+                                    }
+                                }                                
+                            }
+                        }
+                    }
+                    
+                    leftObject_title = 'Extract_'+leftObject;
+                    leftObject_title = leftObject_title.replace(/__/g, "_");
+                    
+                    let sobjects = [];
+                    let unusedSobjects = [];
+                    for(let key in tabRelations){
+                        if(key != leftObject){
+                            sobjects.push(key);
+                            unusedSobjects.push(key);
+                        }
+                    }
+                    
+                    if((leftObject != null) && (selectedLeftObjectFields.length > 0)){
+                        $.each(selectedLeftObjectFields,function(index,field){
+                            if((typeof field['FieldReferenceTo__c'] === 'object') && (field.FieldReferenceTo__c.length > 0)){                                                                                     
+                                $.each(field.FieldReferenceTo__c,function(index1,ref){   
+                                    let i = sobjects.indexOf(ref);                                                
+                                    if(i != -1) {
+                                        let selectedFds = extractFields(reptype,field.Field__c,ref,leftObject);
+                                        if(selectedFds.length >0 ){
+                                            prepareJoinNodeForDataFlow(reptypeobj,field,ref,reptype,leftObject);
+                                        }
+                                    }
+                                    let x = unusedSobjects.indexOf(ref)
+                                    if(x != -1) {
+                                        unusedSobjects.splice(x,1);
+                                    }
+                                });                                            
+                            }
+                        }); 
+                        $.each(unusedSobjects,function(index,tab){
+                            $.each(sobjects,function(ind1,tab1){
+                                if(tab != tab1){
+                                    let remSelectedReportsFields = [];
+                                    $.each(reptypeobj[tab1]['fields'],function(ind2,val){
+                                        if(val.isSelected == true){
+                                            remSelectedReportsFields.push(val);
+                                        }
+                                    });
+                                    $.each(remSelectedReportsFields,function(ind3,field){
+                                        if((typeof field['FieldReferenceTo__c'] === 'object') && (field.FieldReferenceTo__c.length > 0)){
+                                            let refers = field.FieldReferenceTo__c;
+                                            if(refers.includes(tab)){
+                                                let i = sobjects.indexOf(tab);                                                
+                                                if(i != -1) {
+                                                    
+                                                    prepareJoinNodeForDataFlow(reptypeobj,field,tab,reptype,tab1);
+                                                    
+                                                    let x = unusedSobjects.indexOf(tab)
+                                                    if(x != -1) {
+                                                        unusedSobjects.splice(x,1);
+                                                    }
+                                                }                                                    
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                        
+                        //register
+                        generateRegisterNodeForDataFlow(reptype);
+                    }                        
+                }
+            }            
+            
+            function generateExtractNodeForDataFlow(reptypeobj,tab){
+                let selectedTableFields = [];
+                //console.log(reptypeobj[tab]);
+                //console.log(tab);
+                $.each(reptypeobj[tab]['fields'],function(inde,val){
+                    //console.log(val);
+                    if((val['Field__c']) && (val.isSelected == true)){
+                        let index = salesforce['sobjectsDescription'][tab]['fields'].findIndex(x => x.name === val['Field__c']);
+                        if(index > -1){
+                            selectedTableFields.push(val);
+                        }                        
+                    }
+                });
+                
+                if(selectedTableFields.length > 0){
+                    //Create sfdcDigest Nodes 
+                    let extract_title = "Extract_"+tab;
+                    extract_title = extract_title.replace(/__/g, "_");
+                    if(!(extract_title in dataFlow)){
+                        dataFlow[extract_title]={};
+                        dataFlow[extract_title]["action"]= "sfdcDigest";
+                        dataFlow[extract_title]["parameters"] ={};
+                        dataFlow[extract_title]["parameters"]["SFDCtoken"] =  "SFDCtoken";
+                        dataFlow[extract_title]["parameters"]["fields"] =  fieldsObj(selectedTableFields);
+                        dataFlow[extract_title]["parameters"]["object"] =  tab;
+                    }else{
+                        if(dataFlow[extract_title]["parameters"]["fields"].length > 0){
+                            let fieldsArr = dataFlow[extract_title]["parameters"]["fields"];
+                            $.each(selectedTableFields,function(index,value){
+                                fieldsArr.push({name:value.Field__c});
+                            })
+                            dataFlow[extract_title]["parameters"]["fields"] = fieldsObj2(fieldsArr);
+                        }
+                    }
+                }
+            }
+            
+            function prepareJoinNodeForDataFlow(reptypeobj,field,rightObject,reptype,leftObject){
+                let leftObjectCropped;
+                if (leftObject_title.indexOf("Extract_") >= 0){
+                    leftObjectCropped = leftObject_title.replace("Extract_", "");
+                }else if (leftObject_title.indexOf("Join_") >= 0){
+                    leftObjectCropped = leftObject_title.replace("Join_", "");
+                }else{
+                    leftObjectCropped = leftObject_title;
+                }
+                let augment_title = "Join_"+leftObjectCropped+"_"+rightObject+field.Field__c;
+                augment_title = augment_title.replace(/__/g, "_");
+                
+                generateJoinNodeForDataFlow(augment_title,reptypeobj,field,rightObject,reptype,leftObject);
+                
+                             
+                leftObject_title = augment_title;
+                
+                let searchForLeftObject = leftObject+"s";
+                let searchForRightObject = rightObject+"s";
+                //let relation = salesforce['reportTypeRelations'][reptype].find(o => o.objName === searchForObject);
+                if(salesforce['reportTypeRelations'][reptype]){
+                    let relation =  salesforce['reportTypeRelations'][reptype].filter(function(obj) {
+                        //return obj.leftObject === searchForLeftObject && obj.rightObject === searchForRightObject;
+                        return obj.leftObject === searchForRightObject && obj.rightObject === searchForLeftObject;
+                    });
+                    console.log(relation);
+                    
+                    if( (Array.isArray(relation)) &&  (relation.length >0) ){
+                        if(relation[0]['mustRelated'] === true){
+                            generateReverseJoinForDataFlow(augment_title,reptypeobj,field,leftObject,reptype,rightObject);
+                        }
+                    }
+                }
+            }
+            
+            function generateJoinNodeForDataFlow(augment_title,reptypeobj,field,rightObject,reptype,leftObject){
+                augment_title = augment_title.replace(/__/g, "_");
+                let rightObject_title = "Extract_"+rightObject;
+                    rightObject_title = rightObject_title.replace(/__/g, "_");
+                if(!(rightObject_title in dataFlow)){
+                    generateExtractNodeForDataFlow(reptypeobj,rightObject);
+                }
+                let relationShip = rightObject+"_"+field.Field__c; 
+                let selectedRightObjectFields = extractFields(reptype,field.Field__c,rightObject,leftObject);
+                //let mappedRelationShipAndSelectedRightObjectFields = selectedRightObjectFields.map(x => relationShip+"."+x);
+                
+                dataFlow[augment_title]={};
+                dataFlow[augment_title]["action"]= "augment";
+                dataFlow[augment_title]["parameters"] ={};
+                dataFlow[augment_title]["parameters"]["left"] = leftObject_title;                                
+                dataFlow[augment_title]["parameters"]["left_key"] = [field.Field__c];
+                dataFlow[augment_title]["parameters"]["right"] = rightObject_title;
+                dataFlow[augment_title]["parameters"]["right_key"] = ["Id"];
+                dataFlow[augment_title]["parameters"]["right_select"] = selectedRightObjectFields;//mappedRelationShipAndSelectedRightObjectFields;
+                dataFlow[augment_title]["parameters"]["relationship"] = relationShip;//rightObject+"_"+field.Field__c;
+            }
+            
+            function generateReverseJoinForDataFlow(augment_title,reptypeobj,field,rightObject,reptype,leftObject){
+                
+                let augment_title_rev = augment_title+"_Rev"; 
+                augment_title_rev = augment_title_rev.replace(/__/g, "_");
+                
+                let relationShip = rightObject+"_"+field.Field__c; 
+                //let mappedRelationShipAndSelectedRightObjectFields=[];
+                /*$.each(reptypeobj[rightObject]['fields'],function(inde,val){
+                    if(val.isSelected == true){
+                        mappedRelationShipAndSelectedRightObjectFields.push( relationShip+"."+val['Field__c']);
+                    }
+                });*/
+                let selectedRightObjectFields = [];
+                $.each(reptypeobj[rightObject]['fields'],function(inde,val){
+                    if(val['Field__c'] && val.isSelected == true){
+                        let index = salesforce['sobjectsDescription'][rightObject]['fields'].findIndex(x => x.name === val['Field__c']);
+                        if(index > -1){
+                            selectedRightObjectFields.push(val['Field__c']);
+                        }                         
+                    }
+                });
+                
+                let rightObject_title = "Extract_"+rightObject;
+                    rightObject_title = rightObject_title.replace(/__/g, "_");
+                if(!(rightObject_title in dataFlow)){
+                    generateExtractNodeForDataFlow(reptypeobj,rightObject);
+                }
+                                
+                dataFlow[augment_title_rev]={};
+                dataFlow[augment_title_rev]["action"]= "augment";
+                dataFlow[augment_title_rev]["parameters"] ={};
+                dataFlow[augment_title_rev]["parameters"]["left"] = dataFlow[augment_title]["parameters"]["right"];                                
+                dataFlow[augment_title_rev]["parameters"]["left_key"] = dataFlow[augment_title]["parameters"]["right_key"];
+                dataFlow[augment_title_rev]["parameters"]["right"] = dataFlow[augment_title]["parameters"]["left"];
+                dataFlow[augment_title_rev]["parameters"]["right_key"] = dataFlow[augment_title]["parameters"]["left_key"];
+                dataFlow[augment_title_rev]["parameters"]["right_select"] = selectedRightObjectFields;//mappedRelationShipAndSelectedRightObjectFields;
+                dataFlow[augment_title_rev]["parameters"]["relationship"] = relationShip;
+                
+                leftObject_title = augment_title_rev;
+                
+                generateFilterNodeForReverseJoinInDataFlow(augment_title_rev,augment_title);
+                
+            }
+            
+            function generateFilterNodeForReverseJoinInDataFlow(augment_title_rev,augment_title){
+                                
+                let compute_title =  "compute_"+augment_title;
+                compute_title = compute_title.replace(/__/g, "_");
+                
+                let fieldsForRemoveNode = [{"name": "ID_NULL_FIELD"}];
+                let computedFieldsForRenameNode = [];
+                
+                let computedFields = [{
+                    "name": "ID_NULL_FIELD",
+                    "saqlExpression": "case when 'Id' is null then \"ID_IS_NULL\"  else \"OTHER\" end",
+                    "type": "Text"
+                }];
+                
+                let computedFieldsForRevNode = [];
+                let computedFieldsForRenameRevNode = [];
+                $.each(dataFlow[augment_title_rev]["parameters"]["right_select"],function(inde,val){
+                    let obj = {};
+                    obj["name"] = "XX_"+dataFlow[augment_title_rev]["parameters"]["relationship"]+"_"+val;
+                    obj["saqlExpression"] = "'"+val+"'";
+                    obj["type"] = "Text";
+                    computedFields.push(obj);
+
+                    let objForRevNode = {};
+                    objForRevNode["name"] = "XX_"+dataFlow[augment_title_rev]["parameters"]["relationship"]+"_"+val;
+                    objForRevNode["saqlExpression"] = "'"+dataFlow[augment_title_rev]["parameters"]["relationship"]+"."+val+"'";
+                    objForRevNode["type"] = "Text";
+                    computedFieldsForRevNode.push(objForRevNode);
+                    
+                    //let objForRemoveNode = {};
+                    //objForRemoveNode["name"] = val;
+                    //fieldsForRemoveNode.push(objForRemoveNode);
+                    
+                    let objForRenameNode = {};
+                    objForRenameNode["name"] = dataFlow[augment_title_rev]["parameters"]["relationship"]+"_"+val;
+                    objForRenameNode["saqlExpression"] = "'XX_"+dataFlow[augment_title_rev]["parameters"]["relationship"]+"_"+val+"'";
+                    objForRenameNode["type"] = "Text";
+                    computedFieldsForRenameNode.push(objForRenameNode);
+                    
+                    let objForRenameRevNode = {};
+                    objForRenameRevNode["name"] = dataFlow[augment_title_rev]["parameters"]["relationship"]+"_"+val;
+                    objForRenameRevNode["saqlExpression"] = "'XX_"+dataFlow[augment_title_rev]["parameters"]["relationship"]+"_"+val+"'";
+                    objForRenameRevNode["type"] = "Text";
+                    computedFieldsForRenameRevNode.push(objForRenameRevNode);
+                    
+                });
+                $.each(dataFlow[augment_title]["parameters"]["right_select"],function(inde,val){
+                    let obj = {};
+                    obj["name"] = "XX_"+val;
+                    obj["saqlExpression"] = "'"+dataFlow[augment_title]["parameters"]["relationship"]+"."+val+"'";
+                    obj["type"] = "Text";
+                    computedFields.push(obj);
+                    
+                    let objForRevNode = {};
+                    objForRevNode["name"] = "XX_"+val;
+                    objForRevNode["saqlExpression"] = "'"+val+"'";
+                    objForRevNode["type"] = "Text";
+                    computedFieldsForRevNode.push(objForRevNode);
+                    
+                    //let objForRemoveNode = {};
+                    //objForRemoveNode["name"] = dataFlow[augment_title]["parameters"]["relationship"]+"."+val;
+                    //fieldsForRemoveNode.push(objForRemoveNode);
+                    
+                    let objForRenameNode = {};
+                    objForRenameNode["name"] = val;
+                    objForRenameNode["saqlExpression"] = "XX_"+val;
+                    objForRenameNode["type"] = "Text";
+                    computedFieldsForRenameNode.push(objForRenameNode);
+                    
+                    let objForRenameRevNode = {};
+                    objForRenameRevNode["name"] = val;
+                    objForRenameRevNode["saqlExpression"] = "'XX_"+val+"'";
+                    objForRenameRevNode["type"] = "Text";
+                    computedFieldsForRenameRevNode.push(objForRenameRevNode);
+                });
+                
+                
+                dataFlow[compute_title]={};
+                dataFlow[compute_title]["action"]= "computeExpression";
+                dataFlow[compute_title]["parameters"] ={};
+                dataFlow[compute_title]["parameters"]["source"] =  augment_title;//leftObject_title;                               
+                dataFlow[compute_title]["parameters"]["computedFields"] =  computedFields;
+                dataFlow[compute_title]["parameters"]["mergeWithSource"] = false; //true
+                
+                
+                
+                let filter_title =  "filter_"+compute_title;//leftObjectCropped;
+                filter_title = filter_title.replace(/__/g, "_");
+                
+                dataFlow[filter_title]={};
+                dataFlow[filter_title]["action"]= "filter";
+                dataFlow[filter_title]["parameters"] ={};
+                dataFlow[filter_title]["parameters"]["filter"] =  "ID_NULL_FIELD:EQ:OTHER";                                
+                dataFlow[filter_title]["parameters"]["source"] =  compute_title; //leftObjectCropped;
+                
+                
+                
+                
+                let remove_title = "remove_"+compute_title;
+                dataFlow[remove_title]={};
+                dataFlow[remove_title]["action"]= "sliceDataset";
+                dataFlow[remove_title]["parameters"] ={};
+                dataFlow[remove_title]["parameters"]["mode"] =  "drop";                                
+                dataFlow[remove_title]["parameters"]["source"] =  filter_title;
+                dataFlow[remove_title]["parameters"]["fields"] =  fieldsForRemoveNode;
+                
+                
+                
+                let rename_title = "rename_"+compute_title;
+                dataFlow[rename_title]={};
+                dataFlow[rename_title]["action"]= "computeExpression";
+                dataFlow[rename_title]["parameters"] ={};                             
+                dataFlow[rename_title]["parameters"]["source"] = remove_title;                
+                dataFlow[rename_title]["parameters"]["computedFields"] = computedFieldsForRenameNode;  
+                dataFlow[rename_title]["parameters"]["mergeWithSource"] = false;//true;  
+                
+                
+                
+                
+                
+                let compute_rev_title = "compute_"+augment_title_rev;
+                compute_rev_title = compute_rev_title.replace(/__/g, "_");
+                dataFlow[compute_rev_title]={};
+                dataFlow[compute_rev_title]["action"]= "computeExpression";
+                dataFlow[compute_rev_title]["parameters"] ={};
+                dataFlow[compute_rev_title]["parameters"]["source"] =  augment_title_rev;//leftObject_title;                               
+                dataFlow[compute_rev_title]["parameters"]["computedFields"] =  computedFieldsForRevNode;
+                dataFlow[compute_rev_title]["parameters"]["mergeWithSource"] = false; //true
+                
+                
+                let rename_rev_title = "rename_"+compute_rev_title;
+                dataFlow[rename_rev_title]={};
+                dataFlow[rename_rev_title]["action"]= "computeExpression";
+                dataFlow[rename_rev_title]["parameters"] ={};                             
+                dataFlow[rename_rev_title]["parameters"]["source"] = compute_rev_title;                
+                dataFlow[rename_rev_title]["parameters"]["computedFields"] = computedFieldsForRenameRevNode;  
+                dataFlow[rename_rev_title]["parameters"]["mergeWithSource"] = false;//true;
+                
+                
+                leftObject_title = filter_title;
+                appendFilterNodeAndReverseNode(rename_rev_title,filter_title,rename_title); 
+        
+            }
+            
+            function appendFilterNodeAndReverseNode(augment_title_rev,filter_title,rename_title){
+                let append_title =  "Append_"+filter_title;
+                append_title = append_title.replace(/__/g, "_");
+                let arr = [];
+                arr.push(augment_title_rev);
+                arr.push(rename_title);
+                dataFlow[append_title]={};
+                dataFlow[append_title]["action"]= "append";
+                dataFlow[append_title]["parameters"] ={};                               
+                dataFlow[append_title]["parameters"]["sources"] = arr;
+                leftObject_title = append_title;
+            }
+            
+            function generateRegisterNodeForDataFlow(reptype){
+                let register_title = "Register_"+leftObject_title;
+                register_title = register_title.replace(/__/g, "_");
+                let alias_title =  "Analyticscc_"+reptype;
+                alias_title = alias_title.replace(/__/g, "_");
+                
+                dataFlow[register_title]={};
+                dataFlow[register_title]["action"]= "sfdcRegister"; 
+                dataFlow[register_title]["parameters"] ={};                            
+                dataFlow[register_title]["parameters"]["source"] =  leftObject_title;
+                dataFlow[register_title]["parameters"]["name"] =  salesforce['reportTypeInfo'][reptype]['label'];//reptype+left+'Dataset';
+                dataFlow[register_title]["parameters"]["alias"] = alias_title;
+            }
+            
+            
+            
+            
+            ///Permission Sets Functionality Begin
+            let TouchPermissionSetId;            
+            // Check if permission set exists else create new permission set.
+            checkIfTouchPermissionSetExist();
+            function checkIfTouchPermissionSetExist(){
+                $.ajax(baseUrl+"query/?q=SELECT+Id,Name+FROM+PermissionSet+WHERE+Name+=+'Touch_Permission_Set'",{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    success:function(response){
+                        if(response['records'].length <= 0){
+                            getUserLicenseId();
+                        }else{
+                            TouchPermissionSetId = response['records'][0]['Id'];
+                            getFieldPermissionsParentId();
+                        }
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+            let AnalyticsCloudIntegrationUserId;            
+            function getFieldPermissionsParentId() {                    
+                $.ajax(baseUrl+"query/?q=SELECT+Id+FROM+PermissionSet+WHERE+Profile.Name+=+'Analytics+Cloud+Integration+User'",{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    async: false,
+                    success:function(response){
+                        AnalyticsCloudIntegrationUserId = response.records[0].Id;
+                        getPermissionSets();
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+            let appPermissionFieldsArray = [];
+            function getPermissionSets(){
+                $.ajax(baseUrl+"query/?q=SELECT+Field,Id+FROM+FieldPermissions+WHERE+(ParentId+=+'"+TouchPermissionSetId+"'+OR+ParentId+='"+AnalyticsCloudIntegrationUserId+"')",{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    success:function(response){
+                        appPermissionFieldsArray = [];
+                        response['records'].map(obj =>{ 
+                            appPermissionFieldsArray.push(obj.Field); 
+                        });
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+                    
+            
+            // Create Permission set and create permission set assignment get permission set id.
+            let profileId;
+            let userLicenseId;
+            let userId;            
+            function getUserLicenseId(){
+                $.ajax(baseUrl+"query/?q=SELECT+Id,Name,UserLicenseId+FROM+Profile+WHERE+Name+=+'Analytics Cloud Integration User'",{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    success:function(response){
+                        userLicenseId = response['records'][0]['UserLicenseId'];
+                        profileId = response['records'][0]['Id'];
+                        getUserId(response['records'][0]['Id']);
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            function getUserId(pid){
+                $.ajax(baseUrl+"query/?q=SELECT+Id+FROM+User+WHERE+ProfileId+=+'"+pid+"'",{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    success:function(response){
+                        userId = response['records'][0]['Id'];
+                        
+                        createPermissionSet();
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            function createPermissionSet(){
+                let postData = {};
+                postData["LicenseId"] = userLicenseId;
+                postData["Label"] = "Touch Permission Set";
+                postData["Name"] = "Touch_Permission_Set";
+                postData["Description"] = "grant access to touch dataflow fields";
+                
+
+                $.ajax(baseUrl+"sobjects/PermissionSet",{
+                    type: "POST",
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    data: JSON.stringify(postData),  
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success:function(response){
+                        
+                        if(response.success === true){
+                            createPermissionSetAssignment(response.id);
+                        }
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            function createPermissionSetAssignment(pSid){
+                let postData = {};                
+                postData["AssigneeId"] = userId;
+                postData["PermissionSetId"] = pSid;
+                
+                $.ajax(baseUrl+"sobjects/PermissionSetAssignment",{
+                    type: "POST",
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    data: JSON.stringify(postData),  
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success:function(response){
+                        TouchPermissionSetId = response.Id;
+                        
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }
+            
+            
+            
+            $('.page2').on('click','#download',function (e) {
+                if (confirm('The Analytics Cloud Integration User does not have access to all of the fields selected. Clicking "OK" will create a permission set to grant FLS access to the necessary fields.')) {
+                    createFieldPermissions(); // create field permissions and then generateDataFlow
+                }//else{
+                    //generateDataFlow();
+                    //downloadObjectAsJson(dataFlow, 'dataflow');
+                //}                
+            });
+            
+            function createFieldPermissions(){
+                $("#loader").show();
+                let createdFields = [];
+                for(let reptype in finalObject){
+                    for(let table in finalObject[reptype]){
+                        $.each(finalObject[reptype][table]['fields'],function(inde,val){
+                            if(val.isSelected === true){
+                                let genField = table+"."+val.Field__c;  
+                                if(!(createdFields.includes(genField)) && !(appPermissionFieldsArray.includes(genField)) && !(restrictedPickListErrorFields.includes(genField)) ){
+                                    if(val.permissionable === true){
+                                        createdFields.push(genField);
+                                    }
+                                }
+                            }
+                        });
+                        for(let tab in finalObject[reptype][table]['references']){
+                            for(let field in finalObject[reptype][table]['references'][tab]){
+                                $.each(finalObject[reptype][table]['references'][tab][field],function(inde,val){
+                                    if(val.isSelected === true){
+                                        let genField = tab+"."+val.Field__c;
+                                        if(!(createdFields.includes(genField)) && !(appPermissionFieldsArray.includes(genField))){                                        
+                                            if(val.permissionable === true){
+                                                createdFields.push(genField);
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                let postJson = {};
+                postJson['records'] = [];
+                let i,len;
+                len = createdFields.length;
+                for(i=0;i<len;i++){
+                    if(createdFields[i] !== "Opportunity.AccountId"){
+                        let sobject = createdFields[i].split(".")[0];
+                        let obj = {};
+                        obj['attributes'] = {"type" : "FieldPermissions", "referenceId" : createdFields[i]};
+                        obj['Field'] = createdFields[i];
+                        obj['ParentId'] = TouchPermissionSetId;
+                        obj['PermissionsEdit'] = false;
+                        obj['PermissionsRead'] = true;
+                        obj['SobjectType'] = sobject;
+                        postJson['records'].push(obj);
+                    }
+                }
+
+                if(postJson['records'].length === 0){
+                    $("#loader").hide();
+                    generateDataFlow();
+                    downloadObjectAsJson(dataFlow, 'dataflow');
+                }else{
+                    createPermissionsRestCall(postJson,0);
+                }
+            }
+        
+            function createPermissionsRestCall(postJson,attemptNo){
+                $.ajax({
+                    url: baseUrl+"composite/tree/FieldPermissions",
+                    dataType: 'json',
+                    type: 'post',
+                    headers: {
+                        'Authorization': 'Bearer {!$Api.Session_ID}'
+                    },
+                    contentType: 'application/json',
+                    data: JSON.stringify(postJson),
+                    processData: false,
+                    success: function( response ){
+                        console.log("Created Permisssions Succesfully");
+                        generateDataFlow();
+                        downloadObjectAsJson(dataFlow, 'dataflow');
+                        getPermissionSets();
+                        $("#loader").hide();
+                    },
+                    error: function( jqXhr, textStatus, errorThrown ){
+                        console.log(jqXhr.responseText);
+                        let errObj = jqXhr.responseText;
+                        resolveErrorCallCreatePermissionsRestCall(errObj,postJson,attemptNo);
+                        //generateDataFlow();
+                        //downloadObjectAsJson(dataFlow, 'dataflow');
+                        $("#loader").hide();
+                        
+                    }
+                });
+            }
+        
+            let restrictedPickListErrorFields = [];
+            function resolveErrorCallCreatePermissionsRestCall(errObj,postJson,attemptNo){
+                if(isJson(errObj)){
+                    errObj = JSON.parse(errObj);
+                    if(errObj['hasErrors'] === true){
+                        if(attemptNo === 0){
+                            for(let i=0;i<errObj["results"].length;i++){
+                                
+                                let errors = errObj["results"][i]["errors"];
+                                if(errors[0]["statusCode"] === "INVALID_OR_NULL_FOR_RESTRICTED_PICKLIST"){
+                                    for(let j = 0; j < postJson["records"].length; j++) {
+                                        if(postJson["records"][j]['Field'] === errObj["results"][i]["referenceId"]) {
+                                            postJson["records"].splice(j, 1);
+                                        }
+                                    }
+                                    restrictedPickListErrorFields.push(errObj["results"][i]["referenceId"]);
+                                }
+                            }
+                            createPermissionsRestCall(postJson,1);
+                            getPermissionSets();
+                        }
+                    }                    
+                }
+            }
+         
+        
+            function isJson(str) {
+                try {
+                    JSON.parse(str);
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            }
+            
+            function downloadObjectAsJson(exportObj, exportName){
+                var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj,null,4));
+                var downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href",     dataStr);
+                downloadAnchorNode.setAttribute("download", exportName + ".json");
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            }
+            
+            function fieldsObj2(arr){                
+                let fieldsArr = [];
+                for(let i=0;i<arr.length;i++){
+                    fieldsArr.push(arr[i].name);
+                }                   
+                let uArr = [];
+                $.each(fieldsArr, function(i, el){
+                    if($.inArray(el, uArr) === -1) uArr.push(el);
+                });
+                let fieldsObjArray=[];
+                for(let j=0;j<uArr.length;j++){
+                    let data = {};
+                    data.name = uArr[j];
+                    fieldsObjArray.push(data);
+                }
+                return fieldsObjArray;
+            }
+            
+            function fieldsObj(arr){                    
+                let fieldsArr = [];
+                for(let i=0;i<arr.length;i++){
+                    fieldsArr.push(arr[i].Field__c);
+                }                   
+                let uArr = [];
+                $.each(fieldsArr, function(i, el){
+                    if($.inArray(el, uArr) === -1) uArr.push(el);
+                });
+                let fieldsObjArray=[];
+                for(let j=0;j<uArr.length;j++){
+                    let data = {};
+                    data.name = uArr[j];
+                    fieldsObjArray.push(data);
+                }
+                return fieldsObjArray;
+            }
+        //console.log(finalObject);
+            function extractFields(reptype,field,table,left){
+                let selectedReportsFields = [];
+                
+                if(finalObject[reptype][left]['references'][table] && finalObject[reptype][left]['references'][table][field]){
+                    $.each(finalObject[reptype][left]['references'][table][field],function(inde,val){
+                        
+                        //
+                        if(val['Field__c'] && val.isSelected == true){
+                            let index = salesforce['sobjectsDescription'][table]['fields'].findIndex(x => x.name === val['Field__c']);
+                            if(index > -1){
+                                selectedReportsFields.push(val);
+                            }
+                        }
+                    });
+                }
+                let fieldsArr = [];
+                for(let i=0;i<selectedReportsFields.length;i++){
+                    fieldsArr.push(selectedReportsFields[i].Field__c);
+                }                   
+                let uArr = [];
+                $.each(fieldsArr, function(i, el){
+                    if($.inArray(el, uArr) === -1) uArr.push(el);
+                });
+                return uArr;
+            }                
+            
+            
+            //Filter lists
+            $(document).on('keyup', ".myInput",function (event) {
+                let value = $(this).val();
+                let filter = value.toUpperCase();
+                $(this).parent().parent().find(".selectors a").each(function( index ) {
+                    let a=$(this).find('label').html();
+                    if(a!=undefined){
+                        if (a.toUpperCase().indexOf(filter) > -1) {
+                            $(this).css("display","");
+                        } else {
+                            $(this).css("display","none");
+                        }
+                    }
+                });
+            });
+            
+            function IDGenerator() {                    
+                let length = 8;
+                let timestamp = +new Date;
+                let _getRandomInt = function( min, max ) {
+                    return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+                }
+                let ts = timestamp.toString();
+                let parts = ts.split( "" ).reverse();
+                let id = "";
+                for( let i = 0; i < length; ++i ) {
+                    let index = _getRandomInt( 0, parts.length - 1 );
+                    id += parts[index];  
+                }
+                return id;
+            }
+            
+            function sortList(id) {
+                let mylist = $(id).find('#selectedDatasetTableFieldsCol');
+                let listitems = mylist.children('a').get();
+                listitems.sort(function(a, b) {
+                    let compA = $(a).text().toUpperCase();
+                    let compB = $(b).text().toUpperCase();
+                    return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+                })
+                $.each(listitems, function(idx, itm) { mylist.append(itm); });
+                
+                let mylist2 = $(id).find('#datasetTableFieldsCol');
+                let listitems2 = mylist2.children('a').get();
+                listitems2.sort(function(a, b) {
+                    let compA = $(a).text().toUpperCase();
+                    let compB = $(b).text().toUpperCase();
+                    return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+                })
+                $.each(listitems2, function(idx, itm) { mylist2.append(itm); });
+            }
+            
+            function getRefTableFields(table,type,refieldtable,field){
+                $.ajax(baseUrl+'sobjects/'+table+'/describe',{
+                    beforeSend:function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer {!$Api.Session_ID}');
+                    },
+                    async: false,
+                    success:function(response){   
+                        salesforce['sobjectsDescription'][table] = response;
+                        if(!(table in finalObject[type])){
+                            finalObject[type][table] = {}
+                            finalObject[type][table]['fields'] = [];
+                            finalObject[type][table]['references'] = {};
+                        }
+                        let fields = response.fields;
+                        finalObject[type][refieldtable]['references'][table][field] = [];
+                        $.each(fields,function(index,value){
+                            let obj = {'Field__c': value.name, 'FieldReferenceTo__c': value.referenceTo, 'isSelected':false};
+                            finalObject[type][refieldtable]['references'][table][field].push(obj);
+                            finalObject[type][table]['fields'].push(obj);
+                        });
+                    },error:function(jqXHR, textStatus, errorThrown){
+                        console.log(jqXHR.status + ': ' + errorThrown);
+                    }
+                });
+            }                
+        
+        
+            $("#saveConfig").on("click",function(){
+                $('#backdrop').addClass('slds-backdrop--open');
+                $('#saveConfigurationModal').addClass('slds-fade-in-open');
+            });
+        
+            $('#closeSaveConfigurationModal').on('click',function(){
+                $('#saveConfigurationModal .errorMessages').html('');
+                $("input#configname").val();
+                $('#backdrop').removeClass('slds-backdrop--open');
+                $('#saveConfigurationModal').removeClass('slds-fade-in-open');
+            });  
+        
+            $('#saveConfigurationBtn').on('click',function(){
+                //console.log(salesforce['sobjects']);
+                //let configObjExists = salesforce['sobjects'].find( sobj => sobj.name === packageNameSpacePrefix+"TouchDataFlowConfiguration__c" );
+                //if(!configObjExists){
+                    
+                //}
+                //console.log(configObjExists);
+                //return;
+                
+                
+                $('#loader').show();
+                let cname = $("input#configname").val();
+                if (cname == "") {
+                    $('#saveConfigurationModal .errorMessages').html('<p>Name is required</p>');
+                    $("input#configname").focus();
+                    return false;
+                }
+                let configObj = {};
+                configObj['reports'] = [];
+                for(let key in reportTypes){
+                    let reportType = key,
+                        reports = reportTypes[key],
+                        reportsLen = reports.length 
+                    for(let i=0;i<reportsLen;i++){
+                        let report = reports[i];
+                        if(report.isSelected === true){
+                            configObj['reports'].push(report.attributes.reportId);
+                        }                                
+                    }                         
+                }
+
+                configObj['leftObjects'] = leftObjects;
+                
+                let selectedFieldsObj = {};
+                for(let repType in finalObject){
+                    selectedFieldsObj[repType] = {};
+                    let sobjects = finalObject[repType];
+                    
+                    for(let sobject in sobjects){
+                        
+                        
+                        
+                        for(let i=0;i<sobjects[sobject]['fields'].length;i++){
+                            if(sobjects[sobject]['fields'][i]['isSelected'] === true){
+                                if(!(sobject in selectedFieldsObj[repType])){
+                                    selectedFieldsObj[repType][sobject] = {};
+                                }
+                                if(!('fields' in selectedFieldsObj[repType][sobject])){
+                                    selectedFieldsObj[repType][sobject]['fields'] = [];
+                                }
+                                
+                                selectedFieldsObj[repType][sobject]['fields'].push(sobjects[sobject]['fields'][i]);
+                            }
+                        }
+                        for(let reftable in sobjects[sobject]['references']){
+                            
+                            for(let reffield in sobjects[sobject]['references'][reftable]){
+                                
+                                for(let i=0;i<sobjects[sobject]['references'][reftable][reffield].length;i++){
+                                    if(sobjects[sobject]['references'][reftable][reffield][i]['isSelected'] === true){
+                                        if(!('references' in selectedFieldsObj[repType][sobject])){
+                                            selectedFieldsObj[repType][sobject]['references'] = {};
+                                        }
+                                        if(!(reftable in selectedFieldsObj[repType][sobject]['references'])){
+                                            selectedFieldsObj[repType][sobject]['references'][reftable] = {};
+                                        }
+                                        if(!(reffield in selectedFieldsObj[repType][sobject]['references'][reftable])){
+                                            selectedFieldsObj[repType][sobject]['references'][reftable][reffield] = [];
+                                        }
+                                        selectedFieldsObj[repType][sobject]['references'][reftable][reffield].push(sobjects[sobject]['references'][reftable][reffield][i]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                //console.log(selectedFieldsObj);
+                configObj['fields'] = selectedFieldsObj;
+                let config = new sforce.SObject(packageNameSpacePrefix+"TouchDataFlowConfiguration__c");
+                config[packageNameSpacePrefix+"ConfigName__c"] = cname; 
+                config[packageNameSpacePrefix+"ConfigValue__c"] = JSON.stringify(configObj); //configArray
+                
+                sforce.connection.create([config],{
+                    onSuccess : function (result) {
+                        $('#loader').hide();
+                        if (result[0].getBoolean("success")) {
+                            //console.log("new record created with id " + result[0].id);
+                            $('#closeSaveConfigurationModal').click();
+                            alert("Saved Successfully");
+                        } else {
+                            $('#saveConfigurationModal .errorMessages').html('<p>Failed to create record </p>');
+                            //console.log("failed to create record " + result[0]);                            
+                        }
+                    }, onFailure : function(error) {
+                        $('#loader').hide();
+                        $('#saveConfigurationModal .errorMessages').html("An error has occurred " + error);
+                    }
+                });  
+            });
+        
+            $("#loadConfig").on("click",function(){
+                loadAllSavedConfigurations();
+            });
+        
+            let lastSavedConfigurations;
+            function loadAllSavedConfigurations(){
+                $('#loader').show();
+                let savedConfigurations = {};
+                sforce.connection.query(
+                    "Select Name,Id,"+packageNameSpacePrefix+"ConfigName__c,"+packageNameSpacePrefix+"ConfigValue__c,CreatedById from "+packageNameSpacePrefix+"TouchDataFlowConfiguration__c where CreatedById='{!$User.Id}' order by createdDate desc", {
+                        onSuccess : function(result) {
+                            let records = result.getArray("records");
+                            for (let i=0; i<records.length; i++) {
+                                savedConfigurations[records[i]['Id']] = records[i];
+                            }
+                            lastSavedConfigurations = savedConfigurations;
+                            showSelectConfigurationModal(savedConfigurations);
+                            $('#loader').hide();
+                        },
+                        onFailure : function(error) {
+                            $('#loader').hide();                                
+                            console.log("An error has occurred " + error);
+                        }
+                    });
+            }
+            
+            function showSelectConfigurationModal(savedConfigurations){
+                $('#selectConfigurationModal #selectConfigurationdd').empty();
+                let options = '';
+                for(let config in savedConfigurations){ 
+                    options += "<option value='"+config+"'>"+savedConfigurations[config][packageNameSpacePrefix+'ConfigName__c']+"</option>"
+                }  
+                $('#backdrop').addClass('slds-backdrop--open');
+                $('#selectConfigurationModal').addClass('slds-fade-in-open');
+                
+                $('#selectConfigurationModal #selectConfigurationdd').append(options);
+            }
+            
+            $("#selectConfigurationBtn").on('click',function(){
+                let selectedid = $("#selectConfigurationdd option:selected").val();
+                if (selectedid === "") {
+                    $('#selectConfigurationModal .errorMessages').html('<p>Select a configuration</p>');
+                    $("#selectConfigurationModal #selectConfigurationdd").focus();
+                    return false;
+                }
+                loadLastSelected(selectedid);
+                $('#backdrop').removeClass('slds-backdrop--open');
+                $('#selectConfigurationModal').removeClass('slds-fade-in-open');
+            });
+            
+            $("#closeSelectConfigurationModal").on("click",function(){
+                $('#selectConfigurationModal .errorMessages').html('');
+                $('#backdrop').removeClass('slds-backdrop--open');
+                $('#selectConfigurationModal').removeClass('slds-fade-in-open');
+            });
+                
+            function loadLastSelected(selectedId){
+                $('#loader').show();
+                let values = lastSavedConfigurations[selectedId][packageNameSpacePrefix+"ConfigValue__c"];
+                //console.log(values);
+                values = values.replace(/(&quot\;)/g, '"');
+                values = JSON.parse(values);
+                $("#reportsList").find("a img #TA_Label").hide();
+                $("#reportsList").find("a img #DimensionLabel").show();
+                $("#selectedReportsList").empty();
+                
+                let selectedFields = values['fields'];
+                for(let rtype in values['fields']){
+                    for(let sobject in values['fields'][rtype]){
+                        let sobjectfields = values['fields'][rtype][sobject]['fields'];
+                        if(!(sobject in salesforce['sobjectsDescription'])){
+                            let get = describeSObjectsAjax(sobject);
+                            get.done(function(response){
+                                salesforce['sobjectsDescription'][sobject] = response;
+                                let fields = response.fields;
+                                let sobjectfields = values['fields'][rtype][sobject]['fields'];
+                                $.each(fields, function( index, value ) {                                     
+                                    sobjectfields.push({Field__c: value.name, FieldReferenceTo__c: value.referenceTo,isSelected:false,permissionable:value.permissionable});
+                                });
+                            }); 
+                        }else{
+                            let fields = salesforce['sobjectsDescription'][sobject]['fields'];                            
+                            $.each(fields, function( index, value ) {                                     
+                                sobjectfields.push({Field__c: value.name, FieldReferenceTo__c: value.referenceTo,isSelected:false,permissionable:value.permissionable});
+                            });
+                        }
+                    }
+                }
+                finalObject = values['fields'];
+                if(values['leftObjects']){
+                    leftObjects = values['leftObjects'];
+                }
+                for(let key in reportTypes){
+                    let reportType = key,
+                        reports = reportTypes[key],
+                        reportsLen = reports.length 
+                    for(let i=0;i<reportsLen;i++){
+                        let report = reports[i];
+                        if(values['reports'].includes(report.attributes.reportId)){
+                            report.isSelected = true;
+                            
+                            appendReportToSelectedReportsList(key,i);
+                            let rootReptye = $('#listOfReportTypes').find('a[child][reporttype='+key+']');
+                            rootReptye.find("img#TA_Label").show();
+                            rootReptye.find("img#touch_folder").hide();
+                            rootReptye.click();
+                        }else{
+                            report.isSelected = false;
+                        }                        
+                    }
+                }       
+                $('#loader').hide();
+            }
+        
+        
+            
+            var restricted = {!restricted};
+            
+            var SFJSON = {!manualMapping};
+        });
+        </script>
+    </body>
+    </html>
+    
+    
+</apex:page>

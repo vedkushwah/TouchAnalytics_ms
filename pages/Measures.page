@@ -1,0 +1,18 @@
+<apex:page showHeader="false"  docType="html-5.0" sidebar="false" standardStylesheets="false" cache="false" >
+ 
+  <html>
+    <head>
+     <c:MeasuresPanelHeader />
+     </head>
+     
+     <body>
+      <div ng-cloak="ng-cloak" ng-app="MeasuresPanel" ng-controller="MeasuresController" style="align:center" id="anguMeasuresController" >   
+        <c:MeasuresPanelBody MeasuresPanel="1" dataSetId="0Fb36000000H8iHCAS" folderId="0Fc360000010Yy6CAE" MeasuresPanelStyle="opacity: 1; top:20px; left:213px"/>
+        <!--<c:MeasuresPanelBody MeasuresPanel="2" dataSetId="0Fb36000000H8iHCAS" folderId="0Fc360000010Yy6CAE" MeasuresPanelStyle="opacity: 1; top:357px; left: 247px"/>-->
+        
+      </div>  
+     </body>
+     
+    
+    </html>
+</apex:page>
